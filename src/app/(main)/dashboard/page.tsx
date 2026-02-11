@@ -85,7 +85,7 @@ export default function DashboardPage() {
   );
 
   const totalItems = progress.srsBreakdown.apprentice + progress.srsBreakdown.guru +
-    progress.srsBreakdown.master + progress.srsBreakdown.enlightened + progress.srsBreakdown.burned;
+    progress.srsBreakdown.master + progress.srsBreakdown.shodan + progress.srsBreakdown.satori;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -377,8 +377,8 @@ export default function DashboardPage() {
               { label: "Apprenti", count: progress.srsBreakdown.apprentice, color: "bg-pink-500", emoji: "🌱" },
               { label: "Guru", count: progress.srsBreakdown.guru, color: "bg-purple-500", emoji: "🌿" },
               { label: "Maître", count: progress.srsBreakdown.master, color: "bg-blue-500", emoji: "🌳" },
-              { label: "Shodan", count: progress.srsBreakdown.enlightened, color: "bg-amber-500", emoji: "🥋" },
-              { label: "Satori", count: progress.srsBreakdown.burned, color: "bg-stone-800", emoji: "悟" },
+              { label: "Shodan", count: progress.srsBreakdown.shodan, color: "bg-amber-500", emoji: "🥋" },
+              { label: "Satori", count: progress.srsBreakdown.satori, color: "bg-stone-800", emoji: "悟" },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3 p-2 rounded-xl hover:bg-stone-50 transition-colors">
                 <span className="text-lg">{item.emoji}</span>

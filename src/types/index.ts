@@ -62,8 +62,29 @@ export interface SrsBreakdown {
   apprentice: number;
   guru: number;
   master: number;
-  enlightened: number;
-  burned: number;
+  shodan: number;
+  satori: number;
+}
+
+export interface ReviewSessionItem extends ReviewItem {
+  meaningAnswered: boolean;
+  meaningCorrect: boolean | null;
+  readingAnswered: boolean;
+  readingCorrect: boolean | null;
+}
+
+export interface ReviewSummary {
+  totalItems: number;
+  correctItems: number;
+  incorrectItems: number;
+  accuracy: number;
+  xpEarned: number;
+  stageChanges: {
+    type: ItemType;
+    character: string | null;
+    from: number;
+    to: number;
+  }[];
 }
 
 export interface GamificationStats {

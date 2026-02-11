@@ -349,6 +349,47 @@ async function main() {
     }
   }
 
+  // Create vocabulary-kanji relationships
+  const vocabKanjiRelations = [
+    { vocabWord: "一", kanjiChars: ["一"] },
+    { vocabWord: "二", kanjiChars: ["二"] },
+    { vocabWord: "三", kanjiChars: ["三"] },
+    { vocabWord: "十", kanjiChars: ["十"] },
+    { vocabWord: "一日", kanjiChars: ["一", "日"] },
+    { vocabWord: "二日", kanjiChars: ["二", "日"] },
+    { vocabWord: "火", kanjiChars: ["火"] },
+    { vocabWord: "水", kanjiChars: ["水"] },
+    { vocabWord: "大人", kanjiChars: ["大", "人"] },
+    { vocabWord: "人", kanjiChars: ["人"] },
+    { vocabWord: "大きい", kanjiChars: ["大"] },
+    { vocabWord: "小さい", kanjiChars: ["小"] },
+    { vocabWord: "中", kanjiChars: ["中"] },
+  ];
+
+  for (const relation of vocabKanjiRelations) {
+    const vocab = await prisma.vocabulary.findFirst({
+      where: { word: relation.vocabWord },
+    });
+
+    if (vocab) {
+      for (const kanjiChar of relation.kanjiChars) {
+        const kanji = await prisma.kanji.findUnique({
+          where: { character: kanjiChar },
+        });
+
+        if (kanji) {
+          await prisma.vocabularyKanji.upsert({
+            where: {
+              vocabularyId_kanjiId: { vocabularyId: vocab.id, kanjiId: kanji.id },
+            },
+            update: {},
+            create: { vocabularyId: vocab.id, kanjiId: kanji.id },
+          });
+        }
+      }
+    }
+  }
+
   console.log("Seeding complete!");
 }
 

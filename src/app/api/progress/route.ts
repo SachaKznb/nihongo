@@ -64,8 +64,8 @@ export async function GET() {
     apprentice: 0,
     guru: 0,
     master: 0,
-    enlightened: 0,
-    burned: 0,
+    shodan: 0,
+    satori: 0,
   };
 
   const allProgress = [

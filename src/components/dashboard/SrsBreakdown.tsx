@@ -10,9 +10,9 @@ export function SrsBreakdown({ breakdown }: SrsBreakdownProps) {
   const categories = [
     { key: "apprentice", label: "Apprenti", color: "bg-pink-500", count: breakdown.apprentice },
     { key: "guru", label: "Guru", color: "bg-purple-500", count: breakdown.guru },
-    { key: "master", label: "Maitre", color: "bg-blue-500", count: breakdown.master },
-    { key: "enlightened", label: "Illumine", color: "bg-yellow-500", count: breakdown.enlightened },
-    { key: "burned", label: "Brule", color: "bg-gray-800", count: breakdown.burned },
+    { key: "master", label: "Maître", color: "bg-blue-500", count: breakdown.master },
+    { key: "shodan", label: "Shodan", color: "bg-amber-500", count: breakdown.shodan },
+    { key: "satori", label: "Satori", color: "bg-stone-800", count: breakdown.satori },
   ];
 
   const total = Object.values(breakdown).reduce((a, b) => a + b, 0);

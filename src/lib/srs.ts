@@ -25,16 +25,16 @@ export const SRS_INTERVALS_HOURS: Record<number, number> = {
 };
 
 export const SRS_STAGE_NAMES: Record<number, string> = {
-  0: "Verrouille",
+  0: "Verrouillé",
   1: "Apprenti 1",
   2: "Apprenti 2",
   3: "Apprenti 3",
   4: "Apprenti 4",
   5: "Guru 1",
   6: "Guru 2",
-  7: "Maitre",
-  8: "Illumine",
-  9: "Brule",
+  7: "Maître",
+  8: "Shodan",
+  9: "Satori",
 };
 
 export const SRS_STAGE_COLORS: Record<number, string> = {
@@ -70,13 +70,13 @@ export function calculateNewStage(
 
 export function getSrsCategory(
   stage: number
-): "locked" | "apprentice" | "guru" | "master" | "enlightened" | "burned" {
+): "locked" | "apprentice" | "guru" | "master" | "shodan" | "satori" {
   if (stage === 0) return "locked";
   if (stage <= 4) return "apprentice";
   if (stage <= 6) return "guru";
   if (stage === 7) return "master";
-  if (stage === 8) return "enlightened";
-  return "burned";
+  if (stage === 8) return "shodan";
+  return "satori";
 }
 
 export function formatNextReview(nextReviewAt: Date | null): string {
