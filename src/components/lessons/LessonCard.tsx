@@ -24,136 +24,184 @@ export function LessonCard({
     }
   };
 
-  const typeColors = {
-    radical: "bg-blue-500",
-    kanji: "bg-pink-500",
-    vocabulary: "bg-purple-500",
+  const typeConfig = {
+    radical: {
+      bg: "gradient-radical",
+      color: "blue",
+      label: "Radical",
+      headerBg: "bg-gradient-to-r from-blue-500 to-blue-600",
+    },
+    kanji: {
+      bg: "gradient-kanji",
+      color: "pink",
+      label: "Kanji",
+      headerBg: "bg-gradient-to-r from-pink-500 to-pink-600",
+    },
+    vocabulary: {
+      bg: "gradient-vocab",
+      color: "purple",
+      label: "Vocabulaire",
+      headerBg: "bg-gradient-to-r from-purple-500 to-purple-600",
+    },
   };
 
-  const typeLabels = {
-    radical: "Radical",
-    kanji: "Kanji",
-    vocabulary: "Vocabulaire",
-  };
+  const config = typeConfig[item.type];
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
       {/* Header with type */}
-      <div className={`${typeColors[item.type]} py-2 px-4`}>
-        <span className="text-white text-sm font-medium">
-          {typeLabels[item.type]}
+      <div className={`${config.headerBg} py-3 px-6 flex items-center justify-between`}>
+        <span className="text-white text-sm font-semibold uppercase tracking-wide">
+          {config.label}
         </span>
+        {(item.readings || item.readingsOn || item.readingsKun) && (
+          <button
+            onClick={handlePlayAudio}
+            className="text-white/80 hover:text-white transition-colors p-1"
+            aria-label="Écouter la prononciation"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+            </svg>
+          </button>
+        )}
       </div>
 
       {/* Character display */}
-      <div className="py-12 px-4 text-center bg-gray-50">
+      <div className="py-12 px-4 text-center bg-gradient-to-b from-stone-50 to-white">
         {item.character ? (
-          <span className="text-8xl font-japanese">{item.character}</span>
+          <span className="text-8xl font-japanese text-stone-800">{item.character}</span>
         ) : item.imageUrl ? (
-          <img
-            src={item.imageUrl}
-            alt="Radical"
-            className="w-24 h-24 mx-auto"
-          />
+          <img src={item.imageUrl} alt="Radical" className="w-28 h-28 mx-auto" />
         ) : (
           <span className="text-6xl text-gray-400">?</span>
         )}
       </div>
 
       {/* Details */}
-      <div className="p-6 space-y-4">
+      <div className="p-6 space-y-5">
         {/* Meanings */}
-        <div>
-          <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
-            Signification
-          </h4>
-          <p className="text-xl font-semibold text-gray-900">
+        <div className="text-center">
+          <p className="text-2xl font-bold text-stone-900">
             {item.meaningsFr.join(", ")}
           </p>
         </div>
 
+        {/* Component Radicals (for Kanji) */}
+        {item.componentRadicals && item.componentRadicals.length > 0 && (
+          <div className="bg-blue-50 rounded-2xl p-4">
+            <h4 className="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-3 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.959.401v0a.656.656 0 00.659-.663 47.703 47.703 0 00-.31-4.82 48.472 48.472 0 01-4.168.3.64.64 0 01-.656-.643v0z" />
+              </svg>
+              Composants (radicaux)
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {item.componentRadicals.map((radical, i) => (
+                <div key={i} className="flex items-center gap-2 bg-white rounded-xl px-3 py-2 shadow-sm">
+                  {radical.character ? (
+                    <span className="text-xl font-japanese text-blue-600">{radical.character}</span>
+                  ) : radical.imageUrl ? (
+                    <img src={radical.imageUrl} alt="" className="w-6 h-6" />
+                  ) : null}
+                  <span className="text-sm text-stone-600">{radical.meaningFr}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Readings for kanji and vocabulary */}
         {(item.readingsOn || item.readingsKun || item.readings) && (
-          <div>
-            <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
+          <div className="bg-stone-50 rounded-2xl p-4">
+            <h4 className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-3">
               Lecture(s)
             </h4>
-            <div className="flex flex-wrap gap-2 items-center">
+            <div className="space-y-2">
               {item.readingsOn && item.readingsOn.length > 0 && (
-                <div>
-                  <span className="text-xs text-gray-400">On&apos;yomi: </span>
-                  <span className="text-lg font-japanese">
-                    {item.readingsOn.join(", ")}
-                  </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-medium text-pink-600 bg-pink-100 px-2 py-0.5 rounded-full">On'yomi</span>
+                  <span className="text-xl font-japanese text-stone-800">{item.readingsOn.join("、")}</span>
                 </div>
               )}
               {item.readingsKun && item.readingsKun.length > 0 && (
-                <div>
-                  <span className="text-xs text-gray-400">Kun&apos;yomi: </span>
-                  <span className="text-lg font-japanese">
-                    {item.readingsKun.join(", ")}
-                  </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-medium text-teal-600 bg-teal-100 px-2 py-0.5 rounded-full">Kun'yomi</span>
+                  <span className="text-xl font-japanese text-stone-800">{item.readingsKun.join("、")}</span>
                 </div>
               )}
               {item.readings && (
-                <span className="text-lg font-japanese">
-                  {item.readings.join(", ")}
-                </span>
+                <span className="text-xl font-japanese text-stone-800">{item.readings.join("、")}</span>
               )}
-              <button
-                onClick={handlePlayAudio}
-                className="ml-2 p-2 text-gray-500 hover:text-pink-500 transition-colors"
-                aria-label="Ecouter la prononciation"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-5 h-5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"
-                  />
-                </svg>
-              </button>
             </div>
           </div>
         )}
 
         {/* Mnemonic */}
         {showMnemonic && (
-          <div>
-            <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
-              Mnemonique
+          <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-4 border border-amber-100">
+            <h4 className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2 flex items-center gap-2">
+              <span>💡</span> Mnémonique
             </h4>
-            <p className="text-gray-700 leading-relaxed">{item.mnemonic}</p>
+            <p className="text-stone-700 leading-relaxed">{item.mnemonic}</p>
           </div>
         )}
 
         {/* Reading mnemonic for kanji */}
         {showMnemonic && item.readingMnemonic && (
-          <div>
-            <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
-              Mnemonique de lecture
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4 border border-purple-100">
+            <h4 className="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-2 flex items-center gap-2">
+              <span>🎵</span> Mnémonique de lecture
             </h4>
-            <p className="text-gray-700 leading-relaxed">
-              {item.readingMnemonic}
-            </p>
+            <p className="text-stone-700 leading-relaxed">{item.readingMnemonic}</p>
+          </div>
+        )}
+
+        {/* Used in Kanji (for radicals) */}
+        {item.usedInKanji && item.usedInKanji.length > 0 && (
+          <div>
+            <h4 className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-3 flex items-center gap-2">
+              <span>📚</span> Utilisé dans ces kanji
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {item.usedInKanji.map((kanji, i) => (
+                <div key={i} className="flex items-center gap-2 bg-pink-50 rounded-xl px-3 py-2">
+                  <span className="text-xl font-japanese text-pink-600">{kanji.character}</span>
+                  <span className="text-sm text-stone-600">{kanji.meaningFr}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Used in Vocabulary (for kanji) */}
+        {item.usedInVocabulary && item.usedInVocabulary.length > 0 && (
+          <div>
+            <h4 className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-3 flex items-center gap-2">
+              <span>📖</span> Vocabulaire associé
+            </h4>
+            <div className="space-y-2">
+              {item.usedInVocabulary.map((vocab, i) => (
+                <div key={i} className="flex items-center justify-between bg-purple-50 rounded-xl px-4 py-2">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg font-japanese text-purple-700">{vocab.word}</span>
+                    <span className="text-sm text-stone-400 font-japanese">{vocab.reading}</span>
+                  </div>
+                  <span className="text-sm text-stone-600">{vocab.meaningFr}</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
         {/* Example sentence for vocabulary */}
         {item.sentence && (
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-            <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">
-              Exemple
+          <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-2xl p-4 border border-teal-100">
+            <h4 className="text-xs font-semibold text-teal-700 uppercase tracking-wide mb-2 flex items-center gap-2">
+              <span>💬</span> Exemple
             </h4>
-            <p className="text-lg font-japanese mb-1">{item.sentence.jp}</p>
-            <p className="text-gray-600">{item.sentence.fr}</p>
+            <p className="text-lg font-japanese text-stone-800 mb-1">{item.sentence.jp}</p>
+            <p className="text-stone-600">{item.sentence.fr}</p>
           </div>
         )}
       </div>

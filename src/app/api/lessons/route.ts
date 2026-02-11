@@ -27,7 +27,17 @@ export async function GET() {
   // Get radicals that are unlocked (stage 0) and not started
   const radicalProgress = await prisma.userRadicalProgress.findMany({
     where: { userId, srsStage: SRS_STAGES.LOCKED },
-    include: { radical: true },
+    include: {
+      radical: {
+        include: {
+          // Get kanji that use this radical (limit to 5 for preview)
+          kanji: {
+            include: { kanji: true },
+            take: 5,
+          },
+        },
+      },
+    },
     take: user.lessonsPerDay,
   });
 
@@ -39,6 +49,10 @@ export async function GET() {
       meaningsFr: [rp.radical.meaningFr],
       mnemonic: rp.radical.mnemonic,
       imageUrl: rp.radical.imageUrl,
+      usedInKanji: rp.radical.kanji.map((k) => ({
+        character: k.kanji.character,
+        meaningFr: k.kanji.meaningsFr[0] || "",
+      })),
     });
   }
 
@@ -48,7 +62,13 @@ export async function GET() {
     include: {
       kanji: {
         include: {
+          // Component radicals
           radicals: { include: { radical: true } },
+          // Vocabulary using this kanji (limit to 3)
+          vocabulary: {
+            include: { vocabulary: true },
+            take: 3,
+          },
         },
       },
     },
@@ -65,6 +85,16 @@ export async function GET() {
       readingsKun: kp.kanji.readingsKun,
       mnemonic: kp.kanji.meaningMnemonicFr,
       readingMnemonic: kp.kanji.readingMnemonicFr,
+      componentRadicals: kp.kanji.radicals.map((r) => ({
+        character: r.radical.character,
+        meaningFr: r.radical.meaningFr,
+        imageUrl: r.radical.imageUrl,
+      })),
+      usedInVocabulary: kp.kanji.vocabulary.map((v) => ({
+        word: v.vocabulary.word,
+        meaningFr: v.vocabulary.meaningsFr[0] || "",
+        reading: v.vocabulary.readings[0] || "",
+      })),
     });
   }
 

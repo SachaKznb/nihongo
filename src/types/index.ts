@@ -40,6 +40,12 @@ export interface LessonItem {
   readingMnemonic?: string;
   imageUrl?: string | null;
   sentence?: { jp: string; fr: string } | null;
+  // For radicals: kanji that use this radical
+  usedInKanji?: { character: string; meaningFr: string }[];
+  // For kanji: component radicals
+  componentRadicals?: { character: string | null; meaningFr: string; imageUrl?: string | null }[];
+  // For kanji: vocabulary using this kanji
+  usedInVocabulary?: { word: string; meaningFr: string; reading: string }[];
 }
 
 export interface ReviewItem {
