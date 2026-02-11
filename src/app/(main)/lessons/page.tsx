@@ -1,32 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { LessonSession } from "@/components/lessons/LessonSession";
+import { useLessons } from "@/lib/hooks";
 import type { LessonItem } from "@/types";
 
 export default function LessonsPage() {
-  const [lessons, setLessons] = useState<LessonItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading } = useLessons();
   const [started, setStarted] = useState(false);
 
-  useEffect(() => {
-    async function fetchLessons() {
-      try {
-        const response = await fetch("/api/lessons");
-        const data = await response.json();
-        setLessons(data.lessons || []);
-      } catch (error) {
-        console.error("Error fetching lessons:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
+  const lessons: LessonItem[] = data?.lessons || [];
 
-    fetchLessons();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="animate-pulse space-y-6">

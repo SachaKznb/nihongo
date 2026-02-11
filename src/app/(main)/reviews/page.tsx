@@ -1,32 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { ReviewSession } from "@/components/reviews/ReviewSession";
+import { useReviews } from "@/lib/hooks";
 import type { ReviewItem } from "@/types";
 
 export default function ReviewsPage() {
-  const [reviews, setReviews] = useState<ReviewItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, isLoading } = useReviews();
   const [started, setStarted] = useState(false);
 
-  useEffect(() => {
-    async function fetchReviews() {
-      try {
-        const response = await fetch("/api/reviews");
-        const data = await response.json();
-        setReviews(data.reviews || []);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
+  const reviews: ReviewItem[] = data?.reviews || [];
 
-    fetchReviews();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="animate-pulse space-y-6">

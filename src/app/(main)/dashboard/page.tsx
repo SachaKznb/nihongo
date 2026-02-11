@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { UserProgress } from "@/types";
+import { useProgress } from "@/lib/hooks";
 
 // Motivational messages based on context
 const getMotivationalMessage = (streak: number, pendingReviews: number, todayReviews: number) => {
@@ -29,32 +30,17 @@ const getXpLevel = (xp: number) => {
 };
 
 export default function DashboardPage() {
-  const [progress, setProgress] = useState<UserProgress | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: progress, isLoading } = useProgress();
   const [showStreakWarning, setShowStreakWarning] = useState(false);
 
+  // Show streak warning if user has a streak and hasn't studied today
   useEffect(() => {
-    async function fetchProgress() {
-      try {
-        const response = await fetch("/api/progress");
-        const data = await response.json();
-        setProgress(data);
-
-        // Show streak warning if user has a streak and hasn't studied today
-        if (data.gamification?.currentStreak > 0 && data.gamification?.todayReviews === 0) {
-          setShowStreakWarning(true);
-        }
-      } catch (error) {
-        console.error("Error fetching progress:", error);
-      } finally {
-        setLoading(false);
-      }
+    if (progress?.gamification?.currentStreak > 0 && progress?.gamification?.todayReviews === 0) {
+      setShowStreakWarning(true);
     }
+  }, [progress]);
 
-    fetchProgress();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="animate-pulse space-y-6">
@@ -417,7 +403,7 @@ export default function DashboardPage() {
           </div>
           <div className="space-y-2">
             {progress.upcomingReviews.length > 0 ? (
-              progress.upcomingReviews.slice(0, 5).map((review, index) => {
+              progress.upcomingReviews.slice(0, 5).map((review: { time: Date; count: number }, index: number) => {
                 const hours = Math.round((new Date(review.time).getTime() - Date.now()) / (1000 * 60 * 60));
                 if (review.count === 0) return null;
                 return (
