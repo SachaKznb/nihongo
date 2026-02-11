@@ -76,8 +76,22 @@ export default function DashboardPage() {
     );
   }
 
-  const gamification = progress.gamification;
-  const xpInfo = getXpLevel(gamification.totalXp);
+  const defaultGamification = {
+    currentStreak: 0,
+    longestStreak: 0,
+    totalXp: 0,
+    weeklyXp: 0,
+    totalReviewsDone: 0,
+    totalLessonsDone: 0,
+    perfectDays: 0,
+    todayAccuracy: 100,
+    todayReviews: 0,
+    todayLessons: 0,
+    levelProgress: 0,
+    activeLearners: 847,
+  };
+  const gamification = { ...defaultGamification, ...(progress.gamification || {}) };
+  const xpInfo = getXpLevel(gamification.totalXp ?? 0);
   const motivationalMessage = getMotivationalMessage(
     gamification.currentStreak,
     progress.pendingReviews,
@@ -97,8 +111,8 @@ export default function DashboardPage() {
             <div className="flex items-center gap-3">
               <span className="text-3xl animate-streak-fire">🔥</span>
               <div>
-                <p className="font-bold font-display text-lg">Ne perds pas ta serie de {gamification.currentStreak} jours !</p>
-                <p className="text-amber-100 text-sm">Complete au moins une revision aujourd&apos;hui.</p>
+                <p className="font-bold font-display text-lg">Ne perds pas ta série de {gamification.currentStreak} jours !</p>
+                <p className="text-amber-100 text-sm">Complète au moins une revision aujourd&apos;hui.</p>
               </div>
             </div>
             <button
@@ -229,8 +243,8 @@ export default function DashboardPage() {
                   )}
                 </div>
               </div>
-              <h3 className="text-xl font-bold font-display text-stone-900 mb-1">Lecons disponibles</h3>
-              <p className="text-stone-500">Nouveaux elements a apprendre</p>
+              <h3 className="text-xl font-bold font-display text-stone-900 mb-1">Leçons disponibles</h3>
+              <p className="text-stone-500">Nouveaux éléments à apprendre</p>
               {progress.pendingLessons > 0 && (
                 <div className="mt-4 flex items-center gap-2 text-blue-600 font-medium group-hover:gap-3 transition-all">
                   <span>Commencer maintenant</span>
@@ -264,8 +278,8 @@ export default function DashboardPage() {
                   )}
                 </div>
               </div>
-              <h3 className="text-xl font-bold font-display text-stone-900 mb-1">Revisions en attente</h3>
-              <p className="text-stone-500">Elements prets a reviser</p>
+              <h3 className="text-xl font-bold font-display text-stone-900 mb-1">Révisions en attente</h3>
+              <p className="text-stone-500">Éléments prêts à réviser</p>
               {progress.pendingReviews > 0 && (
                 <div className="mt-4 flex items-center gap-2 text-orange-600 font-medium group-hover:gap-3 transition-all">
                   <span>Reviser maintenant</span>
@@ -366,19 +380,19 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <span className="text-2xl font-japanese text-purple-500">段</span>
-              <h3 className="font-bold font-display text-stone-900">Repartition SRS</h3>
+              <h3 className="font-bold font-display text-stone-900">Répartition SRS</h3>
             </div>
             <span className="text-xs font-medium text-stone-500 bg-stone-100 px-3 py-1 rounded-full">
-              {totalItems} elements
+              {totalItems} éléments
             </span>
           </div>
           <div className="space-y-3">
             {[
               { label: "Apprenti", count: progress.srsBreakdown.apprentice, color: "bg-pink-500", emoji: "🌱" },
               { label: "Guru", count: progress.srsBreakdown.guru, color: "bg-purple-500", emoji: "🌿" },
-              { label: "Maitre", count: progress.srsBreakdown.master, color: "bg-blue-500", emoji: "🌳" },
-              { label: "Illumine", count: progress.srsBreakdown.enlightened, color: "bg-amber-500", emoji: "☀️" },
-              { label: "Brule", count: progress.srsBreakdown.burned, color: "bg-stone-800", emoji: "🔥" },
+              { label: "Maître", count: progress.srsBreakdown.master, color: "bg-blue-500", emoji: "🌳" },
+              { label: "Illuminé", count: progress.srsBreakdown.enlightened, color: "bg-amber-500", emoji: "☀️" },
+              { label: "Brûlé", count: progress.srsBreakdown.burned, color: "bg-stone-800", emoji: "🔥" },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3 p-2 rounded-xl hover:bg-stone-50 transition-colors">
                 <span className="text-lg">{item.emoji}</span>
@@ -395,7 +409,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <span className="text-2xl font-japanese text-teal-500">時</span>
-              <h3 className="font-bold font-display text-stone-900">Prochaines revisions</h3>
+              <h3 className="font-bold font-display text-stone-900">Prochaines révisions</h3>
             </div>
             <span className="text-xs font-medium text-teal-600 bg-teal-50 px-3 py-1 rounded-full">
               24h
@@ -426,7 +440,7 @@ export default function DashboardPage() {
               <div className="text-center py-8">
                 <span className="text-4xl mb-2 block">🎉</span>
                 <p className="text-sm text-stone-400">
-                  Aucune revision prevue
+                  Aucune révision prévue
                 </p>
               </div>
             )}
@@ -438,7 +452,7 @@ export default function DashboardPage() {
       <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-2xl font-japanese text-stone-400">索</span>
-          <h3 className="font-bold font-display text-stone-900">Acces rapide</h3>
+          <h3 className="font-bold font-display text-stone-900">Accès rapide</h3>
         </div>
         <div className="flex flex-wrap gap-3">
           <Link

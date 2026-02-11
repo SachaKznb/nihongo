@@ -1,7 +1,7 @@
-@import "tailwindcss";
-
-/* Custom Fonts */
+/* Custom Fonts - must come before tailwindcss */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Space+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap');
+
+@import "tailwindcss";
 
 :root {
   --font-display: 'Space Grotesk', system-ui, sans-serif;

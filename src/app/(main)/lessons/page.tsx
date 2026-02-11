@@ -46,11 +46,11 @@ export default function LessonsPage() {
             <span className="relative text-9xl font-japanese text-transparent bg-clip-text bg-gradient-to-br from-emerald-500 to-teal-600">完</span>
           </div>
           <h2 className="text-3xl font-bold font-display text-stone-900 mb-4">
-            Toutes les lecons sont terminees !
+            Toutes les leçons sont terminées !
           </h2>
           <p className="text-stone-500 mb-10 max-w-md mx-auto text-lg">
-            Vous avez termine toutes les lecons disponibles.
-            Continuez a reviser pour debloquer de nouveaux elements.
+            Vous avez terminé toutes les leçons disponibles.
+            Continuez a reviser pour débloquer de nouveaux éléments.
           </p>
           <div className="flex justify-center gap-4">
             <Link
@@ -63,7 +63,7 @@ export default function LessonsPage() {
               href="/reviews"
               className="px-8 py-4 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-semibold hover:shadow-xl hover:shadow-teal-200/50 transition-all hover:-translate-y-0.5"
             >
-              Faire des revisions
+              Faire des révisions
             </Link>
           </div>
         </div>
@@ -116,14 +116,14 @@ export default function LessonsPage() {
         </div>
 
         <p className="text-stone-500 mb-10 max-w-lg mx-auto text-lg">
-          Prenez votre temps pour bien memoriser les mnemoniques.
-          Chaque element sera ensuite teste dans un quiz.
+          Prenez votre temps pour bien mémoriser les mnémoniques.
+          Chaque element sera ensuite testé dans un quiz.
         </p>
 
         {/* XP Reward indicator */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-full mb-10">
           <span className="text-lg">⚡</span>
-          <span className="text-emerald-700 font-medium">+{lessons.length * 10} XP a gagner</span>
+          <span className="text-emerald-700 font-medium">+{lessons.length * 10} XP à gagner</span>
         </div>
 
         {/* Preview */}
@@ -162,7 +162,7 @@ export default function LessonsPage() {
             onClick={() => setStarted(true)}
             className="group px-8 py-4 bg-gradient-to-r from-stone-800 to-stone-900 text-white rounded-xl font-semibold hover:shadow-2xl hover:shadow-stone-400/30 transition-all hover:-translate-y-1 inline-flex items-center gap-3"
           >
-            <span>Commencer les lecons</span>
+            <span>Commencer les leçons</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 group-hover:translate-x-1 transition-transform">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
@@ -174,7 +174,7 @@ export default function LessonsPage() {
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
           </svg>
-          <span>Astuce : Visualisez les mnemoniques pour mieux retenir</span>
+          <span>Astuce : Visualisez les mnémoniques pour mieux retenir</span>
         </p>
       </div>
     </div>

@@ -45,7 +45,7 @@ export default function Home() {
               </div>
 
               <h1 className="text-5xl lg:text-6xl font-bold font-display text-stone-900 leading-tight mb-6">
-                Maitrisez les
+                Maîtrisez les
                 <span className="relative">
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-emerald-500"> kanji</span>
                   <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
@@ -62,8 +62,8 @@ export default function Home() {
                 naturellement
               </h1>
               <p className="text-xl text-stone-600 mb-8 leading-relaxed">
-                Apprenez les caracteres japonais avec des mnemoniques en francais
-                et un systeme de repetition espacee qui s&apos;adapte a votre rythme.
+                Apprenez les caractères japonais avec des mnémoniques en français
+                et un système de répétition espacée qui s&apos;adapte à votre rythme.
               </p>
 
               {/* Trust indicators */}
@@ -78,13 +78,13 @@ export default function Home() {
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-emerald-500">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span>Methode prouvee</span>
+                  <span>Méthode prouvée</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-emerald-500">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span>En francais</span>
+                  <span>En français</span>
                 </div>
               </div>
 
@@ -102,7 +102,7 @@ export default function Home() {
                   href="#methode"
                   className="text-stone-700 px-8 py-4 rounded-full font-semibold hover:bg-stone-100 transition-all inline-flex items-center gap-2"
                 >
-                  Decouvrir la methode
+                  Découvrir la méthode
                 </Link>
               </div>
             </div>
@@ -157,7 +157,7 @@ export default function Home() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="group">
               <div className="text-4xl font-bold font-display text-stone-900 mb-2 group-hover:scale-110 transition-transform">2,136</div>
-              <div className="text-stone-500 text-sm">Kanji a apprendre</div>
+              <div className="text-stone-500 text-sm">Kanji à apprendre</div>
             </div>
             <div className="group">
               <div className="text-4xl font-bold font-display text-teal-600 mb-2 group-hover:scale-110 transition-transform">6,000+</div>
@@ -183,10 +183,10 @@ export default function Home() {
               <span>🎮</span> Gamifie
             </span>
             <h2 className="text-4xl font-bold font-display text-stone-900 mb-4">
-              Restez motive chaque jour
+              Restez motivé chaque jour
             </h2>
             <p className="text-xl text-stone-600 max-w-2xl mx-auto">
-              Gagnez des XP, maintenez votre serie, et debloquez des succes.
+              Gagnez des XP, maintenez votre serie, et débloquez des succès.
               L&apos;apprentissage devient addictif !
             </p>
           </div>
@@ -198,8 +198,8 @@ export default function Home() {
                 <span className="text-5xl">🔥</span>
                 <span className="text-6xl font-bold font-display">30</span>
               </div>
-              <h3 className="text-xl font-bold mb-2">Series de jours</h3>
-              <p className="text-amber-100 text-sm">Etudiez chaque jour pour maintenir votre flamme et debloquer des bonus.</p>
+              <h3 className="text-xl font-bold mb-2">Séries de jours</h3>
+              <p className="text-amber-100 text-sm">Étudiez chaque jour pour maintenir votre flamme et débloquer des bonus.</p>
             </div>
 
             {/* XP Card */}
@@ -218,8 +218,8 @@ export default function Home() {
                 <span className="text-5xl">🏆</span>
                 <span className="text-6xl font-bold font-display">12</span>
               </div>
-              <h3 className="text-xl font-bold mb-2">Succes debloques</h3>
-              <p className="text-violet-100 text-sm">Completez des defis pour obtenir des badges et recompenses speciales.</p>
+              <h3 className="text-xl font-bold mb-2">Succès débloqués</h3>
+              <p className="text-violet-100 text-sm">Complétez des défis pour obtenir des badges et récompenses spéciales.</p>
             </div>
           </div>
         </div>
@@ -230,11 +230,11 @@ export default function Home() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold font-display text-stone-900 mb-4">
-              Une methode qui fonctionne
+              Une méthode qui fonctionne
             </h2>
             <p className="text-xl text-stone-600 max-w-2xl mx-auto">
               Apprenez les kanji dans l&apos;ordre optimal, des composants de base
-              aux caracteres complexes.
+              aux caractères complexes.
             </p>
           </div>
 
@@ -248,7 +248,7 @@ export default function Home() {
                 <h3 className="text-xl font-bold font-display text-stone-900 mb-3">1. Radicaux</h3>
                 <p className="text-stone-600 leading-relaxed">
                   Commencez par les composants de base. Chaque radical a un nom
-                  et une histoire pour le memoriser facilement.
+                  et une histoire pour le mémoriser facilement.
                 </p>
                 <div className="mt-4 flex -space-x-2">
                   {["人", "大", "口", "山"].map((char, i) => (
@@ -318,13 +318,13 @@ export default function Home() {
                 <span>🧠</span> Science de la memoire
               </span>
               <h2 className="text-4xl font-bold font-display mb-6">
-                La repetition espacee,
+                La répétition espacée,
                 <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">votre super pouvoir</span>
               </h2>
               <p className="text-stone-300 text-lg mb-8 leading-relaxed">
                 Notre algorithme SRS presente les elements au moment optimal pour
-                votre memoire. Revisez moins, retenez plus. C&apos;est prouve scientifiquement.
+                votre mémoire. Révisez moins, retenez plus. C&apos;est prouvé scientifiquement.
               </p>
               <div className="space-y-4">
                 {[
@@ -332,7 +332,7 @@ export default function Home() {
                   { stage: "Guru", emoji: "🌿", time: "1 → 2 semaines", color: "from-purple-400 to-purple-600" },
                   { stage: "Maitre", emoji: "🌳", time: "1 mois", color: "from-blue-400 to-blue-600" },
                   { stage: "Illumine", emoji: "☀️", time: "4 mois", color: "from-amber-400 to-amber-600" },
-                  { stage: "Brule", emoji: "🔥", time: "Memorise !", color: "from-stone-400 to-stone-600" },
+                  { stage: "Brule", emoji: "🔥", time: "Mémorisé !", color: "from-stone-400 to-stone-600" },
                 ].map((item) => (
                   <div key={item.stage} className="flex items-center gap-4 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
                     <span className="text-2xl">{item.emoji}</span>
@@ -385,8 +385,8 @@ export default function Home() {
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">🏆</span>
                     <div>
-                      <p className="text-amber-400 font-bold text-sm">Succes debloque !</p>
-                      <p className="text-stone-400 text-xs">Premiere semaine completee</p>
+                      <p className="text-amber-400 font-bold text-sm">Succès débloqué !</p>
+                      <p className="text-stone-400 text-xs">Première semaine complétée</p>
                     </div>
                   </div>
                 </div>
@@ -401,7 +401,7 @@ export default function Home() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold font-display text-stone-900 mb-4">
-              Ils ont reussi avec Nihongo
+              Ils ont réussi avec Nihongo
             </h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
@@ -409,21 +409,21 @@ export default function Home() {
               {
                 name: "Marie L.",
                 level: "Niveau 15",
-                text: "Grace aux mnemoniques en francais, j'ai enfin reussi a retenir les kanji. Avant, je les oubliais apres quelques jours !",
+                text: "Grace aux mnemoniques en francais, j'ai enfin réussi à retenir les kanji. Avant, je les oubliais apres quelques jours !",
                 avatar: "M",
                 color: "from-pink-400 to-rose-500"
               },
               {
                 name: "Thomas B.",
                 level: "Niveau 8",
-                text: "Le systeme de series m'a rendu accro. 45 jours sans interruption ! Je n'ai jamais ete aussi regulier.",
+                text: "Le systeme de series m'a rendu accro. 45 jours sans interruption ! Je n'ai jamais ete aussi régulier.",
                 avatar: "T",
                 color: "from-blue-400 to-indigo-500"
               },
               {
                 name: "Sophie D.",
                 level: "Niveau 22",
-                text: "En 6 mois, j'ai appris plus de kanji qu'en 2 ans avec d'autres methodes. L'approche est vraiment efficace.",
+                text: "En 6 mois, j'ai appris plus de kanji qu'en 2 ans avec d'autres méthodes. L'approche est vraiment efficace.",
                 avatar: "S",
                 color: "from-amber-400 to-orange-500"
               }
@@ -453,11 +453,11 @@ export default function Home() {
             <span className="relative text-7xl font-japanese text-transparent bg-clip-text bg-gradient-to-br from-teal-500 to-emerald-600">始めよう</span>
           </div>
           <h2 className="text-4xl font-bold font-display text-stone-900 mb-6">
-            Pret a commencer votre voyage ?
+            Prêt à commencer votre voyage ?
           </h2>
           <p className="text-xl text-stone-600 mb-6 max-w-2xl mx-auto">
             Rejoignez des milliers de francophones qui apprennent le japonais
-            de maniere efficace et agreable.
+            de maniere efficace et agréable.
           </p>
 
           {/* Urgency / Scarcity */}
@@ -474,14 +474,14 @@ export default function Home() {
               href="/register"
               className="group inline-flex items-center justify-center gap-3 bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-10 py-5 rounded-full text-lg font-semibold hover:shadow-2xl hover:shadow-teal-200/50 transition-all hover:-translate-y-1"
             >
-              Creer mon compte gratuit
+              Créer mon compte gratuit
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 group-hover:translate-x-1 transition-transform">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
             </Link>
           </div>
 
-          <p className="mt-6 text-sm text-stone-400">Pas de carte bancaire requise • Acces immediat</p>
+          <p className="mt-6 text-sm text-stone-400">Pas de carte bancaire requise • Accès immédiat</p>
         </div>
       </section>
 
