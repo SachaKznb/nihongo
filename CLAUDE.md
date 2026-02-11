@@ -106,3 +106,100 @@ To add new radicals, kanji, or vocabulary:
 - Mnemonics should be culturally relevant for French speakers
 - Reading inputs accept both hiragana and romaji
 - Answer checking includes typo tolerance using Levenshtein distance
+
+---
+
+## Recent Implementation (Feb 2025)
+
+### Completed Features
+
+#### 1. Email Verification System
+- Users must verify email before accessing the app
+- Verification emails sent via Resend API
+- 24-hour token expiry
+- Resend verification option
+- Files: `src/app/api/auth/verify-email/`, `src/app/api/auth/resend-verification/`, `src/app/(auth)/verify-email/`
+
+#### 2. Account Settings (in Settings page, "Compte" tab)
+- View account info (email, username, member since)
+- Change username
+- Change email (requires password, sends verification)
+- Change password (requires current password)
+- Export data as JSON (GDPR compliance)
+- Delete account (requires password + "SUPPRIMER" confirmation)
+- Files: `src/app/api/account/*`, `src/app/(main)/settings/page.tsx`
+
+#### 3. Admin Dashboard (code complete, needs schema push)
+- Dashboard with stats (users, content, activity)
+- User management (list, view, suspend/unsuspend, reset password)
+- Content management (CRUD for levels, radicals, kanji, vocabulary)
+- Mnemonic editing
+- CSV import/export
+- Audit logging for all admin actions
+- Files: `src/app/(admin)/admin/*`, `src/app/api/admin/*`, `src/lib/admin-auth.ts`, `src/lib/audit.ts`
+
+### Database Schema Changes (in prisma/schema.prisma)
+New fields on User model:
+- `emailVerified` - DateTime for email verification
+- `isAdmin` - Boolean for admin access
+- `isSuspended`, `suspendedAt`, `suspendedBy`, `suspendReason` - Suspension system
+
+New models:
+- `EmailVerificationToken` - For email verification flow
+- `EmailChangeToken` - For email change flow
+- `AdminAuditLog` - For tracking admin actions
+
+### Utility Scripts
+- `scripts/set-admin.ts` - Set a user as admin: `npx tsx scripts/set-admin.ts email@example.com`
+- `scripts/reset-pw.ts` - Reset password locally (dev only)
+
+---
+
+## TODO: Production Setup Required
+
+### CRITICAL: Push Schema to Production
+The local schema has new columns (isAdmin, isSuspended, etc.) that don't exist in production yet.
+
+**To fix:**
+1. Get your Supabase production DATABASE_URL (with password)
+2. Run: `DATABASE_URL="your-production-url" npx prisma db push`
+3. Then set yourself as admin in Supabase SQL Editor:
+   ```sql
+   UPDATE "User" SET "isAdmin" = true WHERE email = 'sacha@kaizen-media.co';
+   ```
+4. Reset your password if needed:
+   ```sql
+   UPDATE "User" SET "passwordHash" = '$2a$10$N9qo8uLOickgx2ZMRZoMy.MqrqvnrKLKQF7kL7JMYqh9F8eFmXwdO' WHERE email = 'sacha@kaizen-media.co';
+   ```
+   (Sets password to `TempPass123!`)
+
+### After Schema Push
+1. Log out and log back in to get fresh session with `isAdmin: true`
+2. Access admin at https://www.trynihongo.fr/admin
+
+### Environment Variables on Vercel
+Ensure these are set:
+- `RESEND_API_KEY` - For sending emails (password reset, verification)
+- `DATABASE_URL` - Production Supabase URL
+- `AUTH_SECRET` - NextAuth secret
+- `NEXTAUTH_URL` - https://www.trynihongo.fr
+
+---
+
+## Admin API Routes
+
+- `GET /api/admin/stats` - Dashboard statistics
+- `GET/POST /api/admin/users` - List/search users
+- `GET/PUT /api/admin/users/[id]` - Get/update user
+- `POST /api/admin/users/[id]/suspend` - Suspend user
+- `POST /api/admin/users/[id]/unsuspend` - Unsuspend user
+- `POST /api/admin/users/[id]/reset-password` - Reset user password
+- `GET/POST /api/admin/content/levels` - List/create levels
+- `GET/PUT/DELETE /api/admin/content/levels/[id]` - CRUD level
+- `GET/POST /api/admin/content/radicals` - List/create radicals
+- `GET/PUT/DELETE /api/admin/content/radicals/[id]` - CRUD radical
+- `GET/POST /api/admin/content/kanji` - List/create kanji
+- `GET/PUT/DELETE /api/admin/content/kanji/[id]` - CRUD kanji
+- `GET/POST /api/admin/content/vocabulary` - List/create vocabulary
+- `GET/PUT/DELETE /api/admin/content/vocabulary/[id]` - CRUD vocabulary
+- `GET /api/admin/audit` - View audit logs
