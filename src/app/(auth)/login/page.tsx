@@ -15,6 +15,17 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
+    // Custom French validation
+    if (!email.trim()) {
+      setError("Veuillez entrer votre adresse email");
+      return;
+    }
+    if (!password) {
+      setError("Veuillez entrer votre mot de passe");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -58,7 +69,6 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
               autoComplete="email"
               className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               placeholder="votre@email.com"
@@ -82,7 +92,6 @@ export default function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
               autoComplete="current-password"
               className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               placeholder="••••••••"

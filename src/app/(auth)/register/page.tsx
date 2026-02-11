@@ -18,6 +18,24 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
 
+    // Custom French validation
+    if (!username.trim()) {
+      setError("Veuillez entrer un nom d'utilisateur");
+      return;
+    }
+    if (!email.trim()) {
+      setError("Veuillez entrer votre adresse email");
+      return;
+    }
+    if (!password) {
+      setError("Veuillez entrer un mot de passe");
+      return;
+    }
+    if (!confirmPassword) {
+      setError("Veuillez confirmer votre mot de passe");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Les mots de passe ne correspondent pas");
       return;
@@ -95,7 +113,6 @@ export default function RegisterPage() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              required
               autoComplete="username"
               className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               placeholder="votre_pseudo"
@@ -111,7 +128,6 @@ export default function RegisterPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
               autoComplete="email"
               className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               placeholder="votre@email.com"
@@ -127,7 +143,6 @@ export default function RegisterPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
               autoComplete="new-password"
               className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               placeholder="••••••••"
@@ -146,7 +161,6 @@ export default function RegisterPage() {
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              required
               autoComplete="new-password"
               className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               placeholder="••••••••"
