@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -75,16 +74,9 @@ export default function RegisterPage() {
         return;
       }
 
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.ok) {
-        router.push("/dashboard");
-        router.refresh();
-      }
+      // Redirect to verification page instead of signing in
+      // User must verify email before they can access the app
+      router.push("/verify-email");
     } catch {
       setError("Une erreur est survenue");
     } finally {

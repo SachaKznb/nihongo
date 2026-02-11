@@ -49,10 +49,12 @@ export function middleware(request: NextRequest) {
   ];
   response.headers.set("Content-Security-Policy", cspDirectives.join("; "));
 
-  // Rate limiting for authentication endpoints
+  // Rate limiting for authentication and account endpoints
   if (
     request.nextUrl.pathname.startsWith("/api/auth/register") ||
-    request.nextUrl.pathname.startsWith("/api/auth/forgot-password")
+    request.nextUrl.pathname.startsWith("/api/auth/forgot-password") ||
+    request.nextUrl.pathname.startsWith("/api/auth/resend-verification") ||
+    request.nextUrl.pathname.startsWith("/api/account/")
   ) {
     // Clean up old entries
     cleanupRateLimitStore();

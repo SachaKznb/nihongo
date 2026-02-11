@@ -13,6 +13,11 @@ export default async function MainLayout({
     redirect("/login");
   }
 
+  // Block unverified users from accessing the app
+  if (!session.user.emailVerified) {
+    redirect("/verify-email");
+  }
+
   return (
     <div className="min-h-screen bg-stone-50">
       {/* Navigation */}

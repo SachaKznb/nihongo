@@ -8,15 +8,23 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(cuid())
-  email           String   @unique
+  id              String    @id @default(cuid())
+  email           String    @unique
+  emailVerified   DateTime?
   passwordHash    String
-  username        String   @unique
-  currentLevel    Int      @default(1)
-  lessonsPerDay   Int      @default(20)
-  reviewBatchSize Int      @default(10)
-  autoplayAudio   Boolean  @default(true)
-  createdAt       DateTime @default(now())
+  username        String    @unique
+  currentLevel    Int       @default(1)
+  lessonsPerDay   Int       @default(20)
+  reviewBatchSize Int       @default(10)
+  autoplayAudio   Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+
+  // Admin & Suspension
+  isAdmin       Boolean   @default(false)
+  isSuspended   Boolean   @default(false)
+  suspendedAt   DateTime?
+  suspendedBy   String?
+  suspendReason String?
 
   // Gamification & Streaks
   currentStreak     Int       @default(0)
@@ -29,10 +37,18 @@ model User {
   totalLessonsDone  Int       @default(0)
   perfectDays       Int       @default(0)  // Days with 100% accuracy
 
+  // Progress relations
   radicalProgress    UserRadicalProgress[]
   kanjiProgress      UserKanjiProgress[]
   vocabularyProgress UserVocabularyProgress[]
   reviews            Review[]
+
+  // Token relations
+  emailVerificationTokens EmailVerificationToken[]
+  emailChangeTokens       EmailChangeToken[]
+
+  // Admin audit relations
+  adminActions AdminAuditLog[] @relation("AdminPerformer")
 }
 
 model Level {
@@ -185,4 +201,49 @@ model PasswordResetToken {
   createdAt DateTime @default(now())
 
   @@index([email])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  email     String
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([email])
+  @@index([userId])
+}
+
+model EmailChangeToken {
+  id        String   @id @default(cuid())
+  userId    String
+  newEmail  String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model AdminAuditLog {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String   // e.g., 'user.suspend', 'content.create', 'content.update'
+  targetType String   // e.g., 'user', 'radical', 'kanji', 'vocabulary', 'level'
+  targetId   String   // ID of the affected record
+  details    Json?    // Additional context (old values, new values, etc.)
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  admin User @relation("AdminPerformer", fields: [adminId], references: [id])
+
+  @@index([adminId, createdAt])
+  @@index([targetType, targetId])
+  @@index([createdAt])
 }

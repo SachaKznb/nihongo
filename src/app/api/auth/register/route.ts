@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { unlockAvailableItems } from "@/lib/unlocks";
+import { sendVerificationEmail } from "@/lib/email";
 
 // Validation schema with strong password requirements
 const registerSchema = z.object({
@@ -78,9 +80,31 @@ export async function POST(request: NextRequest) {
     // Unlock initial items for level 1
     await unlockAvailableItems(user.id);
 
+    // Generate verification token
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+    await prisma.emailVerificationToken.create({
+      data: {
+        email: user.email,
+        userId: user.id,
+        token: verificationToken,
+        expiresAt,
+      },
+    });
+
+    // Send verification email
+    if (process.env.RESEND_API_KEY) {
+      const emailResult = await sendVerificationEmail(user.email, verificationToken);
+      if (!emailResult.success) {
+        console.error("Failed to send verification email:", emailResult.error);
+      }
+    }
+
     return NextResponse.json({
-      message: "Compte cree avec succes",
+      message: "Compte cree avec succes. Verifiez votre email pour activer votre compte.",
       user: { id: user.id, email: user.email, username: user.username },
+      requiresVerification: true,
     });
   } catch (error) {
     console.error("Registration error:", error);
