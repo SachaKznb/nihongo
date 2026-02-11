@@ -303,7 +303,7 @@ export default function DashboardPage() {
               <h3 className="font-bold font-display text-stone-900">Niveau {progress.currentLevel}</h3>
             </div>
             <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
-              {gamification.levelProgress}% complete
+              {gamification.levelProgress}% terminé
             </span>
           </div>
 

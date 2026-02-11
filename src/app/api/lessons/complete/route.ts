@@ -56,6 +56,16 @@ export async function POST(request: NextRequest) {
     // Check for newly unlocked items after completing a lesson
     await unlockAvailableItems(userId);
 
+    // Award XP for completing a lesson (+10 XP)
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        totalXp: { increment: 10 },
+        weeklyXp: { increment: 10 },
+        totalLessonsDone: { increment: 1 },
+      },
+    });
+
     return NextResponse.json({ success: true, nextReviewAt });
   } catch (error) {
     console.error("Lesson complete error:", error);
