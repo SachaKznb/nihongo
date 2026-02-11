@@ -80,7 +80,7 @@ export async function checkLevelUp(userId: string): Promise<boolean> {
   return percentage >= LEVEL_UP_PERCENTAGE;
 }
 
-// Unlock all available items for a user
+// Unlock all available items for a user (optimized with batch operations)
 export async function unlockAvailableItems(userId: string): Promise<{
   radicals: number;
   kanji: number;
@@ -89,83 +89,77 @@ export async function unlockAvailableItems(userId: string): Promise<{
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) return { radicals: 0, kanji: 0, vocabulary: 0 };
 
-  let unlockedRadicals = 0;
-  let unlockedKanji = 0;
-  let unlockedVocabulary = 0;
+  const now = new Date();
 
-  // Unlock radicals for current level
-  const levelRadicals = await prisma.radical.findMany({
-    where: { levelId: user.currentLevel },
-  });
+  // Fetch all data in parallel
+  const [levelRadicals, levelKanji, levelVocabulary, existingRadicalProgress, existingKanjiProgress, existingVocabProgress, allRadicalProgress] = await Promise.all([
+    prisma.radical.findMany({ where: { levelId: user.currentLevel } }),
+    prisma.kanji.findMany({ where: { levelId: user.currentLevel }, include: { radicals: true } }),
+    prisma.vocabulary.findMany({ where: { levelId: user.currentLevel }, include: { kanji: true } }),
+    prisma.userRadicalProgress.findMany({ where: { userId } }),
+    prisma.userKanjiProgress.findMany({ where: { userId } }),
+    prisma.userVocabularyProgress.findMany({ where: { userId } }),
+    prisma.userRadicalProgress.findMany({ where: { userId } }), // For checking guru status
+  ]);
 
-  for (const radical of levelRadicals) {
-    const existing = await prisma.userRadicalProgress.findUnique({
-      where: { userId_radicalId: { userId, radicalId: radical.id } },
-    });
+  // Create sets for fast lookup
+  const existingRadicalIds = new Set(existingRadicalProgress.map(p => p.radicalId));
+  const existingKanjiIds = new Set(existingKanjiProgress.map(p => p.kanjiId));
+  const existingVocabIds = new Set(existingVocabProgress.map(p => p.vocabularyId));
 
-    if (!existing) {
-      await prisma.userRadicalProgress.create({
-        data: {
-          userId,
-          radicalId: radical.id,
-          srsStage: SRS_STAGES.LOCKED,
-          unlockedAt: new Date(),
-        },
-      });
-      unlockedRadicals++;
-    }
-  }
+  // Map for radical progress lookup
+  const radicalProgressMap = new Map(allRadicalProgress.map(p => [p.radicalId, p.srsStage]));
+  const kanjiProgressMap = new Map(existingKanjiProgress.map(p => [p.kanjiId, p.srsStage]));
 
-  // Unlock kanji where all radicals are at Guru+
-  const levelKanji = await prisma.kanji.findMany({
-    where: { levelId: user.currentLevel },
-  });
+  // Find radicals to unlock
+  const radicalsToUnlock = levelRadicals
+    .filter(r => !existingRadicalIds.has(r.id))
+    .map(r => ({
+      userId,
+      radicalId: r.id,
+      srsStage: SRS_STAGES.LOCKED,
+      unlockedAt: now,
+    }));
 
-  for (const kanji of levelKanji) {
-    const existing = await prisma.userKanjiProgress.findUnique({
-      where: { userId_kanjiId: { userId, kanjiId: kanji.id } },
-    });
+  // Find kanji to unlock (all radicals at Guru+)
+  const kanjiToUnlock = levelKanji
+    .filter(k => {
+      if (existingKanjiIds.has(k.id)) return false;
+      if (k.radicals.length === 0) return true;
+      return k.radicals.every(kr => (radicalProgressMap.get(kr.radicalId) ?? 0) >= GURU_THRESHOLD);
+    })
+    .map(k => ({
+      userId,
+      kanjiId: k.id,
+      srsStage: SRS_STAGES.LOCKED,
+      unlockedAt: now,
+    }));
 
-    if (!existing && (await checkKanjiUnlock(userId, kanji.id))) {
-      await prisma.userKanjiProgress.create({
-        data: {
-          userId,
-          kanjiId: kanji.id,
-          srsStage: SRS_STAGES.LOCKED,
-          unlockedAt: new Date(),
-        },
-      });
-      unlockedKanji++;
-    }
-  }
+  // Find vocabulary to unlock (all kanji at Guru+)
+  const vocabToUnlock = levelVocabulary
+    .filter(v => {
+      if (existingVocabIds.has(v.id)) return false;
+      if (v.kanji.length === 0) return true;
+      return v.kanji.every(vk => (kanjiProgressMap.get(vk.kanjiId) ?? 0) >= GURU_THRESHOLD);
+    })
+    .map(v => ({
+      userId,
+      vocabularyId: v.id,
+      srsStage: SRS_STAGES.LOCKED,
+      unlockedAt: now,
+    }));
 
-  // Unlock vocabulary where all kanji are at Guru+
-  const levelVocabulary = await prisma.vocabulary.findMany({
-    where: { levelId: user.currentLevel },
-  });
-
-  for (const vocab of levelVocabulary) {
-    const existing = await prisma.userVocabularyProgress.findUnique({
-      where: { userId_vocabularyId: { userId, vocabularyId: vocab.id } },
-    });
-
-    if (!existing && (await checkVocabularyUnlock(userId, vocab.id))) {
-      await prisma.userVocabularyProgress.create({
-        data: {
-          userId,
-          vocabularyId: vocab.id,
-          srsStage: SRS_STAGES.LOCKED,
-          unlockedAt: new Date(),
-        },
-      });
-      unlockedVocabulary++;
-    }
-  }
+  // Batch create all unlocks
+  await Promise.all([
+    radicalsToUnlock.length > 0 ? prisma.userRadicalProgress.createMany({ data: radicalsToUnlock, skipDuplicates: true }) : Promise.resolve(),
+    kanjiToUnlock.length > 0 ? prisma.userKanjiProgress.createMany({ data: kanjiToUnlock, skipDuplicates: true }) : Promise.resolve(),
+    vocabToUnlock.length > 0 ? prisma.userVocabularyProgress.createMany({ data: vocabToUnlock, skipDuplicates: true }) : Promise.resolve(),
+  ]);
 
   return {
-    radicals: unlockedRadicals,
-    kanji: unlockedKanji,
-    vocabulary: unlockedVocabulary,
+    radicals: radicalsToUnlock.length,
+    kanji: kanjiToUnlock.length,
+    vocabulary: vocabToUnlock.length,
   };
 }
 
