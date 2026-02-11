@@ -391,8 +391,8 @@ export default function DashboardPage() {
               { label: "Apprenti", count: progress.srsBreakdown.apprentice, color: "bg-pink-500", emoji: "🌱" },
               { label: "Guru", count: progress.srsBreakdown.guru, color: "bg-purple-500", emoji: "🌿" },
               { label: "Maître", count: progress.srsBreakdown.master, color: "bg-blue-500", emoji: "🌳" },
-              { label: "Illuminé", count: progress.srsBreakdown.enlightened, color: "bg-amber-500", emoji: "☀️" },
-              { label: "Brûlé", count: progress.srsBreakdown.burned, color: "bg-stone-800", emoji: "🔥" },
+              { label: "Shodan", count: progress.srsBreakdown.enlightened, color: "bg-amber-500", emoji: "🥋" },
+              { label: "Satori", count: progress.srsBreakdown.burned, color: "bg-stone-800", emoji: "悟" },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-3 p-2 rounded-xl hover:bg-stone-50 transition-colors">
                 <span className="text-lg">{item.emoji}</span>

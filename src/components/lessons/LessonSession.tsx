@@ -111,7 +111,7 @@ export function LessonSession({ lessons }: LessonSessionProps) {
   useEffect(() => {
     if (!showResult) return;
 
-    const delay = isCorrect ? 2000 : 3000; // Faster for correct, slower for incorrect to read
+    const delay = isCorrect ? 3000 : 4000; // 3s for correct, 4s for incorrect to read
     const timer = setTimeout(() => {
       advanceToNext();
     }, delay);
@@ -322,21 +322,17 @@ export function LessonSession({ lessons }: LessonSessionProps) {
               ) : (
                 <div className="text-center">
                   {isCorrect ? (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-center gap-2">
-                        <span className="text-3xl">🎯</span>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-center gap-3">
+                        <span className="text-4xl animate-bounce">🎯</span>
                         <h3 className="text-2xl font-bold text-emerald-600">{resultMessage}</h3>
                       </div>
-                      <p className="text-emerald-700 font-medium">
+                      <p className="text-emerald-700 font-medium text-lg">
                         {currentQuizItem.meaningsFr[0]}
                       </p>
-                      {/* Progress bar for auto-advance */}
-                      <div className="mt-4 h-1 bg-emerald-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-emerald-500 animate-shrink-width" />
-                      </div>
                     </div>
                   ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div className="flex items-center justify-center gap-2">
                         <span className="text-2xl">💪</span>
                         <h3 className="text-xl font-semibold text-amber-700">{resultMessage}</h3>
@@ -346,10 +342,6 @@ export function LessonSession({ lessons }: LessonSessionProps) {
                         <p className="text-stone-900 font-bold text-lg">
                           {currentQuizItem.meaningsFr.join(", ")}
                         </p>
-                      </div>
-                      {/* Progress bar for auto-advance */}
-                      <div className="mt-4 h-1 bg-amber-100 rounded-full overflow-hidden">
-                        <div className="h-full bg-amber-500 animate-shrink-width-slow" />
                       </div>
                     </div>
                   )}

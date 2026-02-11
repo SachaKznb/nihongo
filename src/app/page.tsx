@@ -331,8 +331,8 @@ export default function Home() {
                   { stage: "Apprenti", emoji: "🌱", time: "4h → 2 jours", color: "from-pink-400 to-pink-600" },
                   { stage: "Guru", emoji: "🌿", time: "1 → 2 semaines", color: "from-purple-400 to-purple-600" },
                   { stage: "Maître", emoji: "🌳", time: "1 mois", color: "from-blue-400 to-blue-600" },
-                  { stage: "Illuminé", emoji: "☀️", time: "4 mois", color: "from-amber-400 to-amber-600" },
-                  { stage: "Brûlé", emoji: "🔥", time: "Mémorisé !", color: "from-stone-400 to-stone-600" },
+                  { stage: "Shodan", emoji: "🥋", time: "4 mois", color: "from-amber-400 to-amber-600" },
+                  { stage: "Satori", emoji: "悟", time: "Mémorisé !", color: "from-stone-400 to-stone-600" },
                 ].map((item) => (
                   <div key={item.stage} className="flex items-center gap-4 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
                     <span className="text-2xl">{item.emoji}</span>
