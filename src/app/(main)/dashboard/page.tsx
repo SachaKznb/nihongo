@@ -35,7 +35,9 @@ export default function DashboardPage() {
 
   // Show streak warning if user has a streak and hasn't studied today
   useEffect(() => {
-    if (progress?.gamification?.currentStreak > 0 && progress?.gamification?.todayReviews === 0) {
+    const streak = progress?.gamification?.currentStreak ?? 0;
+    const todayReviews = progress?.gamification?.todayReviews ?? 0;
+    if (streak > 0 && todayReviews === 0) {
       setShowStreakWarning(true);
     }
   }, [progress]);

@@ -111,6 +111,41 @@ function romajiToHiragana(romaji: string): string {
   let i = 0;
 
   while (i < romaji.length) {
+    // Handle double consonants (geminate) -> small tsu (っ)
+    // Examples: kitte -> きって, gakkou -> がっこう
+    if (
+      i + 1 < romaji.length &&
+      romaji[i] === romaji[i + 1] &&
+      /[bcdfghjklmpqrstvwxyz]/i.test(romaji[i]) &&
+      romaji[i].toLowerCase() !== "n" // 'nn' should be handled separately
+    ) {
+      result += "\u3063"; // small tsu っ
+      i += 1; // skip one consonant, the syllable will be processed next
+      continue;
+    }
+
+    // Handle 'n' before consonant (not before vowel or 'y') -> ん
+    if (
+      romaji[i].toLowerCase() === "n" &&
+      i + 1 < romaji.length &&
+      !/[aiueoyn]/i.test(romaji[i + 1])
+    ) {
+      result += "\u3093"; // ん
+      i += 1;
+      continue;
+    }
+
+    // Handle 'nn' -> ん
+    if (
+      romaji[i].toLowerCase() === "n" &&
+      i + 1 < romaji.length &&
+      romaji[i + 1].toLowerCase() === "n"
+    ) {
+      result += "\u3093"; // ん
+      i += 2;
+      continue;
+    }
+
     // Try 3-char combinations first
     if (i + 3 <= romaji.length && map[romaji.slice(i, i + 3)]) {
       result += map[romaji.slice(i, i + 3)];

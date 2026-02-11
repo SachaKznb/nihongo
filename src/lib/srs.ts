@@ -62,9 +62,17 @@ export function calculateNewStage(
   if (correct) {
     return Math.min(currentStage + 1, SRS_STAGES.BURNED);
   }
-  // Wrong answer: drop back based on current stage
+
+  // Wrong answer: drop back based on current stage (WaniKani-style penalties)
+  // Apprentice (1-4): Drop by 1
   if (currentStage <= 4) return Math.max(1, currentStage - 1);
+  // Guru (5-6): Drop by 2
   if (currentStage <= 6) return Math.max(1, currentStage - 2);
+  // Master (7): Drop to Guru 1 (stage 5)
+  if (currentStage === 7) return SRS_STAGES.GURU_1;
+  // Shodan (8): Drop to Apprentice 4 (stage 4) - harsh but fair
+  if (currentStage === 8) return SRS_STAGES.APPRENTICE_4;
+
   return Math.max(1, currentStage - 2);
 }
 

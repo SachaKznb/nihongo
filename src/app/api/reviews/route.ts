@@ -5,16 +5,17 @@ import type { ReviewItem } from "@/types";
 
 // GET /api/reviews - Returns items due for review
 export async function GET() {
-  const session = await auth();
+  try {
+    const session = await auth();
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
-  }
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    }
 
-  const userId = session.user.id;
-  const now = new Date();
+    const userId = session.user.id;
+    const now = new Date();
 
-  const reviews: ReviewItem[] = [];
+    const reviews: ReviewItem[] = [];
 
   // Get radicals due for review
   const radicalReviews = await prisma.userRadicalProgress.findMany({
@@ -79,8 +80,15 @@ export async function GET() {
     });
   }
 
-  // Shuffle reviews for variety
-  const shuffledReviews = reviews.sort(() => Math.random() - 0.5);
+    // Shuffle reviews for variety
+    const shuffledReviews = reviews.sort(() => Math.random() - 0.5);
 
-  return NextResponse.json({ reviews: shuffledReviews, total: reviews.length });
+    return NextResponse.json({ reviews: shuffledReviews, total: reviews.length });
+  } catch (error) {
+    console.error("Reviews GET error:", error);
+    return NextResponse.json(
+      { error: "Erreur lors du chargement des revisions" },
+      { status: 500 }
+    );
+  }
 }

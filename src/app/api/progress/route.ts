@@ -5,23 +5,24 @@ import { SRS_STAGES, getSrsCategory } from "@/lib/srs";
 import type { UserProgress, SrsBreakdown, GamificationStats } from "@/types";
 
 export async function GET() {
-  const session = await auth();
+  try {
+    const session = await auth();
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
-  }
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    }
 
-  const userId = session.user.id;
-  const user = await prisma.user.findUnique({ where: { id: userId } });
+    const userId = session.user.id;
+    const user = await prisma.user.findUnique({ where: { id: userId } });
 
-  if (!user) {
-    return NextResponse.json(
-      { error: "Utilisateur non trouve" },
-      { status: 404 }
-    );
-  }
+    if (!user) {
+      return NextResponse.json(
+        { error: "Utilisateur non trouve" },
+        { status: 404 }
+      );
+    }
 
-  const now = new Date();
+    const now = new Date();
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 
@@ -151,5 +152,12 @@ export async function GET() {
     gamification,
   };
 
-  return NextResponse.json(progress);
+    return NextResponse.json(progress);
+  } catch (error) {
+    console.error("Progress GET error:", error);
+    return NextResponse.json(
+      { error: "Erreur lors du chargement de la progression" },
+      { status: 500 }
+    );
+  }
 }

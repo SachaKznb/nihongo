@@ -6,23 +6,24 @@ import type { LessonItem } from "@/types";
 
 // GET /api/lessons - Returns available lessons (unlocked items not yet started)
 export async function GET() {
-  const session = await auth();
+  try {
+    const session = await auth();
 
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
-  }
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    }
 
-  const userId = session.user.id;
-  const user = await prisma.user.findUnique({ where: { id: userId } });
+    const userId = session.user.id;
+    const user = await prisma.user.findUnique({ where: { id: userId } });
 
-  if (!user) {
-    return NextResponse.json(
-      { error: "Utilisateur non trouve" },
-      { status: 404 }
-    );
-  }
+    if (!user) {
+      return NextResponse.json(
+        { error: "Utilisateur non trouve" },
+        { status: 404 }
+      );
+    }
 
-  const lessons: LessonItem[] = [];
+    const lessons: LessonItem[] = [];
 
   // Get radicals that are unlocked (stage 0) and not started
   const radicalProgress = await prisma.userRadicalProgress.findMany({
@@ -125,5 +126,12 @@ export async function GET() {
     });
   }
 
-  return NextResponse.json({ lessons, total: lessons.length });
+    return NextResponse.json({ lessons, total: lessons.length });
+  } catch (error) {
+    console.error("Lessons GET error:", error);
+    return NextResponse.json(
+      { error: "Erreur lors du chargement des lecons" },
+      { status: 500 }
+    );
+  }
 }

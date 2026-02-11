@@ -6,6 +6,7 @@ import { LessonItem } from "@/types";
 import { LessonCard } from "./LessonCard";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { useToast } from "@/components/ui/Toast";
 
 interface LessonSessionProps {
   lessons: LessonItem[];
@@ -31,6 +32,7 @@ const INCORRECT_MESSAGES = [
 
 export function LessonSession({ lessons }: LessonSessionProps) {
   const router = useRouter();
+  const { addToast } = useToast();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<SessionPhase>("learning");
   const [quizItems, setQuizItems] = useState<LessonItem[]>([]);
@@ -90,8 +92,10 @@ export function LessonSession({ lessons }: LessonSessionProps) {
       setShowXpAnimation(true);
       setEarnedXp(10);
 
-      // Fire and forget - don't await
+      // Complete lesson with proper error handling
       if (!completedLessons.has(currentQuizItem.id)) {
+        setCompletedLessons(new Set([...completedLessons, currentQuizItem.id]));
+
         fetch("/api/lessons/complete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -99,8 +103,16 @@ export function LessonSession({ lessons }: LessonSessionProps) {
             type: currentQuizItem.type,
             id: currentQuizItem.id,
           }),
-        }).catch(console.error);
-        setCompletedLessons(new Set([...completedLessons, currentQuizItem.id]));
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to complete lesson");
+            }
+          })
+          .catch((error) => {
+            console.error("Error completing lesson:", error);
+            addToast("Erreur de sauvegarde. Votre progression sera resynchronisee.", "warning");
+          });
       }
     } else {
       setResultMessage(INCORRECT_MESSAGES[Math.floor(Math.random() * INCORRECT_MESSAGES.length)]);

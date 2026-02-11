@@ -23,8 +23,21 @@ export default function RegisterPage() {
       return;
     }
 
-    if (password.length < 6) {
-      setError("Le mot de passe doit contenir au moins 6 caracteres");
+    // Client-side password validation (matches server-side Zod schema)
+    if (password.length < 8) {
+      setError("Le mot de passe doit contenir au moins 8 caracteres");
+      return;
+    }
+    if (!/[A-Z]/.test(password)) {
+      setError("Le mot de passe doit contenir au moins une majuscule");
+      return;
+    }
+    if (!/[a-z]/.test(password)) {
+      setError("Le mot de passe doit contenir au moins une minuscule");
+      return;
+    }
+    if (!/[0-9]/.test(password)) {
+      setError("Le mot de passe doit contenir au moins un chiffre");
       return;
     }
 
@@ -119,6 +132,9 @@ export default function RegisterPage() {
               className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
               placeholder="••••••••"
             />
+            <p className="mt-1.5 text-xs text-stone-400">
+              8 caracteres min. avec majuscule, minuscule et chiffre
+            </p>
           </div>
 
           <div>

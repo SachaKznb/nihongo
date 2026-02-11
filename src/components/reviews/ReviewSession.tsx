@@ -8,6 +8,7 @@ import { ReviewInput } from "./ReviewInput";
 import { Button } from "@/components/ui/Button";
 import { SRS_STAGE_NAMES } from "@/lib/srs";
 import { playReading } from "@/lib/audio";
+import { useToast } from "@/components/ui/Toast";
 
 interface ReviewSessionProps {
   reviews: ReviewItem[];
@@ -32,11 +33,15 @@ interface CurrentQuestion {
 
 export function ReviewSession({ reviews }: ReviewSessionProps) {
   const router = useRouter();
+  const { addToast } = useToast();
 
   // Track state for each unique item
   const [itemStates, setItemStates] = useState<Map<string, ItemReviewState>>(
     new Map()
   );
+
+  // Loading state for API calls
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Question queue
   const [questionQueue, setQuestionQueue] = useState<CurrentQuestion[]>([]);
@@ -144,17 +149,20 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
         };
       } catch (error) {
         console.error("Error updating SRS:", error);
+        addToast("Erreur de sauvegarde. Votre progression sera resynchronisee.", "warning");
       }
     },
-    []
+    [addToast]
   );
 
   const handleSubmit = async (answer: string) => {
-    if (!currentQuestion || showResult) return;
+    if (!currentQuestion || showResult || isSubmitting) return;
 
     const itemKey = `${currentQuestion.item.type}-${currentQuestion.item.id}`;
     const state = itemStates.get(itemKey);
     if (!state) return;
+
+    setIsSubmitting(true);
 
     try {
       // Check the answer
@@ -169,11 +177,15 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
         }),
       });
 
+      if (!response.ok) {
+        throw new Error("Erreur de verification");
+      }
+
       const result = await response.json();
       const correct = result.correct;
 
       setLastCorrect(correct);
-      setLastExpectedAnswers(result.expectedAnswers);
+      setLastExpectedAnswers(result.expectedAnswers || []);
       setShowResult(true);
 
       // Update stats
@@ -211,6 +223,9 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
       checkAndUpdateSrs(itemKey, newState);
     } catch (error) {
       console.error("Error checking answer:", error);
+      addToast("Erreur de connexion. Veuillez reessayer.", "error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -399,7 +414,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                     className="flex items-center justify-between p-2 bg-emerald-50 rounded-lg"
                   >
                     <span className="font-japanese text-lg">
-                      {change.character}
+                      {change.character || "?"}
                     </span>
                     <span className="text-sm text-emerald-700">
                       {SRS_STAGE_NAMES[change.from]} → {SRS_STAGE_NAMES[change.to]}{" "}
@@ -413,7 +428,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                     className="flex items-center justify-between p-2 bg-rose-50 rounded-lg"
                   >
                     <span className="font-japanese text-lg">
-                      {change.character}
+                      {change.character || "?"}
                     </span>
                     <span className="text-sm text-rose-700">
                       {SRS_STAGE_NAMES[change.from]} → {SRS_STAGE_NAMES[change.to]}{" "}
@@ -529,10 +544,18 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
         {/* Input or Result */}
         <div className="mt-6">
           {!showResult ? (
-            <ReviewInput
-              reviewType={currentQuestion?.reviewType || "meaning"}
-              onSubmit={handleSubmit}
-            />
+            <div className="relative">
+              <ReviewInput
+                reviewType={currentQuestion?.reviewType || "meaning"}
+                onSubmit={handleSubmit}
+                disabled={isSubmitting}
+              />
+              {isSubmitting && (
+                <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-xl">
+                  <div className="animate-spin h-6 w-6 border-3 border-teal-500 border-t-transparent rounded-full" />
+                </div>
+              )}
+            </div>
           ) : (
             <div className="space-y-4">
               <div
