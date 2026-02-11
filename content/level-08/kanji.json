@@ -1,0 +1,95 @@
+{
+  "level": 8,
+  "kanji": [
+    {
+      "character": "男",
+      "meaningsFr": ["Homme", "Masculin"],
+      "readingsOn": ["ダン", "ナン"],
+      "readingsKun": ["おとこ"],
+      "meaningMnemonic": "Force dans la rizière - l'HOMME qui travaille dur.",
+      "readingMnemonic": "'Otoko' - l'HOMME dit 'oh to-ko!' en soulevant des charges.",
+      "radicals": ["男"]
+    },
+    {
+      "character": "女",
+      "meaningsFr": ["Femme", "Féminin"],
+      "readingsOn": ["ジョ", "ニョ"],
+      "readingsKun": ["おんな"],
+      "meaningMnemonic": "Une silhouette élégante assise - la FEMME.",
+      "readingMnemonic": "'Onna' - la FEMME dit 'oh non, non, ah!' avec grâce.",
+      "radicals": ["女"]
+    },
+    {
+      "character": "子",
+      "meaningsFr": ["Enfant", "Fils/Fille"],
+      "readingsOn": ["シ", "ス"],
+      "readingsKun": ["こ"],
+      "meaningMnemonic": "Un bébé emmailloté avec les bras ouverts - un ENFANT.",
+      "readingMnemonic": "'Ko' - l'ENFANT fait 'coucou!' en jouant.",
+      "radicals": ["子"]
+    },
+    {
+      "character": "父",
+      "meaningsFr": ["Père"],
+      "readingsOn": ["フ"],
+      "readingsKun": ["ちち"],
+      "meaningMnemonic": "Des mains qui tiennent une hache - le PÈRE protecteur.",
+      "readingMnemonic": "'Chichi' - le PÈRE dit 'chichi!' pour calmer les enfants.",
+      "radicals": ["父"]
+    },
+    {
+      "character": "母",
+      "meaningsFr": ["Mère"],
+      "readingsOn": ["ボ"],
+      "readingsKun": ["はは"],
+      "meaningMnemonic": "Deux points comme des seins nourriciers - la MÈRE.",
+      "readingMnemonic": "'Haha' - la MÈRE rit 'haha!' avec ses enfants.",
+      "radicals": ["母"]
+    },
+    {
+      "character": "友",
+      "meaningsFr": ["Ami"],
+      "readingsOn": ["ユウ"],
+      "readingsKun": ["とも"],
+      "meaningMnemonic": "Deux mains qui se tiennent - des AMIS.",
+      "readingMnemonic": "'Tomo' - un AMI, c'est quelqu'un avec qui on fait 'tout, moi!'",
+      "radicals": ["友"]
+    },
+    {
+      "character": "先",
+      "meaningsFr": ["Avant", "Premier", "Futur"],
+      "readingsOn": ["セン"],
+      "readingsKun": ["さき"],
+      "meaningMnemonic": "Des pieds qui avancent en premier - AVANT les autres.",
+      "readingMnemonic": "'Saki' - AVANT tout, on dit 'ça qui' vient en premier!",
+      "radicals": ["先"]
+    },
+    {
+      "character": "生",
+      "meaningsFr": ["Vie", "Naître", "Cru"],
+      "readingsOn": ["セイ", "ショウ"],
+      "readingsKun": ["い-きる", "う-まれる", "なま"],
+      "meaningMnemonic": "Une plante qui pousse de la terre - la VIE.",
+      "readingMnemonic": "'Sei' - la VIE, c'est 'c'est' magnifique!",
+      "radicals": ["生"]
+    },
+    {
+      "character": "名",
+      "meaningsFr": ["Nom", "Réputation"],
+      "readingsOn": ["メイ", "ミョウ"],
+      "readingsKun": ["な"],
+      "meaningMnemonic": "Bouche qui appelle dans le soir - un NOM qu'on crie.",
+      "readingMnemonic": "'Na' - quel est ton NOM? 'Na-ni?' (quoi?)",
+      "radicals": ["名"]
+    },
+    {
+      "character": "何",
+      "meaningsFr": ["Quoi", "Que", "Combien"],
+      "readingsOn": ["カ"],
+      "readingsKun": ["なに", "なん"],
+      "meaningMnemonic": "Une personne qui questionne - QUOI?",
+      "readingMnemonic": "'Nani' - QUOI? 'Nani?!' c'est la surprise!",
+      "radicals": ["何"]
+    }
+  ]
+}

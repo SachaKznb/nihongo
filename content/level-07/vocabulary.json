@@ -1,0 +1,149 @@
+{
+  "level": 7,
+  "vocabulary": [
+    {
+      "word": "学校",
+      "meaningsFr": ["École"],
+      "readings": ["がっこう"],
+      "mnemonic": "Étudier + école = l'école.",
+      "sentenceJp": "学校に行きます。",
+      "sentenceFr": "Je vais à l'école.",
+      "kanji": ["学", "校"]
+    },
+    {
+      "word": "学生",
+      "meaningsFr": ["Étudiant"],
+      "readings": ["がくせい"],
+      "mnemonic": "Étudier + vie = celui qui vit pour étudier.",
+      "sentenceJp": "私は学生です。",
+      "sentenceFr": "Je suis étudiant.",
+      "kanji": ["学"]
+    },
+    {
+      "word": "大学",
+      "meaningsFr": ["Université"],
+      "readings": ["だいがく"],
+      "mnemonic": "Grand + étude = grande école, université.",
+      "sentenceJp": "大学で日本語を勉強しています。",
+      "sentenceFr": "J'étudie le japonais à l'université.",
+      "kanji": ["大", "学"]
+    },
+    {
+      "word": "会う",
+      "meaningsFr": ["Rencontrer", "Voir quelqu'un"],
+      "readings": ["あう"],
+      "mnemonic": "Le kanji rencontrer avec la terminaison verbale.",
+      "sentenceJp": "友達に会います。",
+      "sentenceFr": "Je rencontre un ami.",
+      "kanji": ["会"]
+    },
+    {
+      "word": "会社",
+      "meaningsFr": ["Entreprise", "Société"],
+      "readings": ["かいしゃ"],
+      "mnemonic": "Rencontre + société = lieu où on se réunit pour travailler.",
+      "sentenceJp": "会社は駅の近くです。",
+      "sentenceFr": "L'entreprise est près de la gare.",
+      "kanji": ["会", "社"]
+    },
+    {
+      "word": "店",
+      "meaningsFr": ["Magasin", "Boutique"],
+      "readings": ["みせ"],
+      "mnemonic": "Le kanji seul signifie magasin.",
+      "sentenceJp": "この店は安いです。",
+      "sentenceFr": "Ce magasin est bon marché.",
+      "kanji": ["店"]
+    },
+    {
+      "word": "駅",
+      "meaningsFr": ["Gare", "Station"],
+      "readings": ["えき"],
+      "mnemonic": "Le kanji seul signifie gare.",
+      "sentenceJp": "駅まで歩きます。",
+      "sentenceFr": "Je marche jusqu'à la gare.",
+      "kanji": ["駅"]
+    },
+    {
+      "word": "道",
+      "meaningsFr": ["Chemin", "Route"],
+      "readings": ["みち"],
+      "mnemonic": "Le kanji seul signifie chemin.",
+      "sentenceJp": "この道は長いです。",
+      "sentenceFr": "Ce chemin est long.",
+      "kanji": ["道"]
+    },
+    {
+      "word": "国",
+      "meaningsFr": ["Pays"],
+      "readings": ["くに"],
+      "mnemonic": "Le kanji seul signifie pays.",
+      "sentenceJp": "どの国から来ましたか。",
+      "sentenceFr": "De quel pays venez-vous?",
+      "kanji": ["国"]
+    },
+    {
+      "word": "外国",
+      "meaningsFr": ["Pays étranger", "L'étranger"],
+      "readings": ["がいこく"],
+      "mnemonic": "Extérieur + pays = pays extérieur, étranger.",
+      "sentenceJp": "外国に行きたいです。",
+      "sentenceFr": "Je veux aller à l'étranger.",
+      "kanji": ["外", "国"]
+    },
+    {
+      "word": "外",
+      "meaningsFr": ["Dehors", "Extérieur"],
+      "readings": ["そと"],
+      "mnemonic": "Le kanji seul signifie dehors.",
+      "sentenceJp": "外は寒いです。",
+      "sentenceFr": "Il fait froid dehors.",
+      "kanji": ["外"]
+    },
+    {
+      "word": "家",
+      "meaningsFr": ["Maison"],
+      "readings": ["いえ"],
+      "mnemonic": "Le kanji seul signifie maison.",
+      "sentenceJp": "家に帰ります。",
+      "sentenceFr": "Je rentre à la maison.",
+      "kanji": ["家"]
+    },
+    {
+      "word": "家族",
+      "meaningsFr": ["Famille"],
+      "readings": ["かぞく"],
+      "mnemonic": "Maison + clan = famille.",
+      "sentenceJp": "家族は四人です。",
+      "sentenceFr": "Ma famille compte quatre personnes.",
+      "kanji": ["家"]
+    },
+    {
+      "word": "入学",
+      "meaningsFr": ["Entrer à l'école", "Admission"],
+      "readings": ["にゅうがく"],
+      "mnemonic": "Entrer + étudier = entrer à l'école.",
+      "sentenceJp": "来年、大学に入学します。",
+      "sentenceFr": "J'entre à l'université l'année prochaine.",
+      "kanji": ["入", "学"]
+    },
+    {
+      "word": "中国",
+      "meaningsFr": ["Chine"],
+      "readings": ["ちゅうごく"],
+      "mnemonic": "Milieu + pays = le pays du milieu, la Chine.",
+      "sentenceJp": "中国語を勉強しています。",
+      "sentenceFr": "J'étudie le chinois.",
+      "kanji": ["中", "国"]
+    },
+    {
+      "word": "日本",
+      "meaningsFr": ["Japon"],
+      "readings": ["にほん", "にっぽん"],
+      "mnemonic": "Soleil + origine = origine du soleil, le Japon.",
+      "sentenceJp": "日本は島国です。",
+      "sentenceFr": "Le Japon est un pays insulaire.",
+      "kanji": ["日"]
+    }
+  ]
+}

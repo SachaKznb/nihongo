@@ -1,0 +1,45 @@
+{
+  "level": 2,
+  "radicals": [
+    {
+      "character": "火",
+      "meaningFr": "Feu",
+      "mnemonic": "Des flammes qui s'élèvent vers le haut."
+    },
+    {
+      "character": "水",
+      "meaningFr": "Eau",
+      "mnemonic": "Des gouttes d'eau qui coulent."
+    },
+    {
+      "character": "土",
+      "meaningFr": "Terre",
+      "mnemonic": "Une croix avec une base, comme une plante dans le sol."
+    },
+    {
+      "character": "金",
+      "meaningFr": "Or",
+      "mnemonic": "Un toit sur des lingots d'or."
+    },
+    {
+      "character": "人",
+      "meaningFr": "Personne",
+      "mnemonic": "Une personne qui marche, vue de côté."
+    },
+    {
+      "character": "大",
+      "meaningFr": "Grand",
+      "mnemonic": "Une personne qui écarte les bras pour montrer 'grand'."
+    },
+    {
+      "character": "小",
+      "meaningFr": "Petit",
+      "mnemonic": "Un point avec deux traits, comme quelque chose de petit."
+    },
+    {
+      "character": "中",
+      "meaningFr": "Milieu",
+      "mnemonic": "Une ligne qui passe au milieu d'un rectangle."
+    }
+  ]
+}

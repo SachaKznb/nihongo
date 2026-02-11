@@ -1,0 +1,95 @@
+{
+  "level": 10,
+  "kanji": [
+    {
+      "character": "書",
+      "meaningsFr": ["Écrire", "Livre"],
+      "readingsOn": ["ショ"],
+      "readingsKun": ["か-く"],
+      "meaningMnemonic": "Une main tenant un pinceau qui trace - ÉCRIRE.",
+      "readingMnemonic": "'Kaku' - pour ÉCRIRE, on fait 'cac-cac' avec le stylo!",
+      "radicals": ["書"]
+    },
+    {
+      "character": "読",
+      "meaningsFr": ["Lire"],
+      "readingsOn": ["ドク", "トク"],
+      "readingsKun": ["よ-む"],
+      "meaningMnemonic": "Les paroles qu'on achète dans un livre - LIRE.",
+      "readingMnemonic": "'Yomu' - pour LIRE, on 'yeux-mu' les mots!",
+      "radicals": ["読"]
+    },
+    {
+      "character": "話",
+      "meaningsFr": ["Parler", "Histoire", "Conversation"],
+      "readingsOn": ["ワ"],
+      "readingsKun": ["はな-す", "はなし"],
+      "meaningMnemonic": "Des paroles qui sortent de la langue - PARLER.",
+      "readingMnemonic": "'Hanasu' - pour PARLER, on ouvre le 'hangar' de la bouche!",
+      "radicals": ["話"]
+    },
+    {
+      "character": "聞",
+      "meaningsFr": ["Entendre", "Écouter", "Demander"],
+      "readingsOn": ["ブン", "モン"],
+      "readingsKun": ["き-く", "き-こえる"],
+      "meaningMnemonic": "Une oreille à la porte - ENTENDRE ce qui se dit.",
+      "readingMnemonic": "'Kiku' - pour ÉCOUTER, on tend l'oreille 'qui-coute'!",
+      "radicals": ["聞"]
+    },
+    {
+      "character": "思",
+      "meaningsFr": ["Penser", "Croire"],
+      "readingsOn": ["シ"],
+      "readingsKun": ["おも-う"],
+      "meaningMnemonic": "Ce qui pousse dans le coeur comme dans un champ - PENSER.",
+      "readingMnemonic": "'Omou' - je PENSE, donc 'oh mou'... je suis!",
+      "radicals": ["思"]
+    },
+    {
+      "character": "知",
+      "meaningsFr": ["Savoir", "Connaître"],
+      "readingsOn": ["チ"],
+      "readingsKun": ["し-る"],
+      "meaningMnemonic": "Une flèche de connaissance qui atteint sa cible - SAVOIR.",
+      "readingMnemonic": "'Shiru' - pour SAVOIR, il faut 'si-r' les livres!",
+      "radicals": ["知"]
+    },
+    {
+      "character": "休",
+      "meaningsFr": ["Se reposer", "Repos", "Vacances"],
+      "readingsOn": ["キュウ"],
+      "readingsKun": ["やす-む"],
+      "meaningMnemonic": "Une personne appuyée contre un arbre - SE REPOSER.",
+      "readingMnemonic": "'Yasumu' - pour SE REPOSER, on dit 'yeah, super moment'!",
+      "radicals": ["休"]
+    },
+    {
+      "character": "買",
+      "meaningsFr": ["Acheter"],
+      "readingsOn": ["バイ"],
+      "readingsKun": ["か-う"],
+      "meaningMnemonic": "Un filet pour attraper les coquillages (argent) - ACHETER.",
+      "readingMnemonic": "'Kau' - pour ACHETER, on dit 'ka-ou!' et on paie!",
+      "radicals": ["買"]
+    },
+    {
+      "character": "売",
+      "meaningsFr": ["Vendre"],
+      "readingsOn": ["バイ"],
+      "readingsKun": ["う-る"],
+      "meaningMnemonic": "Un étal au marché où on expose - VENDRE.",
+      "readingMnemonic": "'Uru' - pour VENDRE, on crie 'ou-rou!' au marché!",
+      "radicals": ["売"]
+    },
+    {
+      "character": "使",
+      "meaningsFr": ["Utiliser", "Employer"],
+      "readingsOn": ["シ"],
+      "readingsKun": ["つか-う"],
+      "meaningMnemonic": "Une personne qui fait le travail officiel - UTILISER.",
+      "readingMnemonic": "'Tsukau' - pour UTILISER, on 'ts'casse' la tête!",
+      "radicals": ["使"]
+    }
+  ]
+}

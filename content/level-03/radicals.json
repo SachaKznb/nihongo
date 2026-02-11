@@ -1,0 +1,55 @@
+{
+  "level": 3,
+  "radicals": [
+    {
+      "character": "口",
+      "meaningFr": "Bouche",
+      "mnemonic": "Un carré ouvert, comme une bouche vue de face."
+    },
+    {
+      "character": "山",
+      "meaningFr": "Montagne",
+      "mnemonic": "Trois pics comme une chaîne de montagnes."
+    },
+    {
+      "character": "川",
+      "meaningFr": "Rivière",
+      "mnemonic": "Trois traits verticaux comme l'eau qui coule."
+    },
+    {
+      "character": "木",
+      "meaningFr": "Arbre",
+      "mnemonic": "Un tronc avec des branches et des racines."
+    },
+    {
+      "character": "林",
+      "meaningFr": "Forêt",
+      "mnemonic": "Deux arbres côte à côte forment une forêt."
+    },
+    {
+      "character": "森",
+      "meaningFr": "Bois",
+      "mnemonic": "Trois arbres - une forêt dense devient un bois."
+    },
+    {
+      "character": "上",
+      "meaningFr": "Haut",
+      "mnemonic": "Une ligne au-dessus d'une base indique le haut."
+    },
+    {
+      "character": "下",
+      "meaningFr": "Bas",
+      "mnemonic": "Une ligne en dessous d'une base indique le bas."
+    },
+    {
+      "character": "入",
+      "meaningFr": "Entrer",
+      "mnemonic": "Une flèche qui pointe vers l'intérieur pour entrer."
+    },
+    {
+      "character": "出",
+      "meaningFr": "Sortir",
+      "mnemonic": "Deux montagnes dont on sort, comme émerger d'une vallée."
+    }
+  ]
+}

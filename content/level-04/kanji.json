@@ -1,0 +1,95 @@
+{
+  "level": 4,
+  "kanji": [
+    {
+      "character": "四",
+      "meaningsFr": ["Quatre"],
+      "readingsOn": ["シ"],
+      "readingsKun": ["よ", "よっつ", "よん"],
+      "meaningMnemonic": "Un carré avec des divisions internes représente le chiffre quatre.",
+      "readingMnemonic": "'Yon' - comme 'Yon-duras' (Honduras), il y a QUATRE pays en Amérique centrale.",
+      "radicals": ["四"]
+    },
+    {
+      "character": "五",
+      "meaningsFr": ["Cinq"],
+      "readingsOn": ["ゴ"],
+      "readingsKun": ["いつ", "いつつ"],
+      "meaningMnemonic": "Une forme avec cinq traits horizontaux et verticaux pour le chiffre cinq.",
+      "readingMnemonic": "'Go' - le jeu de Go se joue sur CINQ x CINQ cases pour les débutants.",
+      "radicals": ["五"]
+    },
+    {
+      "character": "六",
+      "meaningsFr": ["Six"],
+      "readingsOn": ["ロク"],
+      "readingsKun": ["む", "むっつ", "むい"],
+      "meaningMnemonic": "Un toit avec deux jambes qui descendent, comme le chiffre six.",
+      "readingMnemonic": "'Roku' - pensez au 'rock' avec SIX cordes de guitare.",
+      "radicals": ["六"]
+    },
+    {
+      "character": "七",
+      "meaningsFr": ["Sept"],
+      "readingsOn": ["シチ"],
+      "readingsKun": ["なな", "ななつ"],
+      "meaningMnemonic": "Un trait horizontal croisé par un trait diagonal, comme un sept.",
+      "readingMnemonic": "'Nana' - votre grand-mère (nana) a SEPT petits-enfants.",
+      "radicals": ["七"]
+    },
+    {
+      "character": "八",
+      "meaningsFr": ["Huit"],
+      "readingsOn": ["ハチ"],
+      "readingsKun": ["や", "やっつ", "よう"],
+      "meaningMnemonic": "Deux traits qui s'écartent vers le bas comme le chiffre huit ouvert.",
+      "readingMnemonic": "'Hachi' - une 'hache' a HUIT lettres en anglais (hatchet).",
+      "radicals": ["八"]
+    },
+    {
+      "character": "九",
+      "meaningsFr": ["Neuf"],
+      "readingsOn": ["キュウ", "ク"],
+      "readingsKun": ["ここの", "ここのつ"],
+      "meaningMnemonic": "Une forme courbée qui ressemble à un neuf stylisé.",
+      "readingMnemonic": "'Kyuu' - 'queue' a NEUF lettres en anglais (nine)... ok, le son 'queue' rime avec neuf!",
+      "radicals": ["九"]
+    },
+    {
+      "character": "百",
+      "meaningsFr": ["Cent"],
+      "readingsOn": ["ヒャク"],
+      "readingsKun": [],
+      "meaningMnemonic": "Un + blanc au-dessus = cent, le premier nombre à trois chiffres.",
+      "readingMnemonic": "'Hyaku' - 'il y a que' CENT façons de compter au Japon.",
+      "radicals": ["百"]
+    },
+    {
+      "character": "千",
+      "meaningsFr": ["Mille"],
+      "readingsOn": ["セン"],
+      "readingsKun": ["ち"],
+      "meaningMnemonic": "Un trait supplémentaire sur dix = mille, dix fois cent.",
+      "readingMnemonic": "'Sen' - 'sans' MILLE euros, on ne peut rien acheter.",
+      "radicals": ["千"]
+    },
+    {
+      "character": "年",
+      "meaningsFr": ["Année", "An"],
+      "readingsOn": ["ネン"],
+      "readingsKun": ["とし"],
+      "meaningMnemonic": "Une personne qui porte le poids du temps sur ses épaules pendant une année.",
+      "readingMnemonic": "'Nen' - chaque ANNÉE, on dit 'n'est-ce pas' pour confirmer.",
+      "radicals": ["年"]
+    },
+    {
+      "character": "今",
+      "meaningsFr": ["Maintenant", "Présent"],
+      "readingsOn": ["コン", "キン"],
+      "readingsKun": ["いま"],
+      "meaningMnemonic": "Un toit qui couvre le moment présent - maintenant.",
+      "readingMnemonic": "'Ima' - 'il m'a' dit ça MAINTENANT, à l'instant!",
+      "radicals": ["今"]
+    }
+  ]
+}

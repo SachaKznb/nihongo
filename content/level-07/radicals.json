@@ -1,0 +1,55 @@
+{
+  "level": 7,
+  "radicals": [
+    {
+      "character": "学",
+      "meaningFr": "Étudier",
+      "mnemonic": "Un enfant sous un toit avec des mains qui apprennent."
+    },
+    {
+      "character": "校",
+      "meaningFr": "École",
+      "mnemonic": "Arbre + comparer = l'école où on compare les connaissances."
+    },
+    {
+      "character": "会",
+      "meaningFr": "Rencontrer",
+      "mnemonic": "Un toit où les gens se rencontrent."
+    },
+    {
+      "character": "社",
+      "meaningFr": "Société",
+      "mnemonic": "Autel + terre = la société qui vénère."
+    },
+    {
+      "character": "店",
+      "meaningFr": "Magasin",
+      "mnemonic": "Un toit avec une marque = un magasin."
+    },
+    {
+      "character": "駅",
+      "meaningFr": "Gare",
+      "mnemonic": "Cheval + relais = station de relais pour chevaux."
+    },
+    {
+      "character": "道",
+      "meaningFr": "Chemin",
+      "mnemonic": "Tête + marcher = le chemin qu'on suit."
+    },
+    {
+      "character": "国",
+      "meaningFr": "Pays",
+      "mnemonic": "Un trésor entouré de frontières = un pays."
+    },
+    {
+      "character": "外",
+      "meaningFr": "Extérieur",
+      "mnemonic": "Soir + devin = dehors la nuit."
+    },
+    {
+      "character": "家",
+      "meaningFr": "Maison",
+      "mnemonic": "Un toit avec un cochon = la maison où on élève."
+    }
+  ]
+}

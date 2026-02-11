@@ -1,0 +1,149 @@
+{
+  "level": 10,
+  "vocabulary": [
+    {
+      "word": "書く",
+      "meaningsFr": ["Écrire"],
+      "readings": ["かく"],
+      "mnemonic": "Le kanji écrire avec la terminaison verbale.",
+      "sentenceJp": "手紙を書きます。",
+      "sentenceFr": "J'écris une lettre.",
+      "kanji": ["書"]
+    },
+    {
+      "word": "読む",
+      "meaningsFr": ["Lire"],
+      "readings": ["よむ"],
+      "mnemonic": "Le kanji lire avec la terminaison verbale.",
+      "sentenceJp": "新聞を読みます。",
+      "sentenceFr": "Je lis le journal.",
+      "kanji": ["読"]
+    },
+    {
+      "word": "話す",
+      "meaningsFr": ["Parler"],
+      "readings": ["はなす"],
+      "mnemonic": "Le kanji parler avec la terminaison verbale.",
+      "sentenceJp": "日本語を話します。",
+      "sentenceFr": "Je parle japonais.",
+      "kanji": ["話"]
+    },
+    {
+      "word": "聞く",
+      "meaningsFr": ["Écouter", "Entendre", "Demander"],
+      "readings": ["きく"],
+      "mnemonic": "Le kanji entendre avec la terminaison verbale.",
+      "sentenceJp": "音楽を聞きます。",
+      "sentenceFr": "J'écoute de la musique.",
+      "kanji": ["聞"]
+    },
+    {
+      "word": "思う",
+      "meaningsFr": ["Penser", "Croire"],
+      "readings": ["おもう"],
+      "mnemonic": "Le kanji penser avec la terminaison verbale.",
+      "sentenceJp": "そう思います。",
+      "sentenceFr": "Je pense que oui.",
+      "kanji": ["思"]
+    },
+    {
+      "word": "知る",
+      "meaningsFr": ["Savoir", "Connaître"],
+      "readings": ["しる"],
+      "mnemonic": "Le kanji savoir avec la terminaison verbale.",
+      "sentenceJp": "この人を知っていますか。",
+      "sentenceFr": "Connaissez-vous cette personne?",
+      "kanji": ["知"]
+    },
+    {
+      "word": "休む",
+      "meaningsFr": ["Se reposer"],
+      "readings": ["やすむ"],
+      "mnemonic": "Le kanji repos avec la terminaison verbale.",
+      "sentenceJp": "今日は休みます。",
+      "sentenceFr": "Je me repose aujourd'hui.",
+      "kanji": ["休"]
+    },
+    {
+      "word": "買う",
+      "meaningsFr": ["Acheter"],
+      "readings": ["かう"],
+      "mnemonic": "Le kanji acheter avec la terminaison verbale.",
+      "sentenceJp": "本を買います。",
+      "sentenceFr": "J'achète un livre.",
+      "kanji": ["買"]
+    },
+    {
+      "word": "売る",
+      "meaningsFr": ["Vendre"],
+      "readings": ["うる"],
+      "mnemonic": "Le kanji vendre avec la terminaison verbale.",
+      "sentenceJp": "車を売ります。",
+      "sentenceFr": "Je vends ma voiture.",
+      "kanji": ["売"]
+    },
+    {
+      "word": "使う",
+      "meaningsFr": ["Utiliser"],
+      "readings": ["つかう"],
+      "mnemonic": "Le kanji utiliser avec la terminaison verbale.",
+      "sentenceJp": "パソコンを使います。",
+      "sentenceFr": "J'utilise un ordinateur.",
+      "kanji": ["使"]
+    },
+    {
+      "word": "電話",
+      "meaningsFr": ["Téléphone"],
+      "readings": ["でんわ"],
+      "mnemonic": "Électricité + parler = téléphone.",
+      "sentenceJp": "電話をください。",
+      "sentenceFr": "Appelez-moi (au téléphone).",
+      "kanji": ["話"]
+    },
+    {
+      "word": "休み",
+      "meaningsFr": ["Repos", "Vacances", "Congé"],
+      "readings": ["やすみ"],
+      "mnemonic": "Le kanji repos en forme nominale.",
+      "sentenceJp": "明日は休みです。",
+      "sentenceFr": "Demain est un jour de congé.",
+      "kanji": ["休"]
+    },
+    {
+      "word": "読書",
+      "meaningsFr": ["Lecture"],
+      "readings": ["どくしょ"],
+      "mnemonic": "Lire + écrire = la lecture (de livres).",
+      "sentenceJp": "読書が好きです。",
+      "sentenceFr": "J'aime la lecture.",
+      "kanji": ["読", "書"]
+    },
+    {
+      "word": "売店",
+      "meaningsFr": ["Kiosque", "Stand"],
+      "readings": ["ばいてん"],
+      "mnemonic": "Vendre + magasin = petit stand de vente.",
+      "sentenceJp": "駅の売店でパンを買いました。",
+      "sentenceFr": "J'ai acheté du pain au kiosque de la gare.",
+      "kanji": ["売", "店"]
+    },
+    {
+      "word": "知人",
+      "meaningsFr": ["Connaissance", "Personne qu'on connaît"],
+      "readings": ["ちじん"],
+      "mnemonic": "Savoir + personne = personne qu'on connaît.",
+      "sentenceJp": "彼は私の知人です。",
+      "sentenceFr": "Il est une de mes connaissances.",
+      "kanji": ["知", "人"]
+    },
+    {
+      "word": "買い物",
+      "meaningsFr": ["Courses", "Shopping"],
+      "readings": ["かいもの"],
+      "mnemonic": "Acheter + chose = faire des achats.",
+      "sentenceJp": "買い物に行きます。",
+      "sentenceFr": "Je vais faire les courses.",
+      "kanji": ["買"]
+    }
+  ]
+}

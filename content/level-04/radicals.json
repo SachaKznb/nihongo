@@ -1,0 +1,60 @@
+{
+  "level": 4,
+  "radicals": [
+    {
+      "character": "四",
+      "meaningFr": "Quatre",
+      "mnemonic": "Un carré divisé représente le chiffre quatre."
+    },
+    {
+      "character": "五",
+      "meaningFr": "Cinq",
+      "mnemonic": "Une forme complexe avec cinq traits pour le chiffre cinq."
+    },
+    {
+      "character": "六",
+      "meaningFr": "Six",
+      "mnemonic": "Un toit avec des jambes, comme le chiffre six."
+    },
+    {
+      "character": "七",
+      "meaningFr": "Sept",
+      "mnemonic": "Un trait croisé comme un sept inversé."
+    },
+    {
+      "character": "八",
+      "meaningFr": "Huit",
+      "mnemonic": "Deux traits qui s'écartent comme le chiffre huit."
+    },
+    {
+      "character": "九",
+      "meaningFr": "Neuf",
+      "mnemonic": "Une forme courbée pour le chiffre neuf."
+    },
+    {
+      "character": "百",
+      "meaningFr": "Cent",
+      "mnemonic": "Un + blanc = cent, le premier nombre à trois chiffres."
+    },
+    {
+      "character": "千",
+      "meaningFr": "Mille",
+      "mnemonic": "Un trait avec une croix, mille fois un."
+    },
+    {
+      "character": "年",
+      "meaningFr": "Année",
+      "mnemonic": "Une personne qui porte le temps sur ses épaules."
+    },
+    {
+      "character": "時",
+      "meaningFr": "Heure",
+      "mnemonic": "Le soleil + temple = l'heure du temple."
+    },
+    {
+      "character": "今",
+      "meaningFr": "Maintenant",
+      "mnemonic": "Un toit qui couvre le moment présent."
+    }
+  ]
+}

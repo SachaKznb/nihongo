@@ -1,0 +1,55 @@
+{
+  "level": 9,
+  "radicals": [
+    {
+      "character": "白",
+      "meaningFr": "Blanc",
+      "mnemonic": "Un rayon de soleil sur quelque chose - le blanc."
+    },
+    {
+      "character": "青",
+      "meaningFr": "Bleu",
+      "mnemonic": "Plantes + lune = le bleu du ciel nocturne."
+    },
+    {
+      "character": "赤",
+      "meaningFr": "Rouge",
+      "mnemonic": "Terre + feu = le rouge des flammes."
+    },
+    {
+      "character": "黒",
+      "meaningFr": "Noir",
+      "mnemonic": "Le feu qui devient suie - le noir."
+    },
+    {
+      "character": "高",
+      "meaningFr": "Haut",
+      "mnemonic": "Un bâtiment avec un toit pointu - haut."
+    },
+    {
+      "character": "安",
+      "meaningFr": "Bon marché",
+      "mnemonic": "Une femme sous un toit - tranquille et pas cher."
+    },
+    {
+      "character": "新",
+      "meaningFr": "Nouveau",
+      "mnemonic": "Arbre + hache = couper du bois neuf."
+    },
+    {
+      "character": "古",
+      "meaningFr": "Vieux",
+      "mnemonic": "Dix + bouche = transmis par dix bouches, ancien."
+    },
+    {
+      "character": "長",
+      "meaningFr": "Long",
+      "mnemonic": "Des cheveux longs qui flottent."
+    },
+    {
+      "character": "好",
+      "meaningFr": "Aimer",
+      "mnemonic": "Femme + enfant = ce qu'on aime."
+    }
+  ]
+}

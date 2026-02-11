@@ -55,6 +55,8 @@ model Radical {
 
   kanji        KanjiRadical[]
   userProgress UserRadicalProgress[]
+
+  @@unique([character, levelId])
 }
 
 model Kanji {
@@ -86,6 +88,8 @@ model Vocabulary {
 
   kanji        VocabularyKanji[]
   userProgress UserVocabularyProgress[]
+
+  @@unique([word, levelId])
 }
 
 // Junction tables

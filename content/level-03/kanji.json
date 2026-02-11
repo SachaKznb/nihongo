@@ -1,0 +1,95 @@
+{
+  "level": 3,
+  "kanji": [
+    {
+      "character": "口",
+      "meaningsFr": ["Bouche"],
+      "readingsOn": ["コウ", "ク"],
+      "readingsKun": ["くち"],
+      "meaningMnemonic": "Un carré représente une bouche ouverte, prête à parler ou manger.",
+      "readingMnemonic": "'Kuchi' - comme 'couche' en français, vous mettez de la nourriture dans votre BOUCHE avant de vous coucher.",
+      "radicals": ["口"]
+    },
+    {
+      "character": "山",
+      "meaningsFr": ["Montagne"],
+      "readingsOn": ["サン"],
+      "readingsKun": ["やま"],
+      "meaningMnemonic": "Trois pics qui s'élèvent vers le ciel forment une montagne.",
+      "readingMnemonic": "'Yama' - imaginez un MONTAGNARD qui crie 'Yama!' en escaladant.",
+      "radicals": ["山"]
+    },
+    {
+      "character": "川",
+      "meaningsFr": ["Rivière", "Fleuve"],
+      "readingsOn": ["セン"],
+      "readingsKun": ["かわ"],
+      "meaningMnemonic": "Trois lignes ondulantes représentent l'eau d'une rivière qui coule.",
+      "readingMnemonic": "'Kawa' - comme 'Kawasaki', les motos japonaises qui traversent les RIVIÈRES.",
+      "radicals": ["川"]
+    },
+    {
+      "character": "木",
+      "meaningsFr": ["Arbre", "Bois"],
+      "readingsOn": ["モク", "ボク"],
+      "readingsKun": ["き", "こ"],
+      "meaningMnemonic": "Un tronc vertical avec des branches qui s'étendent des deux côtés.",
+      "readingMnemonic": "'Ki' - comme 'kiwi', un fruit qui pousse sur un ARBRE.",
+      "radicals": ["木"]
+    },
+    {
+      "character": "林",
+      "meaningsFr": ["Forêt", "Bois"],
+      "readingsOn": ["リン"],
+      "readingsKun": ["はやし"],
+      "meaningMnemonic": "Deux arbres côte à côte créent un petit bois.",
+      "readingMnemonic": "'Hayashi' - pensez à un FORESTIER nommé Hayashi qui plante des arbres.",
+      "radicals": ["木"]
+    },
+    {
+      "character": "森",
+      "meaningsFr": ["Forêt dense", "Bois profond"],
+      "readingsOn": ["シン"],
+      "readingsKun": ["もり"],
+      "meaningMnemonic": "Trois arbres forment une forêt dense et mystérieuse.",
+      "readingMnemonic": "'Mori' - comme 'memento mori', les forêts profondes nous rappellent notre mortalité.",
+      "radicals": ["木"]
+    },
+    {
+      "character": "上",
+      "meaningsFr": ["Haut", "Dessus", "Monter"],
+      "readingsOn": ["ジョウ"],
+      "readingsKun": ["うえ", "あ-がる", "のぼ-る"],
+      "meaningMnemonic": "Un trait horizontal au-dessus d'une base montre la direction vers le haut.",
+      "readingMnemonic": "'Ue' - quand vous êtes EN HAUT, vous dites 'ouais!' de joie.",
+      "radicals": ["上"]
+    },
+    {
+      "character": "下",
+      "meaningsFr": ["Bas", "Dessous", "Descendre"],
+      "readingsOn": ["カ", "ゲ"],
+      "readingsKun": ["した", "さ-がる", "くだ-る"],
+      "meaningMnemonic": "Un trait horizontal en dessous d'une base indique le bas.",
+      "readingMnemonic": "'Shita' - quand vous êtes EN BAS, vous êtes dans la 'shit-a', la situation est basse!",
+      "radicals": ["下"]
+    },
+    {
+      "character": "入",
+      "meaningsFr": ["Entrer", "Insérer"],
+      "readingsOn": ["ニュウ"],
+      "readingsKun": ["はい-る", "い-れる"],
+      "meaningMnemonic": "Une flèche pointant vers l'intérieur - quelque chose qui ENTRE.",
+      "readingMnemonic": "'Hairu' - vous ENTREZ dans un 'havre' de paix.",
+      "radicals": ["入"]
+    },
+    {
+      "character": "出",
+      "meaningsFr": ["Sortir", "Produire"],
+      "readingsOn": ["シュツ"],
+      "readingsKun": ["で-る", "だ-す"],
+      "meaningMnemonic": "Des montagnes dont quelque chose émerge - SORTIR d'une vallée.",
+      "readingMnemonic": "'Deru' - quand vous SORTEZ, vous dites 'de-rien!' en partant.",
+      "radicals": ["出"]
+    }
+  ]
+}

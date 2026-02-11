@@ -1,0 +1,55 @@
+{
+  "level": 6,
+  "radicals": [
+    {
+      "character": "曜",
+      "meaningFr": "Jour de la semaine",
+      "mnemonic": "Soleil + ailes d'oiseau = les jours qui s'envolent."
+    },
+    {
+      "character": "週",
+      "meaningFr": "Semaine",
+      "mnemonic": "Route + entouré = faire le tour complet d'une semaine."
+    },
+    {
+      "character": "間",
+      "meaningFr": "Intervalle",
+      "mnemonic": "Porte avec soleil = la lumière entre par l'intervalle."
+    },
+    {
+      "character": "分",
+      "meaningFr": "Minute/Diviser",
+      "mnemonic": "Huit + couteau = diviser en huit parties."
+    },
+    {
+      "character": "半",
+      "meaningFr": "Moitié",
+      "mnemonic": "Huit coupé en deux = la moitié."
+    },
+    {
+      "character": "毎",
+      "meaningFr": "Chaque",
+      "mnemonic": "Une personne + mère = chaque mère fait pareil."
+    },
+    {
+      "character": "朝",
+      "meaningFr": "Matin",
+      "mnemonic": "Soleil + lune = quand le soleil remplace la lune."
+    },
+    {
+      "character": "昼",
+      "meaningFr": "Midi",
+      "mnemonic": "Soleil au zénith = le milieu de la journée."
+    },
+    {
+      "character": "夜",
+      "meaningFr": "Nuit",
+      "mnemonic": "Toit + personne + lune = personne sous la lune la nuit."
+    },
+    {
+      "character": "夕",
+      "meaningFr": "Soir",
+      "mnemonic": "Croissant de lune = le soir arrive."
+    }
+  ]
+}

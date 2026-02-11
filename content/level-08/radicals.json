@@ -1,0 +1,55 @@
+{
+  "level": 8,
+  "radicals": [
+    {
+      "character": "男",
+      "meaningFr": "Homme",
+      "mnemonic": "Rizière + force = l'homme qui travaille dans les champs."
+    },
+    {
+      "character": "女",
+      "meaningFr": "Femme",
+      "mnemonic": "Une personne assise élégamment - une femme."
+    },
+    {
+      "character": "子",
+      "meaningFr": "Enfant",
+      "mnemonic": "Un bébé emmailloté - un enfant."
+    },
+    {
+      "character": "父",
+      "meaningFr": "Père",
+      "mnemonic": "Deux mains qui tiennent une hache - le père protecteur."
+    },
+    {
+      "character": "母",
+      "meaningFr": "Mère",
+      "mnemonic": "Deux seins nourriciers - la mère."
+    },
+    {
+      "character": "友",
+      "meaningFr": "Ami",
+      "mnemonic": "Deux mains qui se tiennent - des amis."
+    },
+    {
+      "character": "先",
+      "meaningFr": "Avant",
+      "mnemonic": "Des pieds qui avancent en premier."
+    },
+    {
+      "character": "生",
+      "meaningFr": "Vie",
+      "mnemonic": "Une plante qui pousse de la terre - la vie."
+    },
+    {
+      "character": "名",
+      "meaningFr": "Nom",
+      "mnemonic": "Soir + bouche = appeler son nom dans la nuit."
+    },
+    {
+      "character": "何",
+      "meaningFr": "Quoi",
+      "mnemonic": "Personne + possible = quoi? qu'est-ce que c'est?"
+    }
+  ]
+}

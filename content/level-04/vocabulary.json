@@ -1,0 +1,149 @@
+{
+  "level": 4,
+  "vocabulary": [
+    {
+      "word": "四",
+      "meaningsFr": ["Quatre"],
+      "readings": ["よん", "し"],
+      "mnemonic": "Le kanji seul signifie quatre, lu 'yon' ou 'shi'.",
+      "sentenceJp": "四人で行きます。",
+      "sentenceFr": "Nous y allons à quatre.",
+      "kanji": ["四"]
+    },
+    {
+      "word": "五",
+      "meaningsFr": ["Cinq"],
+      "readings": ["ご"],
+      "mnemonic": "Le kanji seul signifie cinq, lu 'go'.",
+      "sentenceJp": "五つください。",
+      "sentenceFr": "Donnez-m'en cinq s'il vous plaît.",
+      "kanji": ["五"]
+    },
+    {
+      "word": "六",
+      "meaningsFr": ["Six"],
+      "readings": ["ろく"],
+      "mnemonic": "Le kanji seul signifie six, lu 'roku'.",
+      "sentenceJp": "六時に会いましょう。",
+      "sentenceFr": "Retrouvons-nous à six heures.",
+      "kanji": ["六"]
+    },
+    {
+      "word": "七",
+      "meaningsFr": ["Sept"],
+      "readings": ["なな", "しち"],
+      "mnemonic": "Le kanji seul signifie sept, lu 'nana' ou 'shichi'.",
+      "sentenceJp": "七日間の旅行です。",
+      "sentenceFr": "C'est un voyage de sept jours.",
+      "kanji": ["七"]
+    },
+    {
+      "word": "八",
+      "meaningsFr": ["Huit"],
+      "readings": ["はち"],
+      "mnemonic": "Le kanji seul signifie huit, lu 'hachi'.",
+      "sentenceJp": "八月は暑いです。",
+      "sentenceFr": "Août (le huitième mois) est chaud.",
+      "kanji": ["八"]
+    },
+    {
+      "word": "九",
+      "meaningsFr": ["Neuf"],
+      "readings": ["きゅう", "く"],
+      "mnemonic": "Le kanji seul signifie neuf, lu 'kyuu' ou 'ku'.",
+      "sentenceJp": "九時に始まります。",
+      "sentenceFr": "Ça commence à neuf heures.",
+      "kanji": ["九"]
+    },
+    {
+      "word": "百",
+      "meaningsFr": ["Cent"],
+      "readings": ["ひゃく"],
+      "mnemonic": "Le kanji seul signifie cent, lu 'hyaku'.",
+      "sentenceJp": "百円ください。",
+      "sentenceFr": "Cent yens s'il vous plaît.",
+      "kanji": ["百"]
+    },
+    {
+      "word": "千",
+      "meaningsFr": ["Mille"],
+      "readings": ["せん"],
+      "mnemonic": "Le kanji seul signifie mille, lu 'sen'.",
+      "sentenceJp": "千円で足りますか。",
+      "sentenceFr": "Est-ce que mille yens suffisent?",
+      "kanji": ["千"]
+    },
+    {
+      "word": "年",
+      "meaningsFr": ["Année", "An"],
+      "readings": ["とし", "ねん"],
+      "mnemonic": "Le kanji seul signifie année, lu 'toshi' ou 'nen'.",
+      "sentenceJp": "今年は何歳ですか。",
+      "sentenceFr": "Quel âge avez-vous cette année?",
+      "kanji": ["年"]
+    },
+    {
+      "word": "今",
+      "meaningsFr": ["Maintenant"],
+      "readings": ["いま"],
+      "mnemonic": "Le kanji seul signifie maintenant, lu 'ima'.",
+      "sentenceJp": "今、何をしていますか。",
+      "sentenceFr": "Que faites-vous maintenant?",
+      "kanji": ["今"]
+    },
+    {
+      "word": "今日",
+      "meaningsFr": ["Aujourd'hui"],
+      "readings": ["きょう"],
+      "mnemonic": "Maintenant + jour = aujourd'hui.",
+      "sentenceJp": "今日は天気がいいです。",
+      "sentenceFr": "Il fait beau aujourd'hui.",
+      "kanji": ["今", "日"]
+    },
+    {
+      "word": "今年",
+      "meaningsFr": ["Cette année"],
+      "readings": ["ことし"],
+      "mnemonic": "Maintenant + année = cette année.",
+      "sentenceJp": "今年、日本に行きます。",
+      "sentenceFr": "Je vais au Japon cette année.",
+      "kanji": ["今", "年"]
+    },
+    {
+      "word": "一年",
+      "meaningsFr": ["Un an", "Une année"],
+      "readings": ["いちねん"],
+      "mnemonic": "Un + année = une année complète.",
+      "sentenceJp": "一年間勉強しました。",
+      "sentenceFr": "J'ai étudié pendant un an.",
+      "kanji": ["一", "年"]
+    },
+    {
+      "word": "三日",
+      "meaningsFr": ["Trois jours", "Le trois"],
+      "readings": ["みっか"],
+      "mnemonic": "Trois + jour = le troisième jour ou trois jours.",
+      "sentenceJp": "三日後に届きます。",
+      "sentenceFr": "Ça arrivera dans trois jours.",
+      "kanji": ["三", "日"]
+    },
+    {
+      "word": "四日",
+      "meaningsFr": ["Quatre jours", "Le quatre"],
+      "readings": ["よっか"],
+      "mnemonic": "Quatre + jour = le quatrième jour ou quatre jours.",
+      "sentenceJp": "四日に予約しました。",
+      "sentenceFr": "J'ai réservé pour le quatre.",
+      "kanji": ["四", "日"]
+    },
+    {
+      "word": "五日",
+      "meaningsFr": ["Cinq jours", "Le cinq"],
+      "readings": ["いつか"],
+      "mnemonic": "Cinq + jour = le cinquième jour ou cinq jours.",
+      "sentenceJp": "五日間の休みです。",
+      "sentenceFr": "C'est cinq jours de congé.",
+      "kanji": ["五", "日"]
+    }
+  ]
+}

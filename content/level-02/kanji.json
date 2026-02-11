@@ -1,0 +1,59 @@
+{
+  "level": 2,
+  "kanji": [
+    {
+      "character": "火",
+      "meaningsFr": ["Feu"],
+      "readingsOn": ["カ"],
+      "readingsKun": ["ひ"],
+      "meaningMnemonic": "Des flammes qui montent vers le ciel représentent le feu.",
+      "readingMnemonic": "'Ka' comme 'car' - votre voiture a pris FEU!",
+      "radicals": ["火"]
+    },
+    {
+      "character": "水",
+      "meaningsFr": ["Eau"],
+      "readingsOn": ["スイ"],
+      "readingsKun": ["みず"],
+      "meaningMnemonic": "Des gouttes d'eau qui coulent et s'écoulent.",
+      "readingMnemonic": "'Sui' comme 'Suisse' - la Suisse a beaucoup d'EAU dans ses lacs.",
+      "radicals": ["水"]
+    },
+    {
+      "character": "人",
+      "meaningsFr": ["Personne", "Humain"],
+      "readingsOn": ["ジン", "ニン"],
+      "readingsKun": ["ひと"],
+      "meaningMnemonic": "Une personne qui marche, vue de profil avec ses deux jambes.",
+      "readingMnemonic": "'Hito' - une PERSONNE dit 'Hi!' (salut) quand elle vous voit.",
+      "radicals": ["人"]
+    },
+    {
+      "character": "大",
+      "meaningsFr": ["Grand", "Gros"],
+      "readingsOn": ["ダイ", "タイ"],
+      "readingsKun": ["おお-", "おおきい"],
+      "meaningMnemonic": "Une personne qui écarte les bras pour montrer quelque chose de GRAND.",
+      "readingMnemonic": "'Ookii' - 'Oh! Qui?' Quelqu'un de GRAND vient d'entrer!",
+      "radicals": ["大"]
+    },
+    {
+      "character": "小",
+      "meaningsFr": ["Petit"],
+      "readingsOn": ["ショウ"],
+      "readingsKun": ["ちい-", "ちいさい", "こ"],
+      "meaningMnemonic": "Un petit point avec deux traits qui le rapetissent encore plus.",
+      "readingMnemonic": "'Chiisai' - 'Chi!' (comme éternuement) fait un PETIT bruit.",
+      "radicals": ["小"]
+    },
+    {
+      "character": "中",
+      "meaningsFr": ["Milieu", "Centre", "Dans"],
+      "readingsOn": ["チュウ"],
+      "readingsKun": ["なか"],
+      "meaningMnemonic": "Une ligne qui traverse le MILIEU d'un rectangle.",
+      "readingMnemonic": "'Naka' - 'Nager' au MILIEU de la piscine.",
+      "radicals": ["中"]
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "level": 3,
+  "vocabulary": [
+    {
+      "word": "口",
+      "meaningsFr": ["Bouche"],
+      "readings": ["くち"],
+      "mnemonic": "Le kanji seul signifie bouche, lu 'kuchi'.",
+      "sentenceJp": "口を開けてください。",
+      "sentenceFr": "Ouvrez la bouche s'il vous plaît.",
+      "kanji": ["口"]
+    },
+    {
+      "word": "山",
+      "meaningsFr": ["Montagne"],
+      "readings": ["やま"],
+      "mnemonic": "Le kanji seul signifie montagne, lu 'yama'.",
+      "sentenceJp": "あの山は高いです。",
+      "sentenceFr": "Cette montagne est haute.",
+      "kanji": ["山"]
+    },
+    {
+      "word": "川",
+      "meaningsFr": ["Rivière", "Fleuve"],
+      "readings": ["かわ"],
+      "mnemonic": "Le kanji seul signifie rivière, lu 'kawa'.",
+      "sentenceJp": "川で泳ぎたいです。",
+      "sentenceFr": "Je veux nager dans la rivière.",
+      "kanji": ["川"]
+    },
+    {
+      "word": "木",
+      "meaningsFr": ["Arbre"],
+      "readings": ["き"],
+      "mnemonic": "Le kanji seul signifie arbre, lu 'ki'.",
+      "sentenceJp": "木の下で休みましょう。",
+      "sentenceFr": "Reposons-nous sous l'arbre.",
+      "kanji": ["木"]
+    },
+    {
+      "word": "林",
+      "meaningsFr": ["Bois", "Bosquet"],
+      "readings": ["はやし"],
+      "mnemonic": "Deux arbres forment un petit bois, lu 'hayashi'.",
+      "sentenceJp": "林を散歩しました。",
+      "sentenceFr": "J'ai fait une promenade dans le bois.",
+      "kanji": ["林"]
+    },
+    {
+      "word": "森",
+      "meaningsFr": ["Forêt"],
+      "readings": ["もり"],
+      "mnemonic": "Trois arbres forment une forêt dense, lu 'mori'.",
+      "sentenceJp": "森には動物がたくさんいます。",
+      "sentenceFr": "Il y a beaucoup d'animaux dans la forêt.",
+      "kanji": ["森"]
+    },
+    {
+      "word": "上",
+      "meaningsFr": ["Haut", "Dessus"],
+      "readings": ["うえ"],
+      "mnemonic": "Le kanji seul signifie haut/dessus, lu 'ue'.",
+      "sentenceJp": "本は机の上にあります。",
+      "sentenceFr": "Le livre est sur le bureau.",
+      "kanji": ["上"]
+    },
+    {
+      "word": "下",
+      "meaningsFr": ["Bas", "Dessous"],
+      "readings": ["した"],
+      "mnemonic": "Le kanji seul signifie bas/dessous, lu 'shita'.",
+      "sentenceJp": "猫はベッドの下にいます。",
+      "sentenceFr": "Le chat est sous le lit.",
+      "kanji": ["下"]
+    },
+    {
+      "word": "上がる",
+      "meaningsFr": ["Monter", "S'élever"],
+      "readings": ["あがる"],
+      "mnemonic": "Haut + terminaison verbale = monter.",
+      "sentenceJp": "階段を上がります。",
+      "sentenceFr": "Je monte les escaliers.",
+      "kanji": ["上"]
+    },
+    {
+      "word": "下がる",
+      "meaningsFr": ["Descendre", "Baisser"],
+      "readings": ["さがる"],
+      "mnemonic": "Bas + terminaison verbale = descendre.",
+      "sentenceJp": "温度が下がりました。",
+      "sentenceFr": "La température a baissé.",
+      "kanji": ["下"]
+    },
+    {
+      "word": "入る",
+      "meaningsFr": ["Entrer"],
+      "readings": ["はいる"],
+      "mnemonic": "Le kanji entrer avec la terminaison verbale -る.",
+      "sentenceJp": "部屋に入ってください。",
+      "sentenceFr": "Entrez dans la pièce s'il vous plaît.",
+      "kanji": ["入"]
+    },
+    {
+      "word": "出る",
+      "meaningsFr": ["Sortir"],
+      "readings": ["でる"],
+      "mnemonic": "Le kanji sortir avec la terminaison verbale -る.",
+      "sentenceJp": "家を出ます。",
+      "sentenceFr": "Je sors de la maison.",
+      "kanji": ["出"]
+    },
+    {
+      "word": "入口",
+      "meaningsFr": ["Entrée"],
+      "readings": ["いりぐち"],
+      "mnemonic": "Entrer + bouche = l'ouverture par où on entre.",
+      "sentenceJp": "入口はどこですか。",
+      "sentenceFr": "Où est l'entrée?",
+      "kanji": ["入", "口"]
+    },
+    {
+      "word": "出口",
+      "meaningsFr": ["Sortie"],
+      "readings": ["でぐち"],
+      "mnemonic": "Sortir + bouche = l'ouverture par où on sort.",
+      "sentenceJp": "出口は右にあります。",
+      "sentenceFr": "La sortie est à droite.",
+      "kanji": ["出", "口"]
+    },
+    {
+      "word": "火山",
+      "meaningsFr": ["Volcan"],
+      "readings": ["かざん"],
+      "mnemonic": "Feu + montagne = une montagne de feu, un volcan.",
+      "sentenceJp": "日本には火山がたくさんあります。",
+      "sentenceFr": "Il y a beaucoup de volcans au Japon.",
+      "kanji": ["火", "山"]
+    },
+    {
+      "word": "山川",
+      "meaningsFr": ["Montagnes et rivières", "Paysage"],
+      "readings": ["やまかわ", "さんせん"],
+      "mnemonic": "Montagne + rivière = les éléments du paysage naturel.",
+      "sentenceJp": "日本の山川は美しいです。",
+      "sentenceFr": "Les montagnes et rivières du Japon sont belles.",
+      "kanji": ["山", "川"]
+    }
+  ]
+}

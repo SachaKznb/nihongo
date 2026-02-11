@@ -101,8 +101,9 @@
 
 | Level | Radicals | Kanji | Vocabulary | Status |
 |-------|----------|-------|------------|--------|
-| 1-3   | 26       | 18    | 18         | ✅ Done |
-| 4-10  | ~50      | ~100  | ~300       | 🔲 To do |
+| 1-3   | 28       | 22    | 29         | ✅ Done |
+| 4-5   | 21       | 20    | 32         | ✅ Done |
+| 6-10  | 50       | 50    | 80         | ✅ Done |
 | 11-20 | ~50      | ~200  | ~600       | 🔲 To do |
 | 21-40 | ~50      | ~400  | ~1200      | 🔲 To do |
 | 41-60 | ~50      | ~400  | ~1500      | 🔲 To do |
@@ -181,14 +182,14 @@
 ## Immediate Next Steps
 
 ### This week:
-1. [ ] Create JSON content structure
-2. [ ] Build import script
-3. [ ] Generate levels 4-5 content with AI
+1. [x] Create JSON content structure (levels 1-10)
+2. [x] Build import script (`npm run content:import`)
+3. [x] Generate levels 4-5 content with AI
 4. [ ] Review and refine mnemonics
 
 ### Next week:
-5. [ ] Generate levels 6-10 content
-6. [ ] Test full user journey (new user → level 3)
+5. [x] Generate levels 6-10 content
+6. [ ] Test full user journey (new user → level 10)
 7. [ ] Fix any bugs found
 8. [ ] Deploy with expanded content
 

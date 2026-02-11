@@ -1,0 +1,149 @@
+{
+  "level": 5,
+  "vocabulary": [
+    {
+      "word": "目",
+      "meaningsFr": ["Oeil", "Yeux"],
+      "readings": ["め"],
+      "mnemonic": "Le kanji seul signifie oeil, lu 'me'.",
+      "sentenceJp": "目が痛いです。",
+      "sentenceFr": "J'ai mal aux yeux.",
+      "kanji": ["目"]
+    },
+    {
+      "word": "耳",
+      "meaningsFr": ["Oreille"],
+      "readings": ["みみ"],
+      "mnemonic": "Le kanji seul signifie oreille, lu 'mimi'.",
+      "sentenceJp": "耳が大きいですね。",
+      "sentenceFr": "Vous avez de grandes oreilles.",
+      "kanji": ["耳"]
+    },
+    {
+      "word": "手",
+      "meaningsFr": ["Main"],
+      "readings": ["て"],
+      "mnemonic": "Le kanji seul signifie main, lu 'te'.",
+      "sentenceJp": "手を洗ってください。",
+      "sentenceFr": "Lavez-vous les mains s'il vous plaît.",
+      "kanji": ["手"]
+    },
+    {
+      "word": "足",
+      "meaningsFr": ["Pied", "Jambe"],
+      "readings": ["あし"],
+      "mnemonic": "Le kanji seul signifie pied, lu 'ashi'.",
+      "sentenceJp": "足が速いですね。",
+      "sentenceFr": "Vous êtes rapide (vous avez les pieds rapides).",
+      "kanji": ["足"]
+    },
+    {
+      "word": "見る",
+      "meaningsFr": ["Voir", "Regarder"],
+      "readings": ["みる"],
+      "mnemonic": "Le kanji voir avec la terminaison verbale -る.",
+      "sentenceJp": "テレビを見ます。",
+      "sentenceFr": "Je regarde la télé.",
+      "kanji": ["見"]
+    },
+    {
+      "word": "行く",
+      "meaningsFr": ["Aller"],
+      "readings": ["いく"],
+      "mnemonic": "Le kanji aller avec la terminaison verbale -く.",
+      "sentenceJp": "学校に行きます。",
+      "sentenceFr": "Je vais à l'école.",
+      "kanji": ["行"]
+    },
+    {
+      "word": "来る",
+      "meaningsFr": ["Venir"],
+      "readings": ["くる"],
+      "mnemonic": "Le kanji venir avec la terminaison verbale -る.",
+      "sentenceJp": "明日、友達が来ます。",
+      "sentenceFr": "Mon ami vient demain.",
+      "kanji": ["来"]
+    },
+    {
+      "word": "食べる",
+      "meaningsFr": ["Manger"],
+      "readings": ["たべる"],
+      "mnemonic": "Le kanji manger avec la terminaison verbale -べる.",
+      "sentenceJp": "朝ごはんを食べます。",
+      "sentenceFr": "Je mange le petit-déjeuner.",
+      "kanji": ["食"]
+    },
+    {
+      "word": "飲む",
+      "meaningsFr": ["Boire"],
+      "readings": ["のむ"],
+      "mnemonic": "Le kanji boire avec la terminaison verbale -む.",
+      "sentenceJp": "水を飲みます。",
+      "sentenceFr": "Je bois de l'eau.",
+      "kanji": ["飲"]
+    },
+    {
+      "word": "言う",
+      "meaningsFr": ["Dire"],
+      "readings": ["いう"],
+      "mnemonic": "Le kanji dire avec la terminaison verbale -う.",
+      "sentenceJp": "何と言いましたか。",
+      "sentenceFr": "Qu'avez-vous dit?",
+      "kanji": ["言"]
+    },
+    {
+      "word": "上手",
+      "meaningsFr": ["Habile", "Doué"],
+      "readings": ["じょうず"],
+      "mnemonic": "Haut + main = main levée haut, quelqu'un d'habile.",
+      "sentenceJp": "日本語が上手ですね。",
+      "sentenceFr": "Vous êtes doué en japonais.",
+      "kanji": ["上", "手"]
+    },
+    {
+      "word": "下手",
+      "meaningsFr": ["Maladroit", "Pas doué"],
+      "readings": ["へた"],
+      "mnemonic": "Bas + main = main basse, quelqu'un de maladroit.",
+      "sentenceJp": "料理が下手です。",
+      "sentenceFr": "Je suis mauvais en cuisine.",
+      "kanji": ["下", "手"]
+    },
+    {
+      "word": "来年",
+      "meaningsFr": ["L'année prochaine"],
+      "readings": ["らいねん"],
+      "mnemonic": "Venir + année = l'année qui vient.",
+      "sentenceJp": "来年、結婚します。",
+      "sentenceFr": "Je me marie l'année prochaine.",
+      "kanji": ["来", "年"]
+    },
+    {
+      "word": "来月",
+      "meaningsFr": ["Le mois prochain"],
+      "readings": ["らいげつ"],
+      "mnemonic": "Venir + mois = le mois qui vient.",
+      "sentenceJp": "来月、旅行します。",
+      "sentenceFr": "Je voyage le mois prochain.",
+      "kanji": ["来", "月"]
+    },
+    {
+      "word": "人口",
+      "meaningsFr": ["Population"],
+      "readings": ["じんこう"],
+      "mnemonic": "Personne + bouche = les bouches à nourrir, la population.",
+      "sentenceJp": "東京の人口は多いです。",
+      "sentenceFr": "La population de Tokyo est nombreuse.",
+      "kanji": ["人", "口"]
+    },
+    {
+      "word": "入手",
+      "meaningsFr": ["Obtenir", "Se procurer"],
+      "readings": ["にゅうしゅ"],
+      "mnemonic": "Entrer + main = mettre la main sur quelque chose.",
+      "sentenceJp": "チケットを入手しました。",
+      "sentenceFr": "J'ai obtenu les billets.",
+      "kanji": ["入", "手"]
+    }
+  ]
+}

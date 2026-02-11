@@ -1,0 +1,149 @@
+{
+  "level": 6,
+  "vocabulary": [
+    {
+      "word": "日曜日",
+      "meaningsFr": ["Dimanche"],
+      "readings": ["にちようび"],
+      "mnemonic": "Soleil + jour de semaine + jour = le jour du soleil.",
+      "sentenceJp": "日曜日は休みです。",
+      "sentenceFr": "Dimanche est un jour de repos.",
+      "kanji": ["日", "曜"]
+    },
+    {
+      "word": "月曜日",
+      "meaningsFr": ["Lundi"],
+      "readings": ["げつようび"],
+      "mnemonic": "Lune + jour de semaine + jour = le jour de la lune.",
+      "sentenceJp": "月曜日から仕事です。",
+      "sentenceFr": "Le travail commence lundi.",
+      "kanji": ["月", "曜"]
+    },
+    {
+      "word": "火曜日",
+      "meaningsFr": ["Mardi"],
+      "readings": ["かようび"],
+      "mnemonic": "Feu + jour de semaine + jour = le jour du feu (Mars).",
+      "sentenceJp": "火曜日に会議があります。",
+      "sentenceFr": "Il y a une réunion mardi.",
+      "kanji": ["火", "曜"]
+    },
+    {
+      "word": "水曜日",
+      "meaningsFr": ["Mercredi"],
+      "readings": ["すいようび"],
+      "mnemonic": "Eau + jour de semaine + jour = le jour de l'eau (Mercure).",
+      "sentenceJp": "水曜日は早く帰ります。",
+      "sentenceFr": "Je rentre tôt le mercredi.",
+      "kanji": ["水", "曜"]
+    },
+    {
+      "word": "木曜日",
+      "meaningsFr": ["Jeudi"],
+      "readings": ["もくようび"],
+      "mnemonic": "Arbre + jour de semaine + jour = le jour du bois (Jupiter).",
+      "sentenceJp": "木曜日にテストがあります。",
+      "sentenceFr": "Il y a un test jeudi.",
+      "kanji": ["木", "曜"]
+    },
+    {
+      "word": "週",
+      "meaningsFr": ["Semaine"],
+      "readings": ["しゅう"],
+      "mnemonic": "Le kanji seul signifie semaine.",
+      "sentenceJp": "一週間の休みです。",
+      "sentenceFr": "C'est une semaine de vacances.",
+      "kanji": ["週"]
+    },
+    {
+      "word": "今週",
+      "meaningsFr": ["Cette semaine"],
+      "readings": ["こんしゅう"],
+      "mnemonic": "Maintenant + semaine = cette semaine.",
+      "sentenceJp": "今週は忙しいです。",
+      "sentenceFr": "Je suis occupé cette semaine.",
+      "kanji": ["今", "週"]
+    },
+    {
+      "word": "時間",
+      "meaningsFr": ["Temps", "Heure"],
+      "readings": ["じかん"],
+      "mnemonic": "Heure + intervalle = durée de temps.",
+      "sentenceJp": "時間がありません。",
+      "sentenceFr": "Je n'ai pas le temps.",
+      "kanji": ["間"]
+    },
+    {
+      "word": "分",
+      "meaningsFr": ["Minute"],
+      "readings": ["ふん", "ぷん"],
+      "mnemonic": "Le kanji seul signifie minute.",
+      "sentenceJp": "五分待ってください。",
+      "sentenceFr": "Attendez cinq minutes s'il vous plaît.",
+      "kanji": ["分"]
+    },
+    {
+      "word": "半",
+      "meaningsFr": ["Moitié", "Demi"],
+      "readings": ["はん"],
+      "mnemonic": "Le kanji seul signifie moitié.",
+      "sentenceJp": "三時半に会いましょう。",
+      "sentenceFr": "Retrouvons-nous à trois heures et demie.",
+      "kanji": ["半"]
+    },
+    {
+      "word": "毎日",
+      "meaningsFr": ["Chaque jour", "Tous les jours"],
+      "readings": ["まいにち"],
+      "mnemonic": "Chaque + jour = tous les jours.",
+      "sentenceJp": "毎日運動します。",
+      "sentenceFr": "Je fais du sport tous les jours.",
+      "kanji": ["毎", "日"]
+    },
+    {
+      "word": "毎週",
+      "meaningsFr": ["Chaque semaine"],
+      "readings": ["まいしゅう"],
+      "mnemonic": "Chaque + semaine = toutes les semaines.",
+      "sentenceJp": "毎週土曜日に買い物します。",
+      "sentenceFr": "Je fais les courses chaque samedi.",
+      "kanji": ["毎", "週"]
+    },
+    {
+      "word": "朝",
+      "meaningsFr": ["Matin"],
+      "readings": ["あさ"],
+      "mnemonic": "Le kanji seul signifie matin.",
+      "sentenceJp": "朝早く起きます。",
+      "sentenceFr": "Je me lève tôt le matin.",
+      "kanji": ["朝"]
+    },
+    {
+      "word": "昼",
+      "meaningsFr": ["Midi", "Journée"],
+      "readings": ["ひる"],
+      "mnemonic": "Le kanji seul signifie midi.",
+      "sentenceJp": "昼ごはんを食べましょう。",
+      "sentenceFr": "Mangeons le déjeuner.",
+      "kanji": ["昼"]
+    },
+    {
+      "word": "夜",
+      "meaningsFr": ["Nuit"],
+      "readings": ["よる"],
+      "mnemonic": "Le kanji seul signifie nuit.",
+      "sentenceJp": "夜は静かです。",
+      "sentenceFr": "La nuit est calme.",
+      "kanji": ["夜"]
+    },
+    {
+      "word": "夕方",
+      "meaningsFr": ["Soir", "Fin d'après-midi"],
+      "readings": ["ゆうがた"],
+      "mnemonic": "Soir + direction = vers le soir.",
+      "sentenceJp": "夕方に散歩します。",
+      "sentenceFr": "Je me promène le soir.",
+      "kanji": ["夕"]
+    }
+  ]
+}

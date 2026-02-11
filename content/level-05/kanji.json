@@ -1,0 +1,95 @@
+{
+  "level": 5,
+  "kanji": [
+    {
+      "character": "目",
+      "meaningsFr": ["Oeil", "Yeux"],
+      "readingsOn": ["モク", "ボク"],
+      "readingsKun": ["め"],
+      "meaningMnemonic": "Un rectangle vertical avec des lignes représente un oeil vu de face.",
+      "readingMnemonic": "'Me' - quand quelqu'un vous regarde dans les YEUX, vous dites 'me?'",
+      "radicals": ["目"]
+    },
+    {
+      "character": "耳",
+      "meaningsFr": ["Oreille"],
+      "readingsOn": ["ジ"],
+      "readingsKun": ["みみ"],
+      "meaningMnemonic": "La forme stylisée d'une oreille avec ses plis caractéristiques.",
+      "readingMnemonic": "'Mimi' - les chats ont de grandes OREILLES et font 'mimi' quand ils ronronnent.",
+      "radicals": ["耳"]
+    },
+    {
+      "character": "手",
+      "meaningsFr": ["Main"],
+      "readingsOn": ["シュ"],
+      "readingsKun": ["て"],
+      "meaningMnemonic": "Une main stylisée avec ses doigts et son poignet.",
+      "readingMnemonic": "'Te' - donnez-moi la MAIN, on prend le 'thé' ensemble!",
+      "radicals": ["手"]
+    },
+    {
+      "character": "足",
+      "meaningsFr": ["Pied", "Jambe", "Suffisant"],
+      "readingsOn": ["ソク"],
+      "readingsKun": ["あし", "た-りる"],
+      "meaningMnemonic": "Un pied attaché à une jambe, prêt à marcher.",
+      "readingMnemonic": "'Ashi' - avec vos PIEDS, vous pouvez aller en 'Asie'!",
+      "radicals": ["足"]
+    },
+    {
+      "character": "言",
+      "meaningsFr": ["Dire", "Parole", "Mot"],
+      "readingsOn": ["ゲン", "ゴン"],
+      "readingsKun": ["い-う", "こと"],
+      "meaningMnemonic": "Des ondes sonores qui sortent d'une bouche - quelqu'un qui PARLE.",
+      "readingMnemonic": "'Iu' - quand vous DITES quelque chose, vous 'iou-lez' les mots!",
+      "radicals": ["言"]
+    },
+    {
+      "character": "見",
+      "meaningsFr": ["Voir", "Regarder"],
+      "readingsOn": ["ケン"],
+      "readingsKun": ["み-る", "み-える"],
+      "meaningMnemonic": "Un grand oeil sur des jambes - quelqu'un qui REGARDE attentivement.",
+      "readingMnemonic": "'Miru' - pour VOIR un 'miroir', il faut regarder dedans.",
+      "radicals": ["見"]
+    },
+    {
+      "character": "行",
+      "meaningsFr": ["Aller", "Faire"],
+      "readingsOn": ["コウ", "ギョウ"],
+      "readingsKun": ["い-く", "おこな-う"],
+      "meaningMnemonic": "Un carrefour de routes - on peut ALLER dans n'importe quelle direction.",
+      "readingMnemonic": "'Iku' - quand vous ALLEZ quelque part, vous êtes 'ici, cou' penché en avant!",
+      "radicals": ["行"]
+    },
+    {
+      "character": "来",
+      "meaningsFr": ["Venir", "Arriver"],
+      "readingsOn": ["ライ"],
+      "readingsKun": ["く-る", "きた-る"],
+      "meaningMnemonic": "Du riz dans un champ - les gens VIENNENT pour la récolte.",
+      "readingMnemonic": "'Kuru' - quand quelqu'un VIENT, il court 'cou-rou'!",
+      "radicals": ["来"]
+    },
+    {
+      "character": "食",
+      "meaningsFr": ["Manger", "Nourriture"],
+      "readingsOn": ["ショク"],
+      "readingsKun": ["た-べる", "く-う"],
+      "meaningMnemonic": "Une personne assise devant un bol de nourriture, prête à MANGER.",
+      "readingMnemonic": "'Taberu' - vous MANGEZ sur une 'table-ru' japonaise.",
+      "radicals": ["食"]
+    },
+    {
+      "character": "飲",
+      "meaningsFr": ["Boire"],
+      "readingsOn": ["イン"],
+      "readingsKun": ["の-む"],
+      "meaningMnemonic": "Nourriture + quelqu'un qui avale = BOIRE un liquide.",
+      "readingMnemonic": "'Nomu' - pour BOIRE, vous faites 'nom nom nom' avec vos lèvres!",
+      "radicals": ["飲"]
+    }
+  ]
+}

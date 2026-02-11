@@ -1,0 +1,68 @@
+{
+  "level": 2,
+  "vocabulary": [
+    {
+      "word": "火",
+      "meaningsFr": ["Feu"],
+      "readings": ["ひ"],
+      "mnemonic": "Le kanji seul signifie feu, lu 'hi'.",
+      "sentenceJp": "火が燃えています。",
+      "sentenceFr": "Le feu brûle.",
+      "kanji": ["火"]
+    },
+    {
+      "word": "水",
+      "meaningsFr": ["Eau"],
+      "readings": ["みず"],
+      "mnemonic": "Le kanji seul signifie eau, lu 'mizu'.",
+      "sentenceJp": "水を飲みたいです。",
+      "sentenceFr": "Je veux boire de l'eau.",
+      "kanji": ["水"]
+    },
+    {
+      "word": "大人",
+      "meaningsFr": ["Adulte"],
+      "readings": ["おとな"],
+      "mnemonic": "Grand + personne = une grande personne, un adulte.",
+      "sentenceJp": "大人は五人います。",
+      "sentenceFr": "Il y a cinq adultes.",
+      "kanji": ["大", "人"]
+    },
+    {
+      "word": "人",
+      "meaningsFr": ["Personne"],
+      "readings": ["ひと"],
+      "mnemonic": "Le kanji seul signifie personne, lu 'hito'.",
+      "sentenceJp": "あの人は誰ですか。",
+      "sentenceFr": "Qui est cette personne?",
+      "kanji": ["人"]
+    },
+    {
+      "word": "大きい",
+      "meaningsFr": ["Grand", "Gros"],
+      "readings": ["おおきい"],
+      "mnemonic": "Le kanji grand avec la terminaison d'adjectif -きい.",
+      "sentenceJp": "この犬は大きいです。",
+      "sentenceFr": "Ce chien est grand.",
+      "kanji": ["大"]
+    },
+    {
+      "word": "小さい",
+      "meaningsFr": ["Petit"],
+      "readings": ["ちいさい"],
+      "mnemonic": "Le kanji petit avec la terminaison d'adjectif -さい.",
+      "sentenceJp": "小さい猫がいます。",
+      "sentenceFr": "Il y a un petit chat.",
+      "kanji": ["小"]
+    },
+    {
+      "word": "中",
+      "meaningsFr": ["Intérieur", "Dans", "Milieu"],
+      "readings": ["なか"],
+      "mnemonic": "Le kanji seul signifie milieu/intérieur, lu 'naka'.",
+      "sentenceJp": "箱の中に何がありますか。",
+      "sentenceFr": "Qu'y a-t-il dans la boîte?",
+      "kanji": ["中"]
+    }
+  ]
+}

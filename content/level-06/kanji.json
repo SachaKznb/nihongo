@@ -1,0 +1,95 @@
+{
+  "level": 6,
+  "kanji": [
+    {
+      "character": "曜",
+      "meaningsFr": ["Jour de la semaine"],
+      "readingsOn": ["ヨウ"],
+      "readingsKun": [],
+      "meaningMnemonic": "Le soleil avec des ailes - les jours de la semaine s'envolent vite.",
+      "readingMnemonic": "'You' - chaque JOUR DE LA SEMAINE, 'you' (vous) travaillez.",
+      "radicals": ["曜"]
+    },
+    {
+      "character": "週",
+      "meaningsFr": ["Semaine"],
+      "readingsOn": ["シュウ"],
+      "readingsKun": [],
+      "meaningMnemonic": "Faire le tour complet du chemin - une SEMAINE complète.",
+      "readingMnemonic": "'Shuu' - une SEMAINE, c'est 'chou' quand c'est les vacances!",
+      "radicals": ["週"]
+    },
+    {
+      "character": "間",
+      "meaningsFr": ["Intervalle", "Entre", "Espace"],
+      "readingsOn": ["カン", "ケン"],
+      "readingsKun": ["あいだ", "ま"],
+      "meaningMnemonic": "La lumière du soleil qui passe entre les portes - un INTERVALLE.",
+      "readingMnemonic": "'Aida' - il y a un INTERVALLE 'aïe-da' entre les deux!",
+      "radicals": ["間"]
+    },
+    {
+      "character": "分",
+      "meaningsFr": ["Minute", "Diviser", "Comprendre"],
+      "readingsOn": ["フン", "ブン"],
+      "readingsKun": ["わ-かる", "わ-ける"],
+      "meaningMnemonic": "Un couteau qui divise en parties - DIVISER en minutes.",
+      "readingMnemonic": "'Fun' - c'est 'fun' de DIVISER le gâteau en parts égales!",
+      "radicals": ["分"]
+    },
+    {
+      "character": "半",
+      "meaningsFr": ["Moitié", "Demi"],
+      "readingsOn": ["ハン"],
+      "readingsKun": ["なか-ば"],
+      "meaningMnemonic": "Quelque chose coupé en deux parties égales - la MOITIÉ.",
+      "readingMnemonic": "'Han' - la MOITIÉ d'un 'hamburger' c'est 'han-burger'!",
+      "radicals": ["半"]
+    },
+    {
+      "character": "毎",
+      "meaningsFr": ["Chaque", "Tous les"],
+      "readingsOn": ["マイ"],
+      "readingsKun": ["ごと"],
+      "meaningMnemonic": "Une mère fait la même chose CHAQUE jour.",
+      "readingMnemonic": "'Mai' - CHAQUE mois de 'mai', c'est pareil!",
+      "radicals": ["毎"]
+    },
+    {
+      "character": "朝",
+      "meaningsFr": ["Matin"],
+      "readingsOn": ["チョウ"],
+      "readingsKun": ["あさ"],
+      "meaningMnemonic": "Le soleil qui se lève sur la lune - le MATIN arrive.",
+      "readingMnemonic": "'Asa' - le MATIN, on dit 'ah ça!' en se réveillant.",
+      "radicals": ["朝"]
+    },
+    {
+      "character": "昼",
+      "meaningsFr": ["Midi", "Journée"],
+      "readingsOn": ["チュウ"],
+      "readingsKun": ["ひる"],
+      "meaningMnemonic": "Le soleil au plus haut - c'est MIDI.",
+      "readingMnemonic": "'Hiru' - à MIDI, on mange un 'hero' sandwich!",
+      "radicals": ["昼"]
+    },
+    {
+      "character": "夜",
+      "meaningsFr": ["Nuit", "Soir"],
+      "readingsOn": ["ヤ"],
+      "readingsKun": ["よ", "よる"],
+      "meaningMnemonic": "Une personne sous un toit avec la lune - la NUIT.",
+      "readingMnemonic": "'Yoru' - la NUIT, on dit 'yo!' aux étoiles.",
+      "radicals": ["夜"]
+    },
+    {
+      "character": "夕",
+      "meaningsFr": ["Soir", "Crépuscule"],
+      "readingsOn": ["セキ"],
+      "readingsKun": ["ゆう"],
+      "meaningMnemonic": "Un croissant de lune qui apparaît - le SOIR arrive.",
+      "readingMnemonic": "'Yuu' - le SOIR, on dit 'youhou!' en rentrant.",
+      "radicals": ["夕"]
+    }
+  ]
+}

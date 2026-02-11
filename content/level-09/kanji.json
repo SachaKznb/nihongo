@@ -1,0 +1,95 @@
+{
+  "level": 9,
+  "kanji": [
+    {
+      "character": "白",
+      "meaningsFr": ["Blanc"],
+      "readingsOn": ["ハク", "ビャク"],
+      "readingsKun": ["しろ", "しろ-い"],
+      "meaningMnemonic": "Un rayon de lumière qui illumine - le BLANC pur.",
+      "readingMnemonic": "'Shiro' - le BLANC comme le château 'shi-ro' (château en japonais)!",
+      "radicals": ["白"]
+    },
+    {
+      "character": "青",
+      "meaningsFr": ["Bleu", "Vert"],
+      "readingsOn": ["セイ", "ショウ"],
+      "readingsKun": ["あお", "あお-い"],
+      "meaningMnemonic": "Plantes sous la lune - le BLEU du ciel nocturne.",
+      "readingMnemonic": "'Ao' - le BLEU du ciel fait dire 'oh!'",
+      "radicals": ["青"]
+    },
+    {
+      "character": "赤",
+      "meaningsFr": ["Rouge"],
+      "readingsOn": ["セキ", "シャク"],
+      "readingsKun": ["あか", "あか-い"],
+      "meaningMnemonic": "La terre et le feu - le ROUGE des flammes.",
+      "readingMnemonic": "'Aka' - le ROUGE de la colère: 'ah-gah!'",
+      "radicals": ["赤"]
+    },
+    {
+      "character": "黒",
+      "meaningsFr": ["Noir"],
+      "readingsOn": ["コク"],
+      "readingsKun": ["くろ", "くろ-い"],
+      "meaningMnemonic": "Le feu qui devient suie - le NOIR de la cendre.",
+      "readingMnemonic": "'Kuro' - le NOIR du 'corbeau' (crow en anglais)!",
+      "radicals": ["黒"]
+    },
+    {
+      "character": "高",
+      "meaningsFr": ["Haut", "Cher", "Élevé"],
+      "readingsOn": ["コウ"],
+      "readingsKun": ["たか-い"],
+      "meaningMnemonic": "Un bâtiment avec un toit pointu - très HAUT.",
+      "readingMnemonic": "'Takai' - c'est trop HAUT, 'ta-ca-illé'!",
+      "radicals": ["高"]
+    },
+    {
+      "character": "安",
+      "meaningsFr": ["Bon marché", "Paisible", "Sûr"],
+      "readingsOn": ["アン"],
+      "readingsKun": ["やす-い"],
+      "meaningMnemonic": "Une femme sous un toit - tranquille et PAS CHER.",
+      "readingMnemonic": "'Yasui' - c'est BON MARCHÉ, 'yeah super!'",
+      "radicals": ["安"]
+    },
+    {
+      "character": "新",
+      "meaningsFr": ["Nouveau", "Neuf"],
+      "readingsOn": ["シン"],
+      "readingsKun": ["あたら-しい"],
+      "meaningMnemonic": "Couper un arbre avec une hache - du bois NEUF.",
+      "readingMnemonic": "'Atarashii' - c'est NOUVEAU, 'à ta rashii' (à ton style)!",
+      "radicals": ["新"]
+    },
+    {
+      "character": "古",
+      "meaningsFr": ["Vieux", "Ancien"],
+      "readingsOn": ["コ"],
+      "readingsKun": ["ふる-い"],
+      "meaningMnemonic": "Dix bouches ont transmis l'histoire - c'est ANCIEN.",
+      "readingMnemonic": "'Furui' - c'est VIEUX, 'fourrure' d'antan!",
+      "radicals": ["古"]
+    },
+    {
+      "character": "長",
+      "meaningsFr": ["Long", "Chef"],
+      "readingsOn": ["チョウ"],
+      "readingsKun": ["なが-い"],
+      "meaningMnemonic": "Des cheveux qui flottent - très LONG.",
+      "readingMnemonic": "'Nagai' - c'est LONG, 'nage' dans une piscine sans fin!",
+      "radicals": ["長"]
+    },
+    {
+      "character": "好",
+      "meaningsFr": ["Aimer", "Apprécier"],
+      "readingsOn": ["コウ"],
+      "readingsKun": ["す-き", "この-む"],
+      "meaningMnemonic": "Femme + enfant = ce qu'on AIME naturellement.",
+      "readingMnemonic": "'Suki' - j'AIME ça, 'c'est ski!' (super)!",
+      "radicals": ["好"]
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "level": 1,
+  "vocabulary": [
+    {
+      "word": "一",
+      "meaningsFr": ["Un"],
+      "readings": ["いち"],
+      "mnemonic": "Le kanji seul se lit 'ichi' et signifie un.",
+      "sentenceJp": "一から十まで数えてください。",
+      "sentenceFr": "Comptez de un à dix s'il vous plaît.",
+      "kanji": ["一"]
+    },
+    {
+      "word": "二",
+      "meaningsFr": ["Deux"],
+      "readings": ["に"],
+      "mnemonic": "Le kanji seul se lit 'ni' et signifie deux.",
+      "sentenceJp": "二つのりんごがあります。",
+      "sentenceFr": "Il y a deux pommes.",
+      "kanji": ["二"]
+    },
+    {
+      "word": "三",
+      "meaningsFr": ["Trois"],
+      "readings": ["さん"],
+      "mnemonic": "Le kanji seul se lit 'san' et signifie trois.",
+      "sentenceJp": "三人の学生がいます。",
+      "sentenceFr": "Il y a trois étudiants.",
+      "kanji": ["三"]
+    },
+    {
+      "word": "十",
+      "meaningsFr": ["Dix"],
+      "readings": ["じゅう"],
+      "mnemonic": "Le kanji seul se lit 'juu' et signifie dix.",
+      "sentenceJp": "十分待ってください。",
+      "sentenceFr": "Attendez dix minutes s'il vous plaît.",
+      "kanji": ["十"]
+    },
+    {
+      "word": "一日",
+      "meaningsFr": ["Premier jour", "Un jour"],
+      "readings": ["いちにち", "ついたち"],
+      "mnemonic": "Un + jour = premier jour du mois ou une journée.",
+      "sentenceJp": "一日は日曜日です。",
+      "sentenceFr": "Le premier est un dimanche.",
+      "kanji": ["一", "日"]
+    },
+    {
+      "word": "二日",
+      "meaningsFr": ["Deuxième jour", "Deux jours"],
+      "readings": ["ふつか"],
+      "mnemonic": "Deux + jour = deuxième jour du mois ou deux jours.",
+      "sentenceJp": "二日に会いましょう。",
+      "sentenceFr": "Retrouvons-nous le deux.",
+      "kanji": ["二", "日"]
+    }
+  ]
+}

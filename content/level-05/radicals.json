@@ -1,0 +1,55 @@
+{
+  "level": 5,
+  "radicals": [
+    {
+      "character": "目",
+      "meaningFr": "Oeil",
+      "mnemonic": "Un rectangle avec des lignes horizontales comme un oeil vu de face."
+    },
+    {
+      "character": "耳",
+      "meaningFr": "Oreille",
+      "mnemonic": "La forme d'une oreille avec ses plis internes."
+    },
+    {
+      "character": "手",
+      "meaningFr": "Main",
+      "mnemonic": "Une main avec ses doigts et son poignet."
+    },
+    {
+      "character": "足",
+      "meaningFr": "Pied",
+      "mnemonic": "Un pied avec sa jambe attachée."
+    },
+    {
+      "character": "言",
+      "meaningFr": "Dire",
+      "mnemonic": "Des lignes qui sortent d'une bouche - les paroles."
+    },
+    {
+      "character": "見",
+      "meaningFr": "Voir",
+      "mnemonic": "Un oeil sur des jambes - quelqu'un qui regarde."
+    },
+    {
+      "character": "行",
+      "meaningFr": "Aller",
+      "mnemonic": "Un carrefour de routes - on peut aller partout."
+    },
+    {
+      "character": "来",
+      "meaningFr": "Venir",
+      "mnemonic": "Du riz dans un champ - les gens viennent récolter."
+    },
+    {
+      "character": "食",
+      "meaningFr": "Manger",
+      "mnemonic": "Une personne avec un bol de nourriture."
+    },
+    {
+      "character": "飲",
+      "meaningFr": "Boire",
+      "mnemonic": "Manger + quelqu'un qui avale = boire."
+    }
+  ]
+}

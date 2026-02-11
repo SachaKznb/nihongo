@@ -1,0 +1,55 @@
+{
+  "level": 1,
+  "radicals": [
+    {
+      "character": "一",
+      "meaningFr": "Un",
+      "mnemonic": "Un seul trait horizontal, comme le chiffre 1 couché sur le côté."
+    },
+    {
+      "character": "二",
+      "meaningFr": "Deux",
+      "mnemonic": "Deux traits horizontaux, comme deux lignes parallèles."
+    },
+    {
+      "character": "三",
+      "meaningFr": "Trois",
+      "mnemonic": "Trois traits horizontaux empilés."
+    },
+    {
+      "character": "十",
+      "meaningFr": "Dix",
+      "mnemonic": "Une croix, comme le chiffre romain X."
+    },
+    {
+      "character": "口",
+      "meaningFr": "Bouche",
+      "mnemonic": "Un carré ouvert, comme une bouche vue de face."
+    },
+    {
+      "character": "日",
+      "meaningFr": "Soleil",
+      "mnemonic": "Un rectangle avec un trait au milieu, comme le soleil brillant."
+    },
+    {
+      "character": "月",
+      "meaningFr": "Lune",
+      "mnemonic": "Une forme courbée comme un croissant de lune."
+    },
+    {
+      "character": "山",
+      "meaningFr": "Montagne",
+      "mnemonic": "Trois pics comme une chaîne de montagnes."
+    },
+    {
+      "character": "川",
+      "meaningFr": "Rivière",
+      "mnemonic": "Trois traits verticaux comme l'eau qui coule."
+    },
+    {
+      "character": "木",
+      "meaningFr": "Arbre",
+      "mnemonic": "Un tronc avec des branches, comme un arbre vu de loin."
+    }
+  ]
+}

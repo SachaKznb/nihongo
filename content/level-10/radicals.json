@@ -1,0 +1,55 @@
+{
+  "level": 10,
+  "radicals": [
+    {
+      "character": "書",
+      "meaningFr": "Écrire",
+      "mnemonic": "Une main qui tient un pinceau - écrire."
+    },
+    {
+      "character": "読",
+      "meaningFr": "Lire",
+      "mnemonic": "Parole + vendre = acheter des mots, lire."
+    },
+    {
+      "character": "話",
+      "meaningFr": "Parler",
+      "mnemonic": "Parole + langue = parler."
+    },
+    {
+      "character": "聞",
+      "meaningFr": "Entendre",
+      "mnemonic": "Oreille à la porte - entendre."
+    },
+    {
+      "character": "思",
+      "meaningFr": "Penser",
+      "mnemonic": "Champ + coeur = ce qui pousse dans le coeur."
+    },
+    {
+      "character": "知",
+      "meaningFr": "Savoir",
+      "mnemonic": "Flèche + bouche = paroles qui visent juste."
+    },
+    {
+      "character": "休",
+      "meaningFr": "Repos",
+      "mnemonic": "Personne + arbre = se reposer sous un arbre."
+    },
+    {
+      "character": "買",
+      "meaningFr": "Acheter",
+      "mnemonic": "Filet + coquillage = attraper de l'argent pour acheter."
+    },
+    {
+      "character": "売",
+      "meaningFr": "Vendre",
+      "mnemonic": "Un étal de marché - vendre."
+    },
+    {
+      "character": "使",
+      "meaningFr": "Utiliser",
+      "mnemonic": "Personne + officiel = utiliser quelqu'un."
+    }
+  ]
+}

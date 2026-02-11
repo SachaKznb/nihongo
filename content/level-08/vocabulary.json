@@ -1,0 +1,149 @@
+{
+  "level": 8,
+  "vocabulary": [
+    {
+      "word": "男",
+      "meaningsFr": ["Homme"],
+      "readings": ["おとこ"],
+      "mnemonic": "Le kanji seul signifie homme.",
+      "sentenceJp": "あの男の人は誰ですか。",
+      "sentenceFr": "Qui est cet homme?",
+      "kanji": ["男"]
+    },
+    {
+      "word": "女",
+      "meaningsFr": ["Femme"],
+      "readings": ["おんな"],
+      "mnemonic": "Le kanji seul signifie femme.",
+      "sentenceJp": "女の子が歌っています。",
+      "sentenceFr": "La fille chante.",
+      "kanji": ["女"]
+    },
+    {
+      "word": "男の子",
+      "meaningsFr": ["Garçon"],
+      "readings": ["おとこのこ"],
+      "mnemonic": "Homme + enfant = garçon.",
+      "sentenceJp": "男の子は元気です。",
+      "sentenceFr": "Le garçon est en forme.",
+      "kanji": ["男", "子"]
+    },
+    {
+      "word": "女の子",
+      "meaningsFr": ["Fille"],
+      "readings": ["おんなのこ"],
+      "mnemonic": "Femme + enfant = fille.",
+      "sentenceJp": "女の子は本を読んでいます。",
+      "sentenceFr": "La fille lit un livre.",
+      "kanji": ["女", "子"]
+    },
+    {
+      "word": "子供",
+      "meaningsFr": ["Enfant"],
+      "readings": ["こども"],
+      "mnemonic": "Enfant + accompagner = les enfants.",
+      "sentenceJp": "子供が遊んでいます。",
+      "sentenceFr": "Les enfants jouent.",
+      "kanji": ["子"]
+    },
+    {
+      "word": "父",
+      "meaningsFr": ["Père (mon père)"],
+      "readings": ["ちち"],
+      "mnemonic": "Le kanji seul signifie père (humble).",
+      "sentenceJp": "父は会社員です。",
+      "sentenceFr": "Mon père est employé de bureau.",
+      "kanji": ["父"]
+    },
+    {
+      "word": "母",
+      "meaningsFr": ["Mère (ma mère)"],
+      "readings": ["はは"],
+      "mnemonic": "Le kanji seul signifie mère (humble).",
+      "sentenceJp": "母は料理が上手です。",
+      "sentenceFr": "Ma mère cuisine bien.",
+      "kanji": ["母"]
+    },
+    {
+      "word": "友達",
+      "meaningsFr": ["Ami"],
+      "readings": ["ともだち"],
+      "mnemonic": "Ami + atteindre = ami proche.",
+      "sentenceJp": "友達と映画を見ます。",
+      "sentenceFr": "Je regarde un film avec un ami.",
+      "kanji": ["友"]
+    },
+    {
+      "word": "先生",
+      "meaningsFr": ["Professeur", "Maître"],
+      "readings": ["せんせい"],
+      "mnemonic": "Avant + vie = celui qui est né avant, le professeur.",
+      "sentenceJp": "先生は優しいです。",
+      "sentenceFr": "Le professeur est gentil.",
+      "kanji": ["先", "生"]
+    },
+    {
+      "word": "学生",
+      "meaningsFr": ["Étudiant"],
+      "readings": ["がくせい"],
+      "mnemonic": "Étudier + vie = celui qui vit pour étudier.",
+      "sentenceJp": "私は大学生です。",
+      "sentenceFr": "Je suis étudiant universitaire.",
+      "kanji": ["学", "生"]
+    },
+    {
+      "word": "生まれる",
+      "meaningsFr": ["Naître"],
+      "readings": ["うまれる"],
+      "mnemonic": "Le kanji vie avec la terminaison verbale = naître.",
+      "sentenceJp": "東京で生まれました。",
+      "sentenceFr": "Je suis né à Tokyo.",
+      "kanji": ["生"]
+    },
+    {
+      "word": "名前",
+      "meaningsFr": ["Nom", "Prénom"],
+      "readings": ["なまえ"],
+      "mnemonic": "Nom + devant = le nom qu'on présente.",
+      "sentenceJp": "お名前は何ですか。",
+      "sentenceFr": "Quel est votre nom?",
+      "kanji": ["名"]
+    },
+    {
+      "word": "何",
+      "meaningsFr": ["Quoi", "Que"],
+      "readings": ["なに", "なん"],
+      "mnemonic": "Le kanji seul signifie quoi.",
+      "sentenceJp": "何を食べますか。",
+      "sentenceFr": "Que mangez-vous?",
+      "kanji": ["何"]
+    },
+    {
+      "word": "何人",
+      "meaningsFr": ["Combien de personnes"],
+      "readings": ["なんにん"],
+      "mnemonic": "Quoi + personne = combien de personnes.",
+      "sentenceJp": "何人いますか。",
+      "sentenceFr": "Combien de personnes y a-t-il?",
+      "kanji": ["何", "人"]
+    },
+    {
+      "word": "何時",
+      "meaningsFr": ["Quelle heure"],
+      "readings": ["なんじ"],
+      "mnemonic": "Quoi + heure = quelle heure.",
+      "sentenceJp": "今、何時ですか。",
+      "sentenceFr": "Quelle heure est-il maintenant?",
+      "kanji": ["何"]
+    },
+    {
+      "word": "先月",
+      "meaningsFr": ["Le mois dernier"],
+      "readings": ["せんげつ"],
+      "mnemonic": "Avant + mois = le mois d'avant.",
+      "sentenceJp": "先月、旅行しました。",
+      "sentenceFr": "J'ai voyagé le mois dernier.",
+      "kanji": ["先", "月"]
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "level": 9,
+  "vocabulary": [
+    {
+      "word": "白い",
+      "meaningsFr": ["Blanc"],
+      "readings": ["しろい"],
+      "mnemonic": "Le kanji blanc avec la terminaison d'adjectif.",
+      "sentenceJp": "白い雲が見えます。",
+      "sentenceFr": "Je vois des nuages blancs.",
+      "kanji": ["白"]
+    },
+    {
+      "word": "青い",
+      "meaningsFr": ["Bleu"],
+      "readings": ["あおい"],
+      "mnemonic": "Le kanji bleu avec la terminaison d'adjectif.",
+      "sentenceJp": "青い空が好きです。",
+      "sentenceFr": "J'aime le ciel bleu.",
+      "kanji": ["青"]
+    },
+    {
+      "word": "赤い",
+      "meaningsFr": ["Rouge"],
+      "readings": ["あかい"],
+      "mnemonic": "Le kanji rouge avec la terminaison d'adjectif.",
+      "sentenceJp": "赤いりんごを食べます。",
+      "sentenceFr": "Je mange une pomme rouge.",
+      "kanji": ["赤"]
+    },
+    {
+      "word": "黒い",
+      "meaningsFr": ["Noir"],
+      "readings": ["くろい"],
+      "mnemonic": "Le kanji noir avec la terminaison d'adjectif.",
+      "sentenceJp": "黒い猫がいます。",
+      "sentenceFr": "Il y a un chat noir.",
+      "kanji": ["黒"]
+    },
+    {
+      "word": "高い",
+      "meaningsFr": ["Haut", "Cher"],
+      "readings": ["たかい"],
+      "mnemonic": "Le kanji haut avec la terminaison d'adjectif.",
+      "sentenceJp": "この山は高いです。",
+      "sentenceFr": "Cette montagne est haute.",
+      "kanji": ["高"]
+    },
+    {
+      "word": "安い",
+      "meaningsFr": ["Bon marché", "Pas cher"],
+      "readings": ["やすい"],
+      "mnemonic": "Le kanji bon marché avec la terminaison d'adjectif.",
+      "sentenceJp": "この店は安いです。",
+      "sentenceFr": "Ce magasin est bon marché.",
+      "kanji": ["安"]
+    },
+    {
+      "word": "新しい",
+      "meaningsFr": ["Nouveau", "Neuf"],
+      "readings": ["あたらしい"],
+      "mnemonic": "Le kanji nouveau avec la terminaison d'adjectif.",
+      "sentenceJp": "新しい車を買いました。",
+      "sentenceFr": "J'ai acheté une nouvelle voiture.",
+      "kanji": ["新"]
+    },
+    {
+      "word": "古い",
+      "meaningsFr": ["Vieux", "Ancien"],
+      "readings": ["ふるい"],
+      "mnemonic": "Le kanji vieux avec la terminaison d'adjectif.",
+      "sentenceJp": "古い本を読みます。",
+      "sentenceFr": "Je lis un vieux livre.",
+      "kanji": ["古"]
+    },
+    {
+      "word": "長い",
+      "meaningsFr": ["Long"],
+      "readings": ["ながい"],
+      "mnemonic": "Le kanji long avec la terminaison d'adjectif.",
+      "sentenceJp": "この道は長いです。",
+      "sentenceFr": "Ce chemin est long.",
+      "kanji": ["長"]
+    },
+    {
+      "word": "好き",
+      "meaningsFr": ["Aimer", "Apprécier"],
+      "readings": ["すき"],
+      "mnemonic": "Le kanji aimer - un na-adjectif.",
+      "sentenceJp": "日本語が好きです。",
+      "sentenceFr": "J'aime le japonais.",
+      "kanji": ["好"]
+    },
+    {
+      "word": "大好き",
+      "meaningsFr": ["Adorer", "Aimer beaucoup"],
+      "readings": ["だいすき"],
+      "mnemonic": "Grand + aimer = aimer beaucoup.",
+      "sentenceJp": "音楽が大好きです。",
+      "sentenceFr": "J'adore la musique.",
+      "kanji": ["大", "好"]
+    },
+    {
+      "word": "新年",
+      "meaningsFr": ["Nouvel An"],
+      "readings": ["しんねん"],
+      "mnemonic": "Nouveau + année = nouvel an.",
+      "sentenceJp": "新年おめでとうございます。",
+      "sentenceFr": "Bonne année!",
+      "kanji": ["新", "年"]
+    },
+    {
+      "word": "長男",
+      "meaningsFr": ["Fils aîné"],
+      "readings": ["ちょうなん"],
+      "mnemonic": "Long + homme = le premier fils (le plus ancien).",
+      "sentenceJp": "彼は長男です。",
+      "sentenceFr": "Il est le fils aîné.",
+      "kanji": ["長", "男"]
+    },
+    {
+      "word": "長女",
+      "meaningsFr": ["Fille aînée"],
+      "readings": ["ちょうじょ"],
+      "mnemonic": "Long + femme = la première fille (la plus ancienne).",
+      "sentenceJp": "私は長女です。",
+      "sentenceFr": "Je suis la fille aînée.",
+      "kanji": ["長", "女"]
+    },
+    {
+      "word": "安心",
+      "meaningsFr": ["Tranquillité", "Soulagement"],
+      "readings": ["あんしん"],
+      "mnemonic": "Paisible + coeur = coeur en paix.",
+      "sentenceJp": "安心しました。",
+      "sentenceFr": "Je suis soulagé.",
+      "kanji": ["安"]
+    },
+    {
+      "word": "中古",
+      "meaningsFr": ["D'occasion"],
+      "readings": ["ちゅうこ"],
+      "mnemonic": "Milieu + vieux = pas neuf mais pas trop vieux.",
+      "sentenceJp": "中古の車を買いました。",
+      "sentenceFr": "J'ai acheté une voiture d'occasion.",
+      "kanji": ["中", "古"]
+    }
+  ]
+}

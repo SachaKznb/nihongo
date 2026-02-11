@@ -1,0 +1,59 @@
+{
+  "level": 1,
+  "kanji": [
+    {
+      "character": "一",
+      "meaningsFr": ["Un", "Premier"],
+      "readingsOn": ["イチ"],
+      "readingsKun": ["ひと-", "ひとつ"],
+      "meaningMnemonic": "Un seul trait horizontal représente le chiffre un.",
+      "readingMnemonic": "Pensez à 'ichi' comme 'itchy' (ça démange) - vous avez UN seul endroit qui démange.",
+      "radicals": ["一"]
+    },
+    {
+      "character": "二",
+      "meaningsFr": ["Deux", "Deuxième"],
+      "readingsOn": ["ニ"],
+      "readingsKun": ["ふた-", "ふたつ"],
+      "meaningMnemonic": "Deux traits horizontaux empilés représentent le chiffre deux.",
+      "readingMnemonic": "Pensez à 'ni' comme 'knee' (genou) - vous avez DEUX genoux.",
+      "radicals": ["二"]
+    },
+    {
+      "character": "三",
+      "meaningsFr": ["Trois", "Troisième"],
+      "readingsOn": ["サン"],
+      "readingsKun": ["み-", "みっつ"],
+      "meaningMnemonic": "Trois traits horizontaux empilés représentent le chiffre trois.",
+      "readingMnemonic": "Pensez à 'san' comme le prénom - TROIS lettres dans San.",
+      "radicals": ["三"]
+    },
+    {
+      "character": "十",
+      "meaningsFr": ["Dix"],
+      "readingsOn": ["ジュウ"],
+      "readingsKun": ["とお"],
+      "meaningMnemonic": "Une croix comme le chiffre romain X (dix).",
+      "readingMnemonic": "Pensez à 'juu' comme 'joue' - vous avez DIX doigts pour toucher vos joues.",
+      "radicals": ["十"]
+    },
+    {
+      "character": "日",
+      "meaningsFr": ["Soleil", "Jour"],
+      "readingsOn": ["ニチ", "ジツ"],
+      "readingsKun": ["ひ", "か"],
+      "meaningMnemonic": "Un rectangle avec une ligne au milieu représente le soleil.",
+      "readingMnemonic": "'Nichi' ressemble à 'niche' - le soleil brille sur votre niche.",
+      "radicals": ["日"]
+    },
+    {
+      "character": "月",
+      "meaningsFr": ["Lune", "Mois"],
+      "readingsOn": ["ゲツ", "ガツ"],
+      "readingsKun": ["つき"],
+      "meaningMnemonic": "Une forme courbée représente la lune ou un mois.",
+      "readingMnemonic": "'Getsu' - chaque mois, on 'get' (obtient) une nouvelle lune.",
+      "radicals": ["月"]
+    }
+  ]
+}

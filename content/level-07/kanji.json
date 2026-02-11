@@ -1,0 +1,95 @@
+{
+  "level": 7,
+  "kanji": [
+    {
+      "character": "学",
+      "meaningsFr": ["Étudier", "Apprendre", "Science"],
+      "readingsOn": ["ガク"],
+      "readingsKun": ["まな-ぶ"],
+      "meaningMnemonic": "Un enfant sous un toit qui apprend - ÉTUDIER.",
+      "readingMnemonic": "'Gaku' - pour ÉTUDIER, il faut du 'guts' (courage)!",
+      "radicals": ["学"]
+    },
+    {
+      "character": "校",
+      "meaningsFr": ["École"],
+      "readingsOn": ["コウ"],
+      "readingsKun": [],
+      "meaningMnemonic": "Un arbre où l'on compare les savoirs - l'ÉCOLE.",
+      "readingMnemonic": "'Kou' - à l'ÉCOLE, on apprend les 'coûts' de la vie!",
+      "radicals": ["校"]
+    },
+    {
+      "character": "会",
+      "meaningsFr": ["Rencontrer", "Réunion", "Société"],
+      "readingsOn": ["カイ", "エ"],
+      "readingsKun": ["あ-う"],
+      "meaningMnemonic": "Des gens sous un toit qui se RENCONTRENT.",
+      "readingMnemonic": "'Au' - quand on SE RENCONTRE, on dit 'oh!'",
+      "radicals": ["会"]
+    },
+    {
+      "character": "社",
+      "meaningsFr": ["Société", "Entreprise", "Sanctuaire"],
+      "readingsOn": ["シャ"],
+      "readingsKun": ["やしろ"],
+      "meaningMnemonic": "Un autel sur la terre - lieu de rassemblement de la SOCIÉTÉ.",
+      "readingMnemonic": "'Sha' - la SOCIÉTÉ dit 'cha-cha' quand elle danse!",
+      "radicals": ["社"]
+    },
+    {
+      "character": "店",
+      "meaningsFr": ["Magasin", "Boutique"],
+      "readingsOn": ["テン"],
+      "readingsKun": ["みせ"],
+      "meaningMnemonic": "Un toit avec une enseigne - un MAGASIN.",
+      "readingMnemonic": "'Mise' - au MAGASIN, tout est 'mis' en vente!",
+      "radicals": ["店"]
+    },
+    {
+      "character": "駅",
+      "meaningsFr": ["Gare", "Station"],
+      "readingsOn": ["エキ"],
+      "readingsKun": [],
+      "meaningMnemonic": "Un cheval à un relais - une GARE pour chevaux, puis trains.",
+      "readingMnemonic": "'Eki' - à la GARE, on prend l''express' pour partir!",
+      "radicals": ["駅"]
+    },
+    {
+      "character": "道",
+      "meaningsFr": ["Chemin", "Voie", "Route"],
+      "readingsOn": ["ドウ"],
+      "readingsKun": ["みち"],
+      "meaningMnemonic": "Une tête qui avance sur un CHEMIN.",
+      "readingMnemonic": "'Michi' - sur le CHEMIN, on fait 'mi-chemin'!",
+      "radicals": ["道"]
+    },
+    {
+      "character": "国",
+      "meaningsFr": ["Pays", "Nation"],
+      "readingsOn": ["コク"],
+      "readingsKun": ["くに"],
+      "meaningMnemonic": "Un trésor protégé par des frontières - un PAYS.",
+      "readingMnemonic": "'Kuni' - chaque PAYS a son 'cou-ni' (coin) du monde!",
+      "radicals": ["国"]
+    },
+    {
+      "character": "外",
+      "meaningsFr": ["Extérieur", "Dehors", "Étranger"],
+      "readingsOn": ["ガイ", "ゲ"],
+      "readingsKun": ["そと", "ほか"],
+      "meaningMnemonic": "La nuit dehors - l'EXTÉRIEUR.",
+      "readingMnemonic": "'Soto' - DEHORS, il fait 'si tôt' froid!",
+      "radicals": ["外"]
+    },
+    {
+      "character": "家",
+      "meaningsFr": ["Maison", "Famille", "Spécialiste"],
+      "readingsOn": ["カ", "ケ"],
+      "readingsKun": ["いえ", "や"],
+      "meaningMnemonic": "Un toit avec des animaux - une MAISON de famille.",
+      "readingMnemonic": "'Ie' - la MAISON, c'est là où 'y est' le coeur!",
+      "radicals": ["家"]
+    }
+  ]
+}
