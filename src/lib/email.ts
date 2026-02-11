@@ -19,7 +19,7 @@ export async function sendPasswordResetEmail(
   try {
     const resend = getResendClient();
     const { error } = await resend.emails.send({
-      from: "Nihongo <noreply@resend.dev>", // Use your verified domain in production
+      from: "Nihongo <noreply@trynihongo.fr>",
       to: email,
       subject: "Reinitialisation de votre mot de passe - Nihongo",
       html: `
