@@ -44,19 +44,43 @@ nihongo/
 
 ## Key Concepts
 
-### SRS Stages
-- 0: Locked
-- 1-4: Apprentice (4h, 8h, 1d, 2d)
-- 5-6: Guru (1w, 2w)
-- 7: Master (1 month)
-- 8: Enlightened (4 months)
-- 9: Burned (complete)
+### SRS Stages (WaniKani-style)
+| Stage | Name | Interval | Color |
+|-------|------|----------|-------|
+| 0 | Verrouille | - | gray |
+| 1 | Apprenti 1 | 4h | pink |
+| 2 | Apprenti 2 | 8h | pink |
+| 3 | Apprenti 3 | 1 day | pink |
+| 4 | Apprenti 4 | 2 days | pink |
+| 5 | Guru 1 | 1 week | purple |
+| 6 | Guru 2 | 2 weeks | purple |
+| 7 | Maitre | 1 month | blue |
+| 8 | Shodan | 4 months | yellow |
+| 9 | Satori | Complete | black |
+
+**Wrong answer penalties:**
+- Apprentice (1-4): Drop 1 stage
+- Guru (5-6): Drop 2 stages
+- Master (7): Drop to Guru 1
+- Shodan (8): Drop to Apprentice 4
 
 ### Unlock System
-- Radicals unlock when user reaches a new level
-- Kanji unlock when ALL component radicals are at Guru+
-- Vocabulary unlocks when ALL component kanji are at Guru+
-- Next level unlocks when 90% of current level kanji are at Guru+
+- **Radicals** unlock immediately when user reaches a new level
+- **Kanji** unlock when ALL component radicals reach Guru (stage 5+)
+- **Vocabulary** unlocks when ALL component kanji reach Guru (stage 5+)
+- **Level up** when 90% of current level's kanji reach Guru
+
+### Content (Levels 1-10)
+| Level | Radicals | Kanji | Vocabulary |
+|-------|----------|-------|------------|
+| 1 | 10 | 6 | 6 |
+| 2 | 8 | 6 | 9 |
+| 3 | 10 | 10 | 16 |
+| 4-10 | 10-11 | 10 | 16 |
+
+**Total:** ~99 radicals, ~92 kanji, ~143 vocabulary
+
+All content has French mnemonics designed for French speakers.
 
 ## Development Commands
 
