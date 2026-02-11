@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  passwordHash    String
+  username        String   @unique
+  currentLevel    Int      @default(1)
+  lessonsPerDay   Int      @default(20)
+  reviewBatchSize Int      @default(10)
+  autoplayAudio   Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  // Gamification & Streaks
+  currentStreak     Int       @default(0)
+  longestStreak     Int       @default(0)
+  lastStudyDate     DateTime?
+  totalXp           Int       @default(0)
+  weeklyXp          Int       @default(0)
+  weeklyXpResetAt   DateTime  @default(now())
+  totalReviewsDone  Int       @default(0)
+  totalLessonsDone  Int       @default(0)
+  perfectDays       Int       @default(0)  // Days with 100% accuracy
+
+  radicalProgress    UserRadicalProgress[]
+  kanjiProgress      UserKanjiProgress[]
+  vocabularyProgress UserVocabularyProgress[]
+  reviews            Review[]
+}
+
+model Level {
+  id         Int          @id @default(autoincrement())
+  name       String?
+  radicals   Radical[]
+  kanji      Kanji[]
+  vocabulary Vocabulary[]
+}
+
+model Radical {
+  id            Int     @id @default(autoincrement())
+  character     String? // null if image-only radical
+  meaningFr     String
+  meaningHintFr String?
+  mnemonic      String  @db.Text
+  imageUrl      String? // for radicals without unicode
+  levelId       Int
+  level         Level   @relation(fields: [levelId], references: [id])
+
+  kanji        KanjiRadical[]
+  userProgress UserRadicalProgress[]
+}
+
+model Kanji {
+  id                Int      @id @default(autoincrement())
+  character         String   @unique
+  meaningsFr        String[] // array of accepted meanings
+  readingsOn        String[] // onyomi readings
+  readingsKun       String[] // kunyomi readings
+  meaningMnemonicFr String   @db.Text
+  readingMnemonicFr String   @db.Text
+  levelId           Int
+  level             Level    @relation(fields: [levelId], references: [id])
+
+  radicals     KanjiRadical[]
+  vocabulary   VocabularyKanji[]
+  userProgress UserKanjiProgress[]
+}
+
+model Vocabulary {
+  id         Int      @id @default(autoincrement())
+  word       String
+  meaningsFr String[]
+  readings   String[] // kana readings
+  mnemonicFr String   @db.Text
+  sentenceJp String?
+  sentenceFr String?
+  levelId    Int
+  level      Level    @relation(fields: [levelId], references: [id])
+
+  kanji        VocabularyKanji[]
+  userProgress UserVocabularyProgress[]
+}
+
+// Junction tables
+model KanjiRadical {
+  kanjiId   Int
+  radicalId Int
+  kanji     Kanji   @relation(fields: [kanjiId], references: [id])
+  radical   Radical @relation(fields: [radicalId], references: [id])
+
+  @@id([kanjiId, radicalId])
+}
+
+model VocabularyKanji {
+  vocabularyId Int
+  kanjiId      Int
+  vocabulary   Vocabulary @relation(fields: [vocabularyId], references: [id])
+  kanji        Kanji      @relation(fields: [kanjiId], references: [id])
+
+  @@id([vocabularyId, kanjiId])
+}
+
+// Progress Tracking
+model UserRadicalProgress {
+  userId           String
+  radicalId        Int
+  srsStage         Int       @default(0) // 0=locked, 1-4=apprentice, 5-6=guru, 7=master, 8=enlightened, 9=burned
+  unlockedAt       DateTime?
+  nextReviewAt     DateTime?
+  meaningCorrect   Int       @default(0)
+  meaningIncorrect Int       @default(0)
+
+  user    User    @relation(fields: [userId], references: [id])
+  radical Radical @relation(fields: [radicalId], references: [id])
+
+  @@id([userId, radicalId])
+}
+
+model UserKanjiProgress {
+  userId           String
+  kanjiId          Int
+  srsStage         Int       @default(0)
+  unlockedAt       DateTime?
+  nextReviewAt     DateTime?
+  meaningCorrect   Int       @default(0)
+  meaningIncorrect Int       @default(0)
+  readingCorrect   Int       @default(0)
+  readingIncorrect Int       @default(0)
+
+  user  User  @relation(fields: [userId], references: [id])
+  kanji Kanji @relation(fields: [kanjiId], references: [id])
+
+  @@id([userId, kanjiId])
+}
+
+model UserVocabularyProgress {
+  userId           String
+  vocabularyId     Int
+  srsStage         Int       @default(0)
+  unlockedAt       DateTime?
+  nextReviewAt     DateTime?
+  meaningCorrect   Int       @default(0)
+  meaningIncorrect Int       @default(0)
+  readingCorrect   Int       @default(0)
+  readingIncorrect Int       @default(0)
+
+  user       User       @relation(fields: [userId], references: [id])
+  vocabulary Vocabulary @relation(fields: [vocabularyId], references: [id])
+
+  @@id([userId, vocabularyId])
+}
+
+model Review {
+  id           String   @id @default(cuid())
+  userId       String
+  itemType     String // 'radical' | 'kanji' | 'vocabulary'
+  itemId       Int
+  reviewType   String // 'meaning' | 'reading'
+  correct      Boolean
+  srsStageFrom Int
+  srsStageTo   Int
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId, createdAt])
+}

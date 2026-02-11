@@ -1,0 +1,108 @@
+import type {
+  User,
+  Radical,
+  Kanji,
+  Vocabulary,
+  UserRadicalProgress,
+  UserKanjiProgress,
+  UserVocabularyProgress,
+  Review,
+} from "@prisma/client";
+
+export type { User, Radical, Kanji, Vocabulary, Review };
+
+export type ItemType = "radical" | "kanji" | "vocabulary";
+export type ReviewType = "meaning" | "reading";
+
+export interface RadicalWithProgress extends Radical {
+  userProgress?: UserRadicalProgress | null;
+}
+
+export interface KanjiWithProgress extends Kanji {
+  userProgress?: UserKanjiProgress | null;
+  radicals?: { radical: Radical }[];
+}
+
+export interface VocabularyWithProgress extends Vocabulary {
+  userProgress?: UserVocabularyProgress | null;
+  kanji?: { kanji: Kanji }[];
+}
+
+export interface LessonItem {
+  type: ItemType;
+  id: number;
+  character: string | null;
+  meaningsFr: string[];
+  readings?: string[];
+  readingsOn?: string[];
+  readingsKun?: string[];
+  mnemonic: string;
+  readingMnemonic?: string;
+  imageUrl?: string | null;
+  sentence?: { jp: string; fr: string } | null;
+}
+
+export interface ReviewItem {
+  type: ItemType;
+  id: number;
+  character: string | null;
+  meaningsFr: string[];
+  readings?: string[];
+  currentStage: number;
+  imageUrl?: string | null;
+}
+
+export interface SrsBreakdown {
+  apprentice: number;
+  guru: number;
+  master: number;
+  enlightened: number;
+  burned: number;
+}
+
+export interface GamificationStats {
+  currentStreak: number;
+  longestStreak: number;
+  totalXp: number;
+  weeklyXp: number;
+  totalReviewsDone: number;
+  totalLessonsDone: number;
+  perfectDays: number;
+  todayAccuracy: number;
+  todayReviews: number;
+  todayLessons: number;
+  levelProgress: number; // 0-100 percentage to next level
+  activeLearners: number; // Social proof - simulated or real
+}
+
+export interface UserProgress {
+  currentLevel: number;
+  totalRadicals: number;
+  totalKanji: number;
+  totalVocabulary: number;
+  learnedRadicals: number;
+  learnedKanji: number;
+  learnedVocabulary: number;
+  srsBreakdown: SrsBreakdown;
+  pendingLessons: number;
+  pendingReviews: number;
+  upcomingReviews: { time: Date; count: number }[];
+  gamification: GamificationStats;
+}
+
+export interface AnswerResult {
+  correct: boolean;
+  expectedAnswers: string[];
+  srsStageFrom: number;
+  srsStageTo: number;
+}
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      name: string;
+    };
+  }
+}
