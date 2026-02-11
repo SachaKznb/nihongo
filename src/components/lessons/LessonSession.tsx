@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { LessonItem } from "@/types";
 import { LessonCard } from "./LessonCard";
@@ -13,6 +13,22 @@ interface LessonSessionProps {
 
 type SessionPhase = "learning" | "quiz" | "complete";
 
+const CORRECT_MESSAGES = [
+  "Parfait !",
+  "Excellent !",
+  "Bravo !",
+  "Magnifique !",
+  "Superbe !",
+  "Incroyable !",
+];
+
+const INCORRECT_MESSAGES = [
+  "Pas tout à fait...",
+  "Presque !",
+  "Continue comme ça !",
+  "Tu y es presque !",
+];
+
 export function LessonSession({ lessons }: LessonSessionProps) {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,6 +39,10 @@ export function LessonSession({ lessons }: LessonSessionProps) {
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [completedLessons, setCompletedLessons] = useState<Set<number>>(new Set());
+  const [showXpAnimation, setShowXpAnimation] = useState(false);
+  const [earnedXp, setEarnedXp] = useState(0);
+  const [resultMessage, setResultMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const currentLesson = lessons[currentIndex];
   const currentQuizItem = quizItems[quizIndex];
@@ -33,15 +53,14 @@ export function LessonSession({ lessons }: LessonSessionProps) {
       .toLowerCase()
       .trim()
       .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Remove accents
-      .replace(/[^a-z0-9\s]/g, ""); // Remove special chars
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9\s]/g, "");
   };
 
   const handleNext = () => {
     if (currentIndex < lessons.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      // Move to quiz phase
       setQuizItems([...lessons].sort(() => Math.random() - 0.5));
       setPhase("quiz");
     }
@@ -65,37 +84,53 @@ export function LessonSession({ lessons }: LessonSessionProps) {
 
     setIsCorrect(isAnswerCorrect);
     setShowResult(true);
-  };
 
-  const handleQuizNext = async () => {
-    if (isCorrect && !completedLessons.has(currentQuizItem.id)) {
-      // Mark lesson as completed via API
-      try {
-        await fetch("/api/lessons/complete", {
+    if (isAnswerCorrect) {
+      setResultMessage(CORRECT_MESSAGES[Math.floor(Math.random() * CORRECT_MESSAGES.length)]);
+      setShowXpAnimation(true);
+      setEarnedXp(10);
+
+      // Fire and forget - don't await
+      if (!completedLessons.has(currentQuizItem.id)) {
+        fetch("/api/lessons/complete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             type: currentQuizItem.type,
             id: currentQuizItem.id,
           }),
-        });
+        }).catch(console.error);
         setCompletedLessons(new Set([...completedLessons, currentQuizItem.id]));
-      } catch (error) {
-        console.error("Error completing lesson:", error);
       }
+    } else {
+      setResultMessage(INCORRECT_MESSAGES[Math.floor(Math.random() * INCORRECT_MESSAGES.length)]);
     }
+  };
 
+  // Auto-advance after showing result
+  useEffect(() => {
+    if (!showResult) return;
+
+    const delay = isCorrect ? 2000 : 3000; // Faster for correct, slower for incorrect to read
+    const timer = setTimeout(() => {
+      advanceToNext();
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [showResult, isCorrect]);
+
+  const advanceToNext = () => {
     setAnswer("");
     setShowResult(false);
+    setShowXpAnimation(false);
 
     if (quizIndex < quizItems.length - 1) {
       setQuizIndex(quizIndex + 1);
-    } else if (completedLessons.size + (isCorrect ? 1 : 0) === lessons.length) {
+    } else if (completedLessons.size === lessons.length) {
       setPhase("complete");
     } else {
-      // Reshuffle and retry items that weren't completed
       const remaining = quizItems.filter(
-        (item) => !completedLessons.has(item.id) && item.id !== currentQuizItem.id
+        (item) => !completedLessons.has(item.id)
       );
       if (remaining.length > 0) {
         setQuizItems(remaining.sort(() => Math.random() - 0.5));
@@ -107,38 +142,76 @@ export function LessonSession({ lessons }: LessonSessionProps) {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      if (showResult) {
-        handleQuizNext();
-      } else if (answer.trim()) {
-        checkAnswer();
-      }
+    if (e.key === "Enter" && !showResult && answer.trim()) {
+      checkAnswer();
     }
   };
 
+  // Focus input when quiz phase starts or after advancing
+  useEffect(() => {
+    if (phase === "quiz" && !showResult && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [phase, quizIndex, showResult]);
+
   if (phase === "complete") {
+    const totalXp = lessons.length * 10;
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-lg p-8 text-center max-w-md">
-          <div className="text-6xl mb-4">&#127881;</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Félicitations !
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Vous avez complété {lessons.length} leçon{lessons.length > 1 ? "s" : ""} !
-            Ces éléments apparaîtront dans vos révisions dans 4 heures.
-          </p>
-          <div className="space-y-3">
-            <Button onClick={() => router.push("/dashboard")} className="w-full">
-              Retour au tableau de bord
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => router.push("/lessons")}
-              className="w-full"
-            >
-              Continuer les leçons
-            </Button>
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-md relative overflow-hidden">
+          {/* Celebration background */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-float-up"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 2}s`,
+                  animationDuration: `${3 + Math.random() * 2}s`,
+                }}
+              >
+                <span className="text-2xl opacity-60">
+                  {["✨", "🌟", "⭐", "💫"][Math.floor(Math.random() * 4)]}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="relative z-10">
+            <div className="text-8xl mb-6 animate-bounce">🎉</div>
+            <h2 className="text-3xl font-bold font-display text-stone-900 mb-2">
+              Félicitations !
+            </h2>
+            <p className="text-stone-600 mb-6">
+              Tu as complété {lessons.length} leçon{lessons.length > 1 ? "s" : ""} !
+            </p>
+
+            {/* XP earned card */}
+            <div className="bg-gradient-to-r from-emerald-400 to-teal-500 rounded-2xl p-6 mb-6 text-white shadow-lg">
+              <div className="flex items-center justify-center gap-3">
+                <span className="text-4xl">⚡</span>
+                <span className="text-4xl font-bold font-display">+{totalXp} XP</span>
+              </div>
+              <p className="text-emerald-100 text-sm mt-2">Ajoutés à ton score !</p>
+            </div>
+
+            <p className="text-stone-500 text-sm mb-6">
+              Ces éléments apparaîtront dans tes révisions dans 4 heures.
+            </p>
+
+            <div className="space-y-3">
+              <Button onClick={() => router.push("/dashboard")} className="w-full">
+                Retour au tableau de bord
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => router.push("/lessons")}
+                className="w-full"
+              >
+                Continuer les leçons
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -153,13 +226,13 @@ export function LessonSession({ lessons }: LessonSessionProps) {
           <div className="mb-6">
             <div className="flex justify-between text-sm text-gray-600 mb-2">
               <span>Quiz</span>
-              <span>
+              <span className="font-medium">
                 {completedLessons.size}/{lessons.length}
               </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
-                className="bg-green-500 h-2 rounded-full transition-all"
+                className="bg-gradient-to-r from-emerald-400 to-teal-500 h-2 rounded-full transition-all duration-500"
                 style={{
                   width: `${(completedLessons.size / lessons.length) * 100}%`,
                 }}
@@ -168,10 +241,46 @@ export function LessonSession({ lessons }: LessonSessionProps) {
           </div>
 
           {/* Quiz Card */}
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <div className="py-12 px-4 text-center bg-gray-50">
+          <div className="bg-white rounded-3xl shadow-xl overflow-hidden relative">
+            {/* XP Animation Overlay */}
+            {showXpAnimation && (
+              <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center">
+                <div className="animate-xp-float text-center">
+                  <div className="bg-gradient-to-r from-emerald-400 to-teal-500 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2">
+                    <span className="text-xl">⚡</span>
+                    <span className="text-xl font-bold">+{earnedXp} XP</span>
+                  </div>
+                </div>
+                {/* Sparkles */}
+                {[...Array(8)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="absolute animate-sparkle"
+                    style={{
+                      top: "40%",
+                      left: "50%",
+                      transform: `rotate(${i * 45}deg) translateY(-60px)`,
+                      animationDelay: `${i * 0.1}s`,
+                    }}
+                  >
+                    <span className="text-yellow-400 text-xl">✦</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Character display */}
+            <div className={`py-12 px-4 text-center transition-colors duration-300 ${
+              showResult
+                ? isCorrect
+                  ? "bg-gradient-to-b from-emerald-50 to-emerald-100"
+                  : "bg-gradient-to-b from-amber-50 to-orange-50"
+                : "bg-gray-50"
+            }`}>
               {currentQuizItem.character ? (
-                <span className="text-8xl font-japanese">
+                <span className={`text-8xl font-japanese transition-transform duration-300 inline-block ${
+                  showResult && isCorrect ? "scale-110" : ""
+                }`}>
                   {currentQuizItem.character}
                 </span>
               ) : currentQuizItem.imageUrl ? (
@@ -186,50 +295,64 @@ export function LessonSession({ lessons }: LessonSessionProps) {
             </div>
 
             <div className="p-6">
-              <p className="text-center text-gray-600 mb-4">
-                Quelle est la signification de cet élément ?
-              </p>
-
               {!showResult ? (
-                <div className="space-y-4">
-                  <Input
-                    value={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                    placeholder="Entrez votre réponse..."
-                    autoFocus
-                  />
-                  <Button
-                    onClick={checkAnswer}
-                    disabled={!answer.trim()}
-                    className="w-full"
-                  >
-                    Verifier
-                  </Button>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div
-                    className={`p-4 rounded-lg ${
-                      isCorrect ? "bg-green-100" : "bg-red-100"
-                    }`}
-                  >
-                    <p
-                      className={`font-semibold ${
-                        isCorrect ? "text-green-700" : "text-red-700"
-                      }`}
+                <>
+                  <p className="text-center text-gray-600 mb-4">
+                    Quelle est la signification ?
+                  </p>
+                  <div className="space-y-4">
+                    <Input
+                      ref={inputRef}
+                      value={answer}
+                      onChange={(e) => setAnswer(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                      placeholder="Ta réponse..."
+                      autoFocus
+                      className="text-center text-lg"
+                    />
+                    <Button
+                      onClick={checkAnswer}
+                      disabled={!answer.trim()}
+                      className="w-full"
                     >
-                      {isCorrect ? "Correct !" : "Incorrect"}
-                    </p>
-                    {!isCorrect && (
-                      <p className="text-gray-700 mt-1">
-                        Reponse attendue : {currentQuizItem.meaningsFr.join(", ")}
-                      </p>
-                    )}
+                      Vérifier
+                    </Button>
                   </div>
-                  <Button onClick={handleQuizNext} className="w-full">
-                    Continuer
-                  </Button>
+                </>
+              ) : (
+                <div className="text-center">
+                  {isCorrect ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-3xl">🎯</span>
+                        <h3 className="text-2xl font-bold text-emerald-600">{resultMessage}</h3>
+                      </div>
+                      <p className="text-emerald-700 font-medium">
+                        {currentQuizItem.meaningsFr[0]}
+                      </p>
+                      {/* Progress bar for auto-advance */}
+                      <div className="mt-4 h-1 bg-emerald-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-emerald-500 animate-shrink-width" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-2xl">💪</span>
+                        <h3 className="text-xl font-semibold text-amber-700">{resultMessage}</h3>
+                      </div>
+                      <div className="bg-amber-50 rounded-xl p-4">
+                        <p className="text-stone-600 text-sm mb-1">La bonne réponse :</p>
+                        <p className="text-stone-900 font-bold text-lg">
+                          {currentQuizItem.meaningsFr.join(", ")}
+                        </p>
+                      </div>
+                      {/* Progress bar for auto-advance */}
+                      <div className="mt-4 h-1 bg-amber-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500 animate-shrink-width-slow" />
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -270,7 +393,7 @@ export function LessonSession({ lessons }: LessonSessionProps) {
             onClick={handlePrevious}
             disabled={currentIndex === 0}
           >
-            Precedent
+            Précédent
           </Button>
           <Button onClick={handleNext}>
             {currentIndex === lessons.length - 1 ? "Quiz" : "Suivant"}

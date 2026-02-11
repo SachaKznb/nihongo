@@ -320,3 +320,79 @@ body {
     opacity: 0;
   }
 }
+
+/* XP float animation */
+@keyframes xp-float {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0) scale(1.1);
+  }
+  40% {
+    transform: translateY(-10px) scale(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1);
+  }
+}
+
+.animate-xp-float {
+  animation: xp-float 0.6s ease-out forwards;
+}
+
+/* Sparkle animation */
+@keyframes sparkle {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--rotation, 0deg)) translateY(0) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(var(--rotation, 0deg)) translateY(-60px) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--rotation, 0deg)) translateY(-80px) scale(0.8);
+  }
+}
+
+.animate-sparkle {
+  animation: sparkle 0.8s ease-out forwards;
+}
+
+/* Progress bar shrink for auto-advance */
+@keyframes shrink-width {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.animate-shrink-width {
+  animation: shrink-width 2s linear forwards;
+}
+
+.animate-shrink-width-slow {
+  animation: shrink-width 3s linear forwards;
+}
+
+/* Float up animation for celebration */
+@keyframes float-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  10% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+}
+
+.animate-float-up {
+  animation: float-up 4s ease-out infinite;
+}
