@@ -32,30 +32,37 @@ export async function POST(request: NextRequest) {
     // Always return success to prevent email enumeration
     // But only send email if user exists
     if (user) {
-      // Delete any existing tokens for this email
-      await prisma.passwordResetToken.deleteMany({
-        where: { email: normalizedEmail },
-      });
+      try {
+        // Delete any existing tokens for this email
+        await prisma.passwordResetToken.deleteMany({
+          where: { email: normalizedEmail },
+        });
 
-      // Generate secure token
-      const token = crypto.randomBytes(32).toString("hex");
-      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+        // Generate secure token
+        const token = crypto.randomBytes(32).toString("hex");
+        const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
-      // Save token to database
-      await prisma.passwordResetToken.create({
-        data: {
-          email: normalizedEmail,
-          token,
-          expiresAt,
-        },
-      });
+        // Save token to database
+        await prisma.passwordResetToken.create({
+          data: {
+            email: normalizedEmail,
+            token,
+            expiresAt,
+          },
+        });
 
-      // Send email
-      const result = await sendPasswordResetEmail(normalizedEmail, token);
-
-      if (!result.success) {
-        console.error("Failed to send reset email:", result.error);
-        // Still return success to not reveal if email exists
+        // Send email (only if RESEND_API_KEY is configured)
+        if (process.env.RESEND_API_KEY) {
+          const result = await sendPasswordResetEmail(normalizedEmail, token);
+          if (!result.success) {
+            console.error("Failed to send reset email:", result.error);
+          }
+        } else {
+          console.warn("RESEND_API_KEY not configured, skipping email send");
+        }
+      } catch (innerError) {
+        console.error("Error processing password reset:", innerError);
+        // Don't throw - still return success to prevent email enumeration
       }
     }
 
