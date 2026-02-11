@@ -90,7 +90,7 @@ export default function LessonsPage() {
         </div>
 
         <h2 className="text-4xl font-bold font-display text-stone-900 mb-4">
-          {lessons.length} lecon{lessons.length > 1 ? "s" : ""} disponible{lessons.length > 1 ? "s" : ""}
+          {lessons.length} leçon{lessons.length > 1 ? "s" : ""} disponible{lessons.length > 1 ? "s" : ""}
         </h2>
 
         {/* Type breakdown */}
@@ -117,7 +117,7 @@ export default function LessonsPage() {
 
         <p className="text-stone-500 mb-10 max-w-lg mx-auto text-lg">
           Prenez votre temps pour bien mémoriser les mnémoniques.
-          Chaque element sera ensuite testé dans un quiz.
+          Chaque élément sera ensuite testé dans un quiz.
         </p>
 
         {/* XP Reward indicator */}

@@ -46,11 +46,11 @@ export default function ReviewsPage() {
             <span className="relative text-9xl font-japanese text-transparent bg-clip-text bg-gradient-to-br from-amber-500 to-orange-600">休</span>
           </div>
           <h2 className="text-3xl font-bold font-display text-stone-900 mb-4">
-            Pas de revisions pour le moment
+            Pas de révisions pour le moment
           </h2>
           <p className="text-stone-500 mb-10 max-w-md mx-auto text-lg">
-            Vous n&apos;avez aucune revision en attente.
-            Faites de nouvelles lecons ou revenez plus tard !
+            Vous n&apos;avez aucune révision en attente.
+            Faites de nouvelles leçons ou revenez plus tard !
           </p>
           <div className="flex justify-center gap-4">
             <Link
@@ -63,7 +63,7 @@ export default function ReviewsPage() {
               href="/lessons"
               className="px-8 py-4 bg-gradient-to-r from-teal-500 to-emerald-500 text-white rounded-xl font-semibold hover:shadow-xl hover:shadow-teal-200/50 transition-all hover:-translate-y-0.5"
             >
-              Faire des lecons
+              Faire des leçons
             </Link>
           </div>
         </div>

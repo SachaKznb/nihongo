@@ -105,13 +105,13 @@ export default function SettingsPage() {
                 }
               />
               <p className="text-sm text-gray-500 mt-1">
-                Nombre maximum de nouvelles lecons par session
+                Nombre maximum de nouvelles leçons par session
               </p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Taille des lots de revision
+                Taille des lots de révision
               </label>
               <Input
                 type="number"
@@ -126,7 +126,7 @@ export default function SettingsPage() {
                 }
               />
               <p className="text-sm text-gray-500 mt-1">
-                Nombre d&apos;elements par session de revision
+                Nombre d&apos;éléments par session de révision
               </p>
             </div>
           </CardContent>

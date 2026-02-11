@@ -122,11 +122,11 @@ export function LessonSession({ lessons }: LessonSessionProps) {
         <div className="bg-white rounded-2xl shadow-lg p-8 text-center max-w-md">
           <div className="text-6xl mb-4">&#127881;</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Felicitations !
+            Félicitations !
           </h2>
           <p className="text-gray-600 mb-6">
-            Vous avez complete {lessons.length} lecon{lessons.length > 1 ? "s" : ""} !
-            Ces elements apparaitront dans vos revisions dans 4 heures.
+            Vous avez complété {lessons.length} leçon{lessons.length > 1 ? "s" : ""} !
+            Ces éléments apparaîtront dans vos révisions dans 4 heures.
           </p>
           <div className="space-y-3">
             <Button onClick={() => router.push("/dashboard")} className="w-full">
@@ -137,7 +137,7 @@ export function LessonSession({ lessons }: LessonSessionProps) {
               onClick={() => router.push("/lessons")}
               className="w-full"
             >
-              Continuer les lecons
+              Continuer les leçons
             </Button>
           </div>
         </div>
@@ -187,7 +187,7 @@ export function LessonSession({ lessons }: LessonSessionProps) {
 
             <div className="p-6">
               <p className="text-center text-gray-600 mb-4">
-                Quelle est la signification de cet element ?
+                Quelle est la signification de cet élément ?
               </p>
 
               {!showResult ? (
@@ -196,7 +196,7 @@ export function LessonSession({ lessons }: LessonSessionProps) {
                     value={answer}
                     onChange={(e) => setAnswer(e.target.value)}
                     onKeyDown={handleKeyPress}
-                    placeholder="Entrez votre reponse..."
+                    placeholder="Entrez votre réponse..."
                     autoFocus
                   />
                   <Button

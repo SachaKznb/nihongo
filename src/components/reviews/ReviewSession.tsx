@@ -151,7 +151,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
         <div className="bg-white rounded-2xl shadow-lg p-8 text-center max-w-md">
           <div className="text-6xl mb-4">&#127881;</div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Session terminee !
+            Session terminée !
           </h2>
           <div className="grid grid-cols-3 gap-4 my-6">
             <div className="p-4 bg-green-50 rounded-lg">
@@ -164,7 +164,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
             </div>
             <div className="p-4 bg-blue-50 rounded-lg">
               <p className="text-2xl font-bold text-blue-600">{accuracy}%</p>
-              <p className="text-sm text-gray-600">Precision</p>
+              <p className="text-sm text-gray-600">Précision</p>
             </div>
           </div>
           <div className="space-y-3">

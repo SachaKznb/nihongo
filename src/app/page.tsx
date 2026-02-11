@@ -131,8 +131,8 @@ export default function Home() {
                   </div>
                   <div className="p-4 bg-gradient-to-r from-teal-50 to-emerald-50 rounded-2xl border border-teal-100">
                     <p className="text-sm text-teal-800">
-                      <span className="font-bold">Mnemonique:</span> Imaginez des gouttes d&apos;eau
-                      qui tombent et creent des vagues, comme les traits du kanji.
+                      <span className="font-bold">Mnémonique :</span> Imaginez des gouttes d&apos;eau
+                      qui tombent et créent des vagues, comme les traits du kanji.
                     </p>
                   </div>
                 </div>
@@ -141,7 +141,7 @@ export default function Home() {
                 <div className="mt-6 flex items-center justify-between p-3 bg-emerald-50 rounded-xl">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">⚡</span>
-                    <span className="text-emerald-700 font-medium text-sm">+10 XP gagnes</span>
+                    <span className="text-emerald-700 font-medium text-sm">+10 XP gagnés</span>
                   </div>
                   <div className="text-xs text-emerald-600 font-medium">Niveau 3</div>
                 </div>
@@ -209,7 +209,7 @@ export default function Home() {
                 <span className="text-6xl font-bold font-display">2.4k</span>
               </div>
               <h3 className="text-xl font-bold mb-2">Points d&apos;experience</h3>
-              <p className="text-emerald-100 text-sm">Gagnez des XP a chaque lecon et revision. Montez de niveau !</p>
+              <p className="text-emerald-100 text-sm">Gagnez des XP à chaque leçon et révision. Montez de niveau !</p>
             </div>
 
             {/* Achievements Card */}
@@ -315,7 +315,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <span className="inline-flex items-center gap-2 bg-white/10 text-teal-300 px-4 py-2 rounded-full text-sm font-bold mb-6">
-                <span>🧠</span> Science de la memoire
+                <span>🧠</span> Science de la mémoire
               </span>
               <h2 className="text-4xl font-bold font-display mb-6">
                 La répétition espacée,
@@ -323,16 +323,16 @@ export default function Home() {
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-400">votre super pouvoir</span>
               </h2>
               <p className="text-stone-300 text-lg mb-8 leading-relaxed">
-                Notre algorithme SRS presente les elements au moment optimal pour
+                Notre algorithme SRS présente les éléments au moment optimal pour
                 votre mémoire. Révisez moins, retenez plus. C&apos;est prouvé scientifiquement.
               </p>
               <div className="space-y-4">
                 {[
                   { stage: "Apprenti", emoji: "🌱", time: "4h → 2 jours", color: "from-pink-400 to-pink-600" },
                   { stage: "Guru", emoji: "🌿", time: "1 → 2 semaines", color: "from-purple-400 to-purple-600" },
-                  { stage: "Maitre", emoji: "🌳", time: "1 mois", color: "from-blue-400 to-blue-600" },
-                  { stage: "Illumine", emoji: "☀️", time: "4 mois", color: "from-amber-400 to-amber-600" },
-                  { stage: "Brule", emoji: "🔥", time: "Mémorisé !", color: "from-stone-400 to-stone-600" },
+                  { stage: "Maître", emoji: "🌳", time: "1 mois", color: "from-blue-400 to-blue-600" },
+                  { stage: "Illuminé", emoji: "☀️", time: "4 mois", color: "from-amber-400 to-amber-600" },
+                  { stage: "Brûlé", emoji: "🔥", time: "Mémorisé !", color: "from-stone-400 to-stone-600" },
                 ].map((item) => (
                   <div key={item.stage} className="flex items-center gap-4 p-3 bg-white/5 rounded-xl hover:bg-white/10 transition-colors">
                     <span className="text-2xl">{item.emoji}</span>
