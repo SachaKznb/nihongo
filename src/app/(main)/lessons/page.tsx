@@ -1,10 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { LessonSession } from "@/components/lessons/LessonSession";
 import { useLessons } from "@/lib/hooks";
 import type { LessonItem } from "@/types";
+
+// Dynamic import for code-splitting - only load when session starts
+const LessonSession = dynamic(
+  () => import("@/components/lessons/LessonSession").then((mod) => mod.LessonSession),
+  {
+    loading: () => (
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="animate-pulse space-y-6">
+          <div className="h-10 bg-stone-200 rounded-xl w-1/3"></div>
+          <div className="h-96 bg-stone-200 rounded-3xl"></div>
+        </div>
+      </div>
+    ),
+  }
+);
 
 export default function LessonsPage() {
   const { data, isLoading } = useLessons();

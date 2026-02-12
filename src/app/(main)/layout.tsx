@@ -32,18 +32,21 @@ export default async function MainLayout({
               <div className="hidden md:flex items-center gap-1">
                 <Link
                   href="/dashboard"
+                  prefetch={true}
                   className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
                 >
                   Tableau de bord
                 </Link>
                 <Link
                   href="/lessons"
+                  prefetch={true}
                   className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
                 >
                   Lecons
                 </Link>
                 <Link
                   href="/reviews"
+                  prefetch={true}
                   className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
                 >
                   Revisions

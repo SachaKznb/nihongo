@@ -1,12 +1,13 @@
 "use client";
 
+import { memo } from "react";
 import type { SrsBreakdown as SrsBreakdownType } from "@/types";
 
 interface SrsBreakdownProps {
   breakdown: SrsBreakdownType;
 }
 
-export function SrsBreakdown({ breakdown }: SrsBreakdownProps) {
+export const SrsBreakdown = memo(function SrsBreakdown({ breakdown }: SrsBreakdownProps) {
   const categories = [
     { key: "apprentice", label: "Apprenti", color: "bg-pink-500", count: breakdown.apprentice },
     { key: "guru", label: "Guru", color: "bg-purple-500", count: breakdown.guru },
@@ -44,4 +45,4 @@ export function SrsBreakdown({ breakdown }: SrsBreakdownProps) {
       </div>
     </div>
   );
-}
+});

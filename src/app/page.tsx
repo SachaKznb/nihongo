@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+// ISR: Regenerate landing page every hour (3600 seconds)
+export const revalidate = 3600;
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-stone-50 pattern-overlay">

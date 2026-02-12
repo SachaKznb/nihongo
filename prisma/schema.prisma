@@ -40,6 +40,27 @@ model User {
   // AI Mnemonic Credits
   mnemonicCredits   Int       @default(0)  // Paid credits for regeneration
 
+  // Email Notification Preferences
+  emailNotificationsEnabled  Boolean   @default(true)
+  notifyReviewsWaiting       Boolean   @default(true)
+  notifyStreakAtRisk         Boolean   @default(true)
+  notifyLevelUp              Boolean   @default(true)
+  notifyReengagement         Boolean   @default(true)
+  notifyWeeklySummary        Boolean   @default(true)
+
+  // Notification Timing
+  preferredNotificationHour  Int       @default(9)   // 0-23 hour in user's timezone
+  timezone                   String    @default("Europe/Paris")
+
+  // Anti-spam tracking
+  lastReviewsWaitingEmail    DateTime?
+  lastStreakAtRiskEmail      DateTime?
+  lastReengagementEmail      DateTime?
+  lastWeeklySummaryEmail     DateTime?
+
+  // One-click unsubscribe token
+  unsubscribeToken           String?   @unique
+
   // Progress relations
   radicalProgress    UserRadicalProgress[]
   kanjiProgress      UserKanjiProgress[]
@@ -49,6 +70,7 @@ model User {
   // Token relations
   emailVerificationTokens EmailVerificationToken[]
   emailChangeTokens       EmailChangeToken[]
+  notificationLogs        NotificationLog[]
 
   // Admin audit relations
   adminActions AdminAuditLog[] @relation("AdminPerformer")
@@ -280,4 +302,34 @@ model SharedMnemonic {
 
   @@unique([itemType, itemId, mnemonicType])
   @@index([itemType, itemId])
+}
+
+// Email notification tracking (for debugging and analytics)
+model NotificationLog {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // 'reviews_waiting' | 'streak_at_risk' | 'level_up' | 'reengagement' | 'weekly_summary'
+  sentAt    DateTime @default(now())
+  success   Boolean
+  error     String?
+  metadata  Json?    // Store context like reviewCount, streakDays, etc.
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type, sentAt])
+  @@index([sentAt])
+}
+
+// Customizable email templates (admin-editable)
+model EmailTemplate {
+  id          String   @id @default(cuid())
+  type        String   @unique  // 'reviews_waiting' | 'streak_at_risk' | 'level_up' | 'reengagement' | 'weekly_summary' | 'password_reset' | 'verification' | 'email_change' | 'admin_password_reset'
+  subject     String   @db.Text
+  headline    String   @db.Text
+  bodyText    String   @db.Text
+  buttonText  String
+  footerText  String?  @db.Text
+  isActive    Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+  updatedBy   String?  // Admin who last updated
 }

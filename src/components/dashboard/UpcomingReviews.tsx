@@ -1,5 +1,7 @@
 "use client";
 
+import { memo, useMemo } from "react";
+
 interface UpcomingReview {
   time: Date;
   count: number;
@@ -9,7 +11,7 @@ interface UpcomingReviewsProps {
   reviews: UpcomingReview[];
 }
 
-export function UpcomingReviews({ reviews }: UpcomingReviewsProps) {
+export const UpcomingReviews = memo(function UpcomingReviews({ reviews }: UpcomingReviewsProps) {
   const formatTime = (date: Date) => {
     const now = new Date();
     const diff = new Date(date).getTime() - now.getTime();
@@ -49,4 +51,4 @@ export function UpcomingReviews({ reviews }: UpcomingReviewsProps) {
       ))}
     </div>
   );
-}
+});

@@ -1,4 +1,12 @@
 import { Resend } from "resend";
+import {
+  getEmailWrapper,
+  getReviewsWaitingContent,
+  getStreakAtRiskContent,
+  getLevelUpContent,
+  getReengagementContent,
+  getWeeklySummaryContent,
+} from "./email-templates";
 
 // Lazy-load Resend client to avoid build-time errors
 function getResendClient() {
@@ -304,5 +312,191 @@ export async function sendAdminPasswordReset(
       success: false,
       error: "Erreur lors de l'envoi de l'email",
     };
+  }
+}
+
+// ============================================
+// NOTIFICATION EMAILS
+// ============================================
+
+/**
+ * Send reviews waiting notification
+ */
+export async function sendReviewsWaitingEmail(
+  email: string,
+  username: string,
+  reviewCount: number,
+  unsubscribeToken: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const resend = getResendClient();
+    const content = await getReviewsWaitingContent(username, reviewCount);
+    const html = getEmailWrapper(content, unsubscribeToken, "reviews_waiting");
+
+    const { error } = await resend.emails.send({
+      from: "Nihongo <noreply@trynihongo.fr>",
+      to: email,
+      subject: `${reviewCount} revision${reviewCount > 1 ? "s" : ""} t'attend${reviewCount > 1 ? "ent" : ""} - Nihongo`,
+      html,
+    });
+
+    if (error) {
+      console.error("Resend error:", error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Email send error:", error);
+    return { success: false, error: "Erreur lors de l'envoi de l'email" };
+  }
+}
+
+/**
+ * Send streak at risk notification
+ */
+export async function sendStreakAtRiskEmail(
+  email: string,
+  username: string,
+  currentStreak: number,
+  unsubscribeToken: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const resend = getResendClient();
+    const content = await getStreakAtRiskContent(username, currentStreak);
+    const html = getEmailWrapper(content, unsubscribeToken, "streak_at_risk");
+
+    const { error } = await resend.emails.send({
+      from: "Nihongo <noreply@trynihongo.fr>",
+      to: email,
+      subject: `Ne perds pas ta serie de ${currentStreak} jours ! - Nihongo`,
+      html,
+    });
+
+    if (error) {
+      console.error("Resend error:", error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Email send error:", error);
+    return { success: false, error: "Erreur lors de l'envoi de l'email" };
+  }
+}
+
+/**
+ * Send level up celebration notification
+ */
+export async function sendLevelUpEmail(
+  email: string,
+  username: string,
+  newLevel: number,
+  unsubscribeToken: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const resend = getResendClient();
+    const content = await getLevelUpContent(username, newLevel);
+    const html = getEmailWrapper(content, unsubscribeToken, "level_up");
+
+    const { error } = await resend.emails.send({
+      from: "Nihongo <noreply@trynihongo.fr>",
+      to: email,
+      subject: `Felicitations ! Tu passes au niveau ${newLevel} ! - Nihongo`,
+      html,
+    });
+
+    if (error) {
+      console.error("Resend error:", error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Email send error:", error);
+    return { success: false, error: "Erreur lors de l'envoi de l'email" };
+  }
+}
+
+/**
+ * Send re-engagement notification for inactive users
+ */
+export async function sendReengagementEmail(
+  email: string,
+  username: string,
+  daysInactive: number,
+  pendingReviews: number,
+  unsubscribeToken: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const resend = getResendClient();
+    const content = await getReengagementContent(username, daysInactive, pendingReviews);
+    const html = getEmailWrapper(content, unsubscribeToken, "reengagement");
+
+    let subject: string;
+    if (daysInactive <= 3) {
+      subject = "Tu nous manques ! - Nihongo";
+    } else if (daysInactive <= 7) {
+      subject = "Ta memoire a besoin de toi - Nihongo";
+    } else {
+      subject = "Reprenons ensemble - Nihongo";
+    }
+
+    const { error } = await resend.emails.send({
+      from: "Nihongo <noreply@trynihongo.fr>",
+      to: email,
+      subject,
+      html,
+    });
+
+    if (error) {
+      console.error("Resend error:", error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Email send error:", error);
+    return { success: false, error: "Erreur lors de l'envoi de l'email" };
+  }
+}
+
+/**
+ * Send weekly progress summary
+ */
+export async function sendWeeklySummaryEmail(
+  email: string,
+  username: string,
+  stats: {
+    reviewsCompleted: number;
+    lessonsCompleted: number;
+    accuracy: number;
+    xpEarned: number;
+    currentStreak: number;
+    itemsLearned: { radicals: number; kanji: number; vocabulary: number };
+  },
+  unsubscribeToken: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const resend = getResendClient();
+    const content = await getWeeklySummaryContent(username, stats);
+    const html = getEmailWrapper(content, unsubscribeToken, "weekly_summary");
+
+    const { error } = await resend.emails.send({
+      from: "Nihongo <noreply@trynihongo.fr>",
+      to: email,
+      subject: "Ton resume de la semaine - Nihongo",
+      html,
+    });
+
+    if (error) {
+      console.error("Resend error:", error);
+      return { success: false, error: error.message };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Email send error:", error);
+    return { success: false, error: "Erreur lors de l'envoi de l'email" };
   }
 }

@@ -211,7 +211,7 @@ export default function DashboardPage() {
       {/* Main Action Cards */}
       <div className="grid md:grid-cols-2 gap-6">
         {/* Lessons Card */}
-        <Link href="/lessons" className="group">
+        <Link href="/lessons" prefetch={true} className="group">
           <div className="relative overflow-hidden bg-white rounded-3xl border-2 border-stone-200 p-6 hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-100/50 transition-all hover:-translate-y-1">
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform duration-500"></div>
             <div className="absolute bottom-4 right-4 text-8xl font-japanese text-blue-100 group-hover:text-blue-200 transition-colors">学</div>
@@ -246,7 +246,7 @@ export default function DashboardPage() {
         </Link>
 
         {/* Reviews Card */}
-        <Link href="/reviews" className="group">
+        <Link href="/reviews" prefetch={true} className="group">
           <div className="relative overflow-hidden bg-white rounded-3xl border-2 border-stone-200 p-6 hover:border-orange-300 hover:shadow-2xl hover:shadow-orange-100/50 transition-all hover:-translate-y-1">
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-orange-100 to-orange-50 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform duration-500"></div>
             <div className="absolute bottom-4 right-4 text-8xl font-japanese text-orange-100 group-hover:text-orange-200 transition-colors">復</div>
@@ -445,6 +445,7 @@ export default function DashboardPage() {
         <div className="flex flex-wrap gap-3">
           <Link
             href="/radicals"
+            prefetch={true}
             className="flex items-center gap-2 px-5 py-3 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
           >
             <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
@@ -452,6 +453,7 @@ export default function DashboardPage() {
           </Link>
           <Link
             href="/kanji"
+            prefetch={true}
             className="flex items-center gap-2 px-5 py-3 bg-pink-50 text-pink-700 rounded-xl hover:bg-pink-100 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
           >
             <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
@@ -459,6 +461,7 @@ export default function DashboardPage() {
           </Link>
           <Link
             href="/vocabulary"
+            prefetch={true}
             className="flex items-center gap-2 px-5 py-3 bg-purple-50 text-purple-700 rounded-xl hover:bg-purple-100 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
           >
             <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
@@ -466,6 +469,7 @@ export default function DashboardPage() {
           </Link>
           <Link
             href={`/levels/${progress.currentLevel}`}
+            prefetch={true}
             className="flex items-center gap-2 px-5 py-3 bg-stone-100 text-stone-700 rounded-xl hover:bg-stone-200 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
           >
             <span className="w-2 h-2 bg-stone-500 rounded-full"></span>

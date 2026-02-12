@@ -1,5 +1,7 @@
 import { prisma } from "./db";
 import { SRS_STAGES } from "./srs";
+import { sendLevelUpEmail } from "./email";
+import crypto from "crypto";
 
 export const GURU_THRESHOLD = SRS_STAGES.GURU_1; // Stage 5 = Guru 1
 export const LEVEL_UP_PERCENTAGE = 0.9; // 90% of kanji at guru
@@ -176,8 +178,61 @@ export async function levelUpUser(userId: string): Promise<boolean> {
     // Unlock items for new level
     await unlockAvailableItems(userId);
 
+    // Send level-up email (fire and forget)
+    sendLevelUpNotification(user.id, user.currentLevel).catch((err) =>
+      console.error("Level up email error:", err)
+    );
+
     return true;
   }
 
   return false;
+}
+
+// Send level-up email notification
+async function sendLevelUpNotification(
+  userId: string,
+  newLevel: number
+): Promise<void> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      email: true,
+      username: true,
+      emailNotificationsEnabled: true,
+      notifyLevelUp: true,
+      unsubscribeToken: true,
+    },
+  });
+
+  if (!user) return;
+  if (!user.emailNotificationsEnabled || !user.notifyLevelUp) return;
+
+  // Generate unsubscribe token if not exists
+  let unsubscribeToken = user.unsubscribeToken;
+  if (!unsubscribeToken) {
+    unsubscribeToken = crypto.randomBytes(32).toString("hex");
+    await prisma.user.update({
+      where: { id: userId },
+      data: { unsubscribeToken },
+    });
+  }
+
+  const result = await sendLevelUpEmail(
+    user.email,
+    user.username,
+    newLevel,
+    unsubscribeToken
+  );
+
+  // Log the notification
+  await prisma.notificationLog.create({
+    data: {
+      userId,
+      type: "level_up",
+      success: result.success,
+      error: result.error,
+      metadata: { newLevel },
+    },
+  });
 }

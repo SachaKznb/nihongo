@@ -14,6 +14,17 @@ interface UserSettings {
   autoplayAudio: boolean;
 }
 
+interface NotificationPreferences {
+  emailNotificationsEnabled: boolean;
+  notifyReviewsWaiting: boolean;
+  notifyStreakAtRisk: boolean;
+  notifyLevelUp: boolean;
+  notifyReengagement: boolean;
+  notifyWeeklySummary: boolean;
+  preferredNotificationHour: number;
+  timezone: string;
+}
+
 interface AccountInfo {
   id: string;
   email: string;
@@ -33,7 +44,7 @@ interface AccountInfo {
 export default function SettingsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<"learning" | "account">("learning");
+  const [activeTab, setActiveTab] = useState<"learning" | "account" | "notifications">("learning");
 
   // Learning settings state
   const [settings, setSettings] = useState<UserSettings>({
@@ -48,6 +59,21 @@ export default function SettingsPage() {
   // Account state
   const [account, setAccount] = useState<AccountInfo | null>(null);
   const [accountLoading, setAccountLoading] = useState(true);
+
+  // Notification preferences state
+  const [notifications, setNotifications] = useState<NotificationPreferences>({
+    emailNotificationsEnabled: true,
+    notifyReviewsWaiting: true,
+    notifyStreakAtRisk: true,
+    notifyLevelUp: true,
+    notifyReengagement: true,
+    notifyWeeklySummary: true,
+    preferredNotificationHour: 9,
+    timezone: "Europe/Paris",
+  });
+  const [notificationsLoading, setNotificationsLoading] = useState(true);
+  const [notificationsSaving, setNotificationsSaving] = useState(false);
+  const [notificationsMessage, setNotificationsMessage] = useState("");
 
   // Form states
   const [newUsername, setNewUsername] = useState("");
@@ -136,6 +162,25 @@ export default function SettingsPage() {
     fetchAccount();
   }, []);
 
+  // Fetch notification preferences
+  useEffect(() => {
+    async function fetchNotifications() {
+      try {
+        const response = await fetch("/api/notifications/preferences");
+        if (response.ok) {
+          const data = await response.json();
+          setNotifications(data);
+        }
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      } finally {
+        setNotificationsLoading(false);
+      }
+    }
+
+    fetchNotifications();
+  }, []);
+
   const handleSaveSettings = async () => {
     setSaving(true);
     setMessage("");
@@ -156,6 +201,31 @@ export default function SettingsPage() {
       setMessage("Erreur lors de l'enregistrement");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSaveNotifications = async () => {
+    setNotificationsSaving(true);
+    setNotificationsMessage("");
+
+    try {
+      const response = await fetch("/api/notifications/preferences", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(notifications),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setNotifications(data);
+        setNotificationsMessage("Preferences enregistrees avec succes");
+      } else {
+        setNotificationsMessage("Erreur lors de l'enregistrement");
+      }
+    } catch {
+      setNotificationsMessage("Erreur lors de l'enregistrement");
+    } finally {
+      setNotificationsSaving(false);
     }
   };
 
@@ -304,7 +374,7 @@ export default function SettingsPage() {
     }
   };
 
-  if (loading || accountLoading) {
+  if (loading || accountLoading || notificationsLoading) {
     return (
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="animate-pulse space-y-4">
@@ -343,6 +413,16 @@ export default function SettingsPage() {
           }`}
         >
           Compte
+        </button>
+        <button
+          onClick={() => setActiveTab("notifications")}
+          className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === "notifications"
+              ? "border-teal-500 text-teal-600"
+              : "border-transparent text-stone-500 hover:text-stone-700"
+          }`}
+        >
+          Notifications
         </button>
       </div>
 
@@ -632,6 +712,267 @@ export default function SettingsPage() {
               </Button>
             </CardContent>
           </Card>
+        </div>
+      )}
+
+      {/* Notifications Tab */}
+      {activeTab === "notifications" && (
+        <div className="space-y-6">
+          {/* Master Toggle */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Notifications par email</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-gray-900">Activer les notifications</p>
+                  <p className="text-sm text-gray-500">
+                    Recevoir des emails concernant votre apprentissage
+                  </p>
+                </div>
+                <button
+                  onClick={() =>
+                    setNotifications({
+                      ...notifications,
+                      emailNotificationsEnabled: !notifications.emailNotificationsEnabled,
+                    })
+                  }
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                    notifications.emailNotificationsEnabled ? "bg-teal-500" : "bg-gray-200"
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      notifications.emailNotificationsEnabled ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Individual Preferences */}
+          {notifications.emailNotificationsEnabled && (
+            <>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Types de notifications</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* Reviews Waiting */}
+                  <div className="flex items-center justify-between py-2 border-b border-stone-100">
+                    <div>
+                      <p className="font-medium text-gray-900">Revisions en attente</p>
+                      <p className="text-sm text-gray-500">
+                        Rappel quotidien quand vous avez des revisions a faire
+                      </p>
+                    </div>
+                    <button
+                      onClick={() =>
+                        setNotifications({
+                          ...notifications,
+                          notifyReviewsWaiting: !notifications.notifyReviewsWaiting,
+                        })
+                      }
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                        notifications.notifyReviewsWaiting ? "bg-teal-500" : "bg-gray-200"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          notifications.notifyReviewsWaiting ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Streak At Risk */}
+                  <div className="flex items-center justify-between py-2 border-b border-stone-100">
+                    <div>
+                      <p className="font-medium text-gray-900">Alerte de serie</p>
+                      <p className="text-sm text-gray-500">
+                        Notification si votre serie risque d&apos;etre perdue
+                      </p>
+                    </div>
+                    <button
+                      onClick={() =>
+                        setNotifications({
+                          ...notifications,
+                          notifyStreakAtRisk: !notifications.notifyStreakAtRisk,
+                        })
+                      }
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                        notifications.notifyStreakAtRisk ? "bg-teal-500" : "bg-gray-200"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          notifications.notifyStreakAtRisk ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Level Up */}
+                  <div className="flex items-center justify-between py-2 border-b border-stone-100">
+                    <div>
+                      <p className="font-medium text-gray-900">Passage de niveau</p>
+                      <p className="text-sm text-gray-500">
+                        Celebration quand vous atteignez un nouveau niveau
+                      </p>
+                    </div>
+                    <button
+                      onClick={() =>
+                        setNotifications({
+                          ...notifications,
+                          notifyLevelUp: !notifications.notifyLevelUp,
+                        })
+                      }
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                        notifications.notifyLevelUp ? "bg-teal-500" : "bg-gray-200"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          notifications.notifyLevelUp ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Re-engagement */}
+                  <div className="flex items-center justify-between py-2 border-b border-stone-100">
+                    <div>
+                      <p className="font-medium text-gray-900">Rappels de reengagement</p>
+                      <p className="text-sm text-gray-500">
+                        Rappels si vous n&apos;avez pas etudie depuis plusieurs jours
+                      </p>
+                    </div>
+                    <button
+                      onClick={() =>
+                        setNotifications({
+                          ...notifications,
+                          notifyReengagement: !notifications.notifyReengagement,
+                        })
+                      }
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                        notifications.notifyReengagement ? "bg-teal-500" : "bg-gray-200"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          notifications.notifyReengagement ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Weekly Summary */}
+                  <div className="flex items-center justify-between py-2">
+                    <div>
+                      <p className="font-medium text-gray-900">Resume hebdomadaire</p>
+                      <p className="text-sm text-gray-500">
+                        Resume de vos progres chaque dimanche
+                      </p>
+                    </div>
+                    <button
+                      onClick={() =>
+                        setNotifications({
+                          ...notifications,
+                          notifyWeeklySummary: !notifications.notifyWeeklySummary,
+                        })
+                      }
+                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                        notifications.notifyWeeklySummary ? "bg-teal-500" : "bg-gray-200"
+                      }`}
+                    >
+                      <span
+                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                          notifications.notifyWeeklySummary ? "translate-x-5" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Timing Preferences */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Preferences horaires</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Heure preferee pour les notifications
+                    </label>
+                    <select
+                      value={notifications.preferredNotificationHour}
+                      onChange={(e) =>
+                        setNotifications({
+                          ...notifications,
+                          preferredNotificationHour: parseInt(e.target.value),
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    >
+                      {[6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((hour) => (
+                        <option key={hour} value={hour}>
+                          {hour}h00
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Fuseau horaire
+                    </label>
+                    <select
+                      value={notifications.timezone}
+                      onChange={(e) =>
+                        setNotifications({
+                          ...notifications,
+                          timezone: e.target.value,
+                        })
+                      }
+                      className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                    >
+                      <option value="Europe/Paris">Paris (Europe/Paris)</option>
+                      <option value="Europe/London">Londres (Europe/London)</option>
+                      <option value="Europe/Berlin">Berlin (Europe/Berlin)</option>
+                      <option value="America/New_York">New York (America/New_York)</option>
+                      <option value="America/Los_Angeles">Los Angeles (America/Los_Angeles)</option>
+                      <option value="America/Montreal">Montreal (America/Montreal)</option>
+                      <option value="Asia/Tokyo">Tokyo (Asia/Tokyo)</option>
+                      <option value="Asia/Seoul">Seoul (Asia/Seoul)</option>
+                      <option value="Australia/Sydney">Sydney (Australia/Sydney)</option>
+                    </select>
+                  </div>
+                </CardContent>
+              </Card>
+            </>
+          )}
+
+          {notificationsMessage && (
+            <p
+              className={`text-center ${
+                notificationsMessage.includes("succes") ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {notificationsMessage}
+            </p>
+          )}
+
+          <div className="flex gap-4">
+            <Button variant="secondary" onClick={() => router.back()}>
+              Annuler
+            </Button>
+            <Button onClick={handleSaveNotifications} disabled={notificationsSaving}>
+              {notificationsSaving ? "Enregistrement..." : "Enregistrer"}
+            </Button>
+          </div>
         </div>
       )}
 
