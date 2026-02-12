@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { SRS_STAGE_NAMES, SRS_STAGE_COLORS } from "@/lib/srs";
+import { ReadingBadges } from "@/components/ReadingBadges";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -147,20 +148,11 @@ export default async function KanjiDetailPage({ params }: Props) {
             <h4 className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-3">
               Lectures
             </h4>
-            <div className="space-y-2">
-              {kanji.readingsOn.length > 0 && (
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-medium text-pink-600 bg-pink-100 px-2 py-0.5 rounded-full">On'yomi</span>
-                  <span className="text-xl font-japanese text-stone-800">{kanji.readingsOn.join("、")}</span>
-                </div>
-              )}
-              {kanji.readingsKun.length > 0 && (
-                <div className="flex items-center gap-3">
-                  <span className="text-xs font-medium text-teal-600 bg-teal-100 px-2 py-0.5 rounded-full">Kun'yomi</span>
-                  <span className="text-xl font-japanese text-stone-800">{kanji.readingsKun.join("、")}</span>
-                </div>
-              )}
-            </div>
+            <ReadingBadges
+              readingsOn={kanji.readingsOn}
+              readingsKun={kanji.readingsKun}
+              size="lg"
+            />
           </div>
 
           {/* Progress stats */}

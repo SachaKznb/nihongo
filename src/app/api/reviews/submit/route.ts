@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { calculateNewStage, calculateNextReview, SRS_STAGES } from "@/lib/srs";
 import { unlockAvailableItems, levelUpUser } from "@/lib/unlocks";
+import { generalRateLimit, checkRateLimit, invalidateUserCache } from "@/lib/upstash";
 import type { ItemType, ReviewType, AnswerResult } from "@/types";
 
 // Update gamification stats
@@ -79,6 +80,9 @@ async function updateGamification(userId: string, correct: boolean, isLesson: bo
       perfectDays: { increment: perfectDaysAdjust },
     },
   });
+
+  // Invalidate user's cached data
+  await invalidateUserCache(userId);
 }
 
 function normalizeAnswer(answer: string): string {
@@ -213,6 +217,16 @@ export async function POST(request: NextRequest) {
   }
 
   const userId = session.user.id;
+
+  // Rate limiting
+  const rateLimit = await checkRateLimit(generalRateLimit, userId);
+  if (!rateLimit.success) {
+    return NextResponse.json(
+      { error: "Trop de requetes. Veuillez patienter." },
+      { status: 429 }
+    );
+  }
+
   const body = await request.json();
   const { type, id, reviewType, answer } = body as {
     type: ItemType;

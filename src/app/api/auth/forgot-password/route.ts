@@ -3,12 +3,23 @@ import { z } from "zod";
 import crypto from "crypto";
 import { prisma } from "@/lib/db";
 import { sendPasswordResetEmail } from "@/lib/email";
+import { authRateLimit, checkRateLimit } from "@/lib/upstash";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Adresse email invalide"),
 });
 
 export async function POST(request: NextRequest) {
+  // Rate limiting by IP
+  const ip = request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown";
+  const rateLimit = await checkRateLimit(authRateLimit, `forgot:${ip}`);
+  if (!rateLimit.success) {
+    return NextResponse.json(
+      { error: "Trop de tentatives. Veuillez patienter." },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await request.json();
 

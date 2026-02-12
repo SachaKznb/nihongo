@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { generalRateLimit, checkRateLimit } from "@/lib/upstash";
 import type { ReviewItem } from "@/types";
 
 // GET /api/reviews - Returns items due for review
@@ -13,6 +14,16 @@ export async function GET() {
     }
 
     const userId = session.user.id;
+
+    // Rate limiting
+    const rateLimit = await checkRateLimit(generalRateLimit, userId);
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: "Trop de requetes." },
+        { status: 429 }
+      );
+    }
+
     const now = new Date();
 
     const reviews: ReviewItem[] = [];

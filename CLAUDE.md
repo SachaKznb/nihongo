@@ -12,6 +12,7 @@ A spaced repetition system (SRS) for French speakers learning Japanese kanji and
 - **ORM**: Prisma
 - **Auth**: NextAuth.js (Auth.js v5)
 - **Styling**: Tailwind CSS
+- **Rate Limiting & Caching**: Upstash Redis
 
 ## Project Structure
 
@@ -116,6 +117,38 @@ Required in `.env`:
 - `DATABASE_URL` - PostgreSQL connection string
 - `AUTH_SECRET` - NextAuth secret key
 - `NEXTAUTH_URL` - Application URL
+
+Optional:
+- `ANTHROPIC_API_KEY` - For AI mnemonic/sentence generation
+- `RESEND_API_KEY` - For email sending (verification, password reset)
+- `UPSTASH_REDIS_REST_URL` - Upstash Redis URL for rate limiting
+- `UPSTASH_REDIS_REST_TOKEN` - Upstash Redis token
+
+## Rate Limiting & Caching (Upstash)
+
+The app uses Upstash Redis for serverless rate limiting and caching. Configuration in `src/lib/upstash.ts`.
+
+### Rate Limiters
+| Limiter | Limit | Use Case |
+|---------|-------|----------|
+| `generalRateLimit` | 100 req/10s | General API protection |
+| `aiGenerationRateLimit` | 10 req/min | AI generation endpoints |
+| `authRateLimit` | 5 req/min | Auth endpoints (login, register, password reset) |
+
+### Cache Keys
+- `progress:{userId}` - User progress data
+- `reviews:{userId}` - Pending reviews
+- `dashboard:{userId}` - Dashboard data
+- `sentences:{userId}:{vocabId}` - Generated sentences
+
+Cache is automatically invalidated after reviews/lessons via `invalidateUserCache()`.
+
+### Setup
+1. Create a free Upstash account at https://console.upstash.com
+2. Create a Redis database
+3. Copy the REST URL and token to your `.env`
+
+If Upstash is not configured, rate limiting is skipped gracefully.
 
 ## Adding Content
 

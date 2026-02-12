@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { aiGenerationRateLimit, checkRateLimit } from "@/lib/upstash";
 import {
   fetchMasteredContext,
   getCachedSentences,
@@ -26,6 +27,18 @@ export async function POST(request: NextRequest) {
   }
 
   const userId = session.user.id;
+
+  // Rate limiting for AI generation
+  const rateLimit = await checkRateLimit(aiGenerationRateLimit, userId);
+  if (!rateLimit.success) {
+    return NextResponse.json(
+      {
+        error: "Trop de requêtes. Veuillez patienter avant de réessayer.",
+        retryAfter: rateLimit.reset,
+      },
+      { status: 429 }
+    );
+  }
 
   try {
     const body = await request.json();

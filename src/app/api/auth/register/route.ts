@@ -5,6 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { unlockAvailableItems } from "@/lib/unlocks";
 import { sendVerificationEmail } from "@/lib/email";
+import { authRateLimit, checkRateLimit } from "@/lib/upstash";
 
 // Validation schema with strong password requirements
 const registerSchema = z.object({
@@ -30,6 +31,16 @@ const registerSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  // Rate limiting by IP for auth endpoints
+  const ip = request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown";
+  const rateLimit = await checkRateLimit(authRateLimit, `register:${ip}`);
+  if (!rateLimit.success) {
+    return NextResponse.json(
+      { error: "Trop de tentatives. Veuillez patienter avant de reessayer." },
+      { status: 429 }
+    );
+  }
+
   try {
     const body = await request.json();
 
