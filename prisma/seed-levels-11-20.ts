@@ -1238,11 +1238,381 @@ async function main() {
   console.log("Level 15 complete!");
 
   // ============================================
-  // LEVEL 16-20 PLACEHOLDERS
+  // LEVEL 16 - WaniKani Level 16
+  // Kanji: 園曜書遠門係取品守幸急真箱荷面典府治浴笑辞関弁政留証険危存専冒冗阪
   // ============================================
 
-  console.log("Levels 16-20 will be added in the next iteration.");
-  console.log("Seeding levels 11-15 complete!");
+  const level16Kanji = [
+    { character: "園", meaningsFr: ["Jardin", "Parc"], readingsOn: ["エン"], readingsKun: ["その"], meaningMnemonicFr: "L'enclos et la terre - un PARC.", readingMnemonicFr: "En - le PARC !" },
+    { character: "曜", meaningsFr: ["Jour de la semaine"], readingsOn: ["ヨウ"], readingsKun: [], meaningMnemonicFr: "Le soleil et l'aile - le JOUR de la semaine.", readingMnemonicFr: "You - le JOUR !" },
+    { character: "書", meaningsFr: ["Écrire"], readingsOn: ["ショ"], readingsKun: ["か-く"], meaningMnemonicFr: "Le pinceau et le soleil - ÉCRIRE.", readingMnemonicFr: "Kaku - ÉCRIRE !" },
+    { character: "遠", meaningsFr: ["Loin"], readingsOn: ["エン"], readingsKun: ["とお-い"], meaningMnemonicFr: "Le chemin et le vêtement - LOIN.", readingMnemonicFr: "Tooi - c'est LOIN !" },
+    { character: "門", meaningsFr: ["Porte"], readingsOn: ["モン"], readingsKun: ["かど"], meaningMnemonicFr: "Les deux battants - une PORTE.", readingMnemonicFr: "Mon - la PORTE !" },
+    { character: "係", meaningsFr: ["Relation", "Charge"], readingsOn: ["ケイ"], readingsKun: ["かか-る"], meaningMnemonicFr: "La personne et le fil - la RELATION.", readingMnemonicFr: "Kakari - la CHARGE !" },
+    { character: "取", meaningsFr: ["Prendre"], readingsOn: ["シュ"], readingsKun: ["と-る"], meaningMnemonicFr: "L'oreille et la main - PRENDRE.", readingMnemonicFr: "Toru - PRENDRE !" },
+    { character: "品", meaningsFr: ["Article", "Produit"], readingsOn: ["ヒン"], readingsKun: ["しな"], meaningMnemonicFr: "Trois bouches - un ARTICLE.", readingMnemonicFr: "Shina - un PRODUIT !" },
+    { character: "守", meaningsFr: ["Protéger"], readingsOn: ["シュ"], readingsKun: ["まも-る"], meaningMnemonicFr: "Le toit et le pouce - PROTÉGER.", readingMnemonicFr: "Mamoru - PROTÉGER !" },
+    { character: "幸", meaningsFr: ["Bonheur"], readingsOn: ["コウ"], readingsKun: ["しあわ-せ"], meaningMnemonicFr: "Le sol et le travail - le BONHEUR.", readingMnemonicFr: "Shiawase - le BONHEUR !" },
+    { character: "急", meaningsFr: ["Urgent", "Se dépêcher"], readingsOn: ["キュウ"], readingsKun: ["いそ-ぐ"], meaningMnemonicFr: "Le coeur et l'attraper - URGENT.", readingMnemonicFr: "Isogu - SE DÉPÊCHER !" },
+    { character: "真", meaningsFr: ["Vrai", "Réel"], readingsOn: ["シン"], readingsKun: ["ま"], meaningMnemonicFr: "Le dix et l'oeil - la VÉRITÉ.", readingMnemonicFr: "Ma - VRAI !" },
+    { character: "箱", meaningsFr: ["Boîte"], readingsOn: ["ソウ"], readingsKun: ["はこ"], meaningMnemonicFr: "Le bambou et les yeux - une BOÎTE.", readingMnemonicFr: "Hako - une BOÎTE !" },
+    { character: "荷", meaningsFr: ["Bagage", "Charge"], readingsOn: ["カ"], readingsKun: ["に"], meaningMnemonicFr: "L'herbe et ce qui - un BAGAGE.", readingMnemonicFr: "Ni - un BAGAGE !" },
+    { character: "面", meaningsFr: ["Surface", "Visage"], readingsOn: ["メン"], readingsKun: ["おも"], meaningMnemonicFr: "L'enclos et la tête - la SURFACE.", readingMnemonicFr: "Men - le VISAGE !" },
+    { character: "典", meaningsFr: ["Classique"], readingsOn: ["テン"], readingsKun: [], meaningMnemonicFr: "Le livre et la table - un CLASSIQUE.", readingMnemonicFr: "Ten - le CLASSIQUE !" },
+    { character: "府", meaningsFr: ["Gouvernement"], readingsOn: ["フ"], readingsKun: [], meaningMnemonicFr: "Le bâtiment et le payer - le GOUVERNEMENT.", readingMnemonicFr: "Fu - le GOUVERNEMENT !" },
+    { character: "治", meaningsFr: ["Gouverner", "Guérir"], readingsOn: ["チ", "ジ"], readingsKun: ["おさ-める"], meaningMnemonicFr: "L'eau et le plateau - GOUVERNER.", readingMnemonicFr: "Osameru - GOUVERNER !" },
+    { character: "浴", meaningsFr: ["Baigner"], readingsOn: ["ヨク"], readingsKun: ["あ-びる"], meaningMnemonicFr: "L'eau et la vallée - se BAIGNER.", readingMnemonicFr: "Abiru - se BAIGNER !" },
+    { character: "笑", meaningsFr: ["Rire"], readingsOn: ["ショウ"], readingsKun: ["わら-う"], meaningMnemonicFr: "Le bambou et la génération - RIRE.", readingMnemonicFr: "Warau - RIRE !" },
+    { character: "辞", meaningsFr: ["Démissionner", "Mot"], readingsOn: ["ジ"], readingsKun: ["や-める"], meaningMnemonicFr: "La langue et le vêtement - DÉMISSIONNER.", readingMnemonicFr: "Yameru - DÉMISSIONNER !" },
+    { character: "関", meaningsFr: ["Relation", "Barrière"], readingsOn: ["カン"], readingsKun: ["せき"], meaningMnemonicFr: "La porte et le ciel - la RELATION.", readingMnemonicFr: "Kan - la RELATION !" },
+    { character: "弁", meaningsFr: ["Parler", "Valve"], readingsOn: ["ベン"], readingsKun: [], meaningMnemonicFr: "Le chapeau et la force - PARLER.", readingMnemonicFr: "Ben - PARLER !" },
+    { character: "政", meaningsFr: ["Politique"], readingsOn: ["セイ"], readingsKun: [], meaningMnemonicFr: "Le correct et le frapper - la POLITIQUE.", readingMnemonicFr: "Sei - la POLITIQUE !" },
+    { character: "留", meaningsFr: ["Rester", "Retenir"], readingsOn: ["リュウ"], readingsKun: ["と-める"], meaningMnemonicFr: "Le champ et le couteau - RESTER.", readingMnemonicFr: "Tomeru - RETENIR !" },
+    { character: "証", meaningsFr: ["Preuve", "Certificat"], readingsOn: ["ショウ"], readingsKun: [], meaningMnemonicFr: "Les mots et le correct - une PREUVE.", readingMnemonicFr: "Shou - la PREUVE !" },
+    { character: "険", meaningsFr: ["Dangereux"], readingsOn: ["ケン"], readingsKun: [], meaningMnemonicFr: "La colline et l'ensemble - DANGEREUX.", readingMnemonicFr: "Ken - c'est DANGEREUX !" },
+    { character: "危", meaningsFr: ["Danger"], readingsOn: ["キ"], readingsKun: ["あぶ-ない"], meaningMnemonicFr: "La falaise et la personne - le DANGER.", readingMnemonicFr: "Abunai - c'est DANGEREUX !" },
+    { character: "存", meaningsFr: ["Exister"], readingsOn: ["ソン", "ゾン"], readingsKun: [], meaningMnemonicFr: "Le talent et l'enfant - EXISTER.", readingMnemonicFr: "Son - EXISTER !" },
+    { character: "専", meaningsFr: ["Spécialiser"], readingsOn: ["セン"], readingsKun: [], meaningMnemonicFr: "Le dix et le champ - se SPÉCIALISER.", readingMnemonicFr: "Sen - SPÉCIALISÉ !" },
+    { character: "冒", meaningsFr: ["Risquer"], readingsOn: ["ボウ"], readingsKun: [], meaningMnemonicFr: "Le soleil et l'oeil - RISQUER.", readingMnemonicFr: "Bou - RISQUER !" },
+    { character: "冗", meaningsFr: ["Superflu"], readingsOn: ["ジョウ"], readingsKun: [], meaningMnemonicFr: "Le toit et le grand - SUPERFLU.", readingMnemonicFr: "Jou - SUPERFLU !" },
+    { character: "阪", meaningsFr: ["Pente (Osaka)"], readingsOn: ["ハン"], readingsKun: [], meaningMnemonicFr: "La colline et l'opposé - OSAKA.", readingMnemonicFr: "Han - Osaka !" },
+  ];
+
+  for (const kanji of level16Kanji) {
+    await prisma.kanji.upsert({
+      where: { character: kanji.character },
+      update: { ...kanji, levelId: 16 },
+      create: { ...kanji, levelId: 16 },
+    });
+  }
+
+  const level16Vocab = [
+    { word: "公園", meaningsFr: ["Parc"], readings: ["こうえん"], mnemonicFr: "Un PARC.", levelId: 16 },
+    { word: "日曜日", meaningsFr: ["Dimanche"], readings: ["にちようび"], mnemonicFr: "DIMANCHE.", levelId: 16 },
+    { word: "書く", meaningsFr: ["Écrire"], readings: ["かく"], mnemonicFr: "ÉCRIRE.", levelId: 16 },
+    { word: "遠い", meaningsFr: ["Loin"], readings: ["とおい"], mnemonicFr: "C'est LOIN.", levelId: 16 },
+    { word: "門", meaningsFr: ["Porte"], readings: ["もん"], mnemonicFr: "Une PORTE.", levelId: 16 },
+    { word: "取る", meaningsFr: ["Prendre"], readings: ["とる"], mnemonicFr: "PRENDRE.", levelId: 16 },
+    { word: "守る", meaningsFr: ["Protéger"], readings: ["まもる"], mnemonicFr: "PROTÉGER.", levelId: 16 },
+    { word: "幸せ", meaningsFr: ["Bonheur"], readings: ["しあわせ"], mnemonicFr: "Le BONHEUR.", levelId: 16 },
+    { word: "急ぐ", meaningsFr: ["Se dépêcher"], readings: ["いそぐ"], mnemonicFr: "SE DÉPÊCHER.", levelId: 16 },
+    { word: "真実", meaningsFr: ["Vérité"], readings: ["しんじつ"], mnemonicFr: "La VÉRITÉ.", levelId: 16 },
+    { word: "箱", meaningsFr: ["Boîte"], readings: ["はこ"], mnemonicFr: "Une BOÎTE.", levelId: 16 },
+    { word: "荷物", meaningsFr: ["Bagage"], readings: ["にもつ"], mnemonicFr: "Un BAGAGE.", levelId: 16 },
+    { word: "政府", meaningsFr: ["Gouvernement"], readings: ["せいふ"], mnemonicFr: "Le GOUVERNEMENT.", levelId: 16 },
+    { word: "政治", meaningsFr: ["Politique"], readings: ["せいじ"], mnemonicFr: "La POLITIQUE.", levelId: 16 },
+    { word: "笑う", meaningsFr: ["Rire"], readings: ["わらう"], mnemonicFr: "RIRE.", levelId: 16 },
+    { word: "辞書", meaningsFr: ["Dictionnaire"], readings: ["じしょ"], mnemonicFr: "Un DICTIONNAIRE.", levelId: 16 },
+    { word: "関係", meaningsFr: ["Relation"], readings: ["かんけい"], mnemonicFr: "Une RELATION.", levelId: 16 },
+    { word: "留学", meaningsFr: ["Études à l'étranger"], readings: ["りゅうがく"], mnemonicFr: "ÉTUDES À L'ÉTRANGER.", levelId: 16 },
+    { word: "危険", meaningsFr: ["Danger"], readings: ["きけん"], mnemonicFr: "Le DANGER.", levelId: 16 },
+    { word: "危ない", meaningsFr: ["Dangereux"], readings: ["あぶない"], mnemonicFr: "C'est DANGEREUX.", levelId: 16 },
+    { word: "専門", meaningsFr: ["Spécialité"], readings: ["せんもん"], mnemonicFr: "La SPÉCIALITÉ.", levelId: 16 },
+    { word: "冒険", meaningsFr: ["Aventure"], readings: ["ぼうけん"], mnemonicFr: "L'AVENTURE.", levelId: 16 },
+    { word: "冗談", meaningsFr: ["Blague"], readings: ["じょうだん"], mnemonicFr: "Une BLAGUE.", levelId: 16 },
+    { word: "大阪", meaningsFr: ["Osaka"], readings: ["おおさか"], mnemonicFr: "OSAKA.", levelId: 16 },
+  ];
+
+  for (const vocab of level16Vocab) {
+    await prisma.vocabulary.upsert({
+      where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
+      update: { ...vocab },
+      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+    });
+  }
+
+  console.log("Level 16 complete!");
+
+  // ============================================
+  // LEVEL 17 - WaniKani Level 17
+  // Kanji: 原細薬鼻側兵堂塩席敗果栄梅無結因常識非干是渉虚官察底愛署警恋覚説幻喜悲詳
+  // ============================================
+
+  const level17Kanji = [
+    { character: "原", meaningsFr: ["Origine", "Plaine"], readingsOn: ["ゲン"], readingsKun: ["はら"], meaningMnemonicFr: "La falaise et la source - l'ORIGINE.", readingMnemonicFr: "Hara - la PLAINE !" },
+    { character: "細", meaningsFr: ["Fin", "Détaillé"], readingsOn: ["サイ"], readingsKun: ["ほそ-い"], meaningMnemonicFr: "Le fil et le champ - FIN.", readingMnemonicFr: "Hosoi - c'est FIN !" },
+    { character: "薬", meaningsFr: ["Médicament"], readingsOn: ["ヤク"], readingsKun: ["くすり"], meaningMnemonicFr: "L'herbe et le plaisir - un MÉDICAMENT.", readingMnemonicFr: "Kusuri - un MÉDICAMENT !" },
+    { character: "鼻", meaningsFr: ["Nez"], readingsOn: ["ビ"], readingsKun: ["はな"], meaningMnemonicFr: "Le soi-même et le champ - le NEZ.", readingMnemonicFr: "Hana - le NEZ !" },
+    { character: "側", meaningsFr: ["Côté"], readingsOn: ["ソク"], readingsKun: ["がわ"], meaningMnemonicFr: "La personne et le règle - le CÔTÉ.", readingMnemonicFr: "Gawa - le CÔTÉ !" },
+    { character: "兵", meaningsFr: ["Soldat"], readingsOn: ["ヘイ"], readingsKun: [], meaningMnemonicFr: "Le drap et le huit - un SOLDAT.", readingMnemonicFr: "Hei - un SOLDAT !" },
+    { character: "堂", meaningsFr: ["Salle", "Hall"], readingsOn: ["ドウ"], readingsKun: [], meaningMnemonicFr: "La terre et le chapeau - une SALLE.", readingMnemonicFr: "Dou - la SALLE !" },
+    { character: "塩", meaningsFr: ["Sel"], readingsOn: ["エン"], readingsKun: ["しお"], meaningMnemonicFr: "La terre et l'assiette - le SEL.", readingMnemonicFr: "Shio - le SEL !" },
+    { character: "席", meaningsFr: ["Siège", "Place"], readingsOn: ["セキ"], readingsKun: [], meaningMnemonicFr: "Le bâtiment et le tissu - un SIÈGE.", readingMnemonicFr: "Seki - un SIÈGE !" },
+    { character: "敗", meaningsFr: ["Défaite"], readingsOn: ["ハイ"], readingsKun: ["やぶ-れる"], meaningMnemonicFr: "Le coquillage et le frapper - la DÉFAITE.", readingMnemonicFr: "Haiboku - la DÉFAITE !" },
+    { character: "果", meaningsFr: ["Fruit", "Résultat"], readingsOn: ["カ"], readingsKun: ["は-てる"], meaningMnemonicFr: "Le champ et l'arbre - le FRUIT.", readingMnemonicFr: "Ka - le RÉSULTAT !" },
+    { character: "栄", meaningsFr: ["Prospérer"], readingsOn: ["エイ"], readingsKun: ["さか-える"], meaningMnemonicFr: "L'arbre et le feu - PROSPÉRER.", readingMnemonicFr: "Ei - PROSPÉRER !" },
+    { character: "梅", meaningsFr: ["Prunier"], readingsOn: ["バイ"], readingsKun: ["うめ"], meaningMnemonicFr: "L'arbre et chaque - le PRUNIER.", readingMnemonicFr: "Ume - le PRUNIER !" },
+    { character: "無", meaningsFr: ["Rien", "Sans"], readingsOn: ["ム", "ブ"], readingsKun: ["な-い"], meaningMnemonicFr: "Le feu et quatre - RIEN.", readingMnemonicFr: "Nai - RIEN !" },
+    { character: "結", meaningsFr: ["Lier", "Nouer"], readingsOn: ["ケツ"], readingsKun: ["むす-ぶ"], meaningMnemonicFr: "Le fil et le chanceux - NOUER.", readingMnemonicFr: "Musubu - NOUER !" },
+    { character: "因", meaningsFr: ["Cause"], readingsOn: ["イン"], readingsKun: [], meaningMnemonicFr: "L'enclos et le grand - la CAUSE.", readingMnemonicFr: "In - la CAUSE !" },
+    { character: "常", meaningsFr: ["Normal", "Toujours"], readingsOn: ["ジョウ"], readingsKun: ["つね"], meaningMnemonicFr: "Le chapeau et le tissu - NORMAL.", readingMnemonicFr: "Jou - TOUJOURS !" },
+    { character: "識", meaningsFr: ["Connaissance"], readingsOn: ["シキ"], readingsKun: [], meaningMnemonicFr: "Les mots et le tissu - la CONNAISSANCE.", readingMnemonicFr: "Shiki - la CONNAISSANCE !" },
+    { character: "非", meaningsFr: ["Non", "Erreur"], readingsOn: ["ヒ"], readingsKun: [], meaningMnemonicFr: "Les deux ailes opposées - NON.", readingMnemonicFr: "Hi - NON !" },
+    { character: "愛", meaningsFr: ["Amour"], readingsOn: ["アイ"], readingsKun: [], meaningMnemonicFr: "Le coeur et l'être aimé - l'AMOUR.", readingMnemonicFr: "Ai - l'AMOUR !" },
+    { character: "警", meaningsFr: ["Avertir", "Police"], readingsOn: ["ケイ"], readingsKun: [], meaningMnemonicFr: "Les mots et l'attaque - AVERTIR.", readingMnemonicFr: "Kei - AVERTIR !" },
+    { character: "恋", meaningsFr: ["Amour romantique"], readingsOn: ["レン"], readingsKun: ["こい"], meaningMnemonicFr: "Le coeur et l'autre - l'AMOUR ROMANTIQUE.", readingMnemonicFr: "Koi - l'AMOUR !" },
+    { character: "覚", meaningsFr: ["Mémoriser", "Éveiller"], readingsOn: ["カク"], readingsKun: ["おぼ-える"], meaningMnemonicFr: "Voir et apprendre - MÉMORISER.", readingMnemonicFr: "Oboeru - MÉMORISER !" },
+    { character: "説", meaningsFr: ["Expliquer", "Théorie"], readingsOn: ["セツ"], readingsKun: ["と-く"], meaningMnemonicFr: "Les mots et le frère - EXPLIQUER.", readingMnemonicFr: "Setsu - EXPLIQUER !" },
+    { character: "喜", meaningsFr: ["Joie"], readingsOn: ["キ"], readingsKun: ["よろこ-ぶ"], meaningMnemonicFr: "Le tambour et la bouche - la JOIE.", readingMnemonicFr: "Yorokobu - se RÉJOUIR !" },
+    { character: "悲", meaningsFr: ["Triste"], readingsOn: ["ヒ"], readingsKun: ["かな-しい"], meaningMnemonicFr: "Le non et le coeur - TRISTE.", readingMnemonicFr: "Kanashii - c'est TRISTE !" },
+  ];
+
+  for (const kanji of level17Kanji) {
+    await prisma.kanji.upsert({
+      where: { character: kanji.character },
+      update: { ...kanji, levelId: 17 },
+      create: { ...kanji, levelId: 17 },
+    });
+  }
+
+  const level17Vocab = [
+    { word: "原因", meaningsFr: ["Cause"], readings: ["げんいん"], mnemonicFr: "La CAUSE.", levelId: 17 },
+    { word: "細い", meaningsFr: ["Fin"], readings: ["ほそい"], mnemonicFr: "C'est FIN.", levelId: 17 },
+    { word: "薬", meaningsFr: ["Médicament"], readings: ["くすり"], mnemonicFr: "Un MÉDICAMENT.", levelId: 17 },
+    { word: "鼻", meaningsFr: ["Nez"], readings: ["はな"], mnemonicFr: "Le NEZ.", levelId: 17 },
+    { word: "兵士", meaningsFr: ["Soldat"], readings: ["へいし"], mnemonicFr: "Un SOLDAT.", levelId: 17 },
+    { word: "食堂", meaningsFr: ["Cantine"], readings: ["しょくどう"], mnemonicFr: "La CANTINE.", levelId: 17 },
+    { word: "塩", meaningsFr: ["Sel"], readings: ["しお"], mnemonicFr: "Le SEL.", levelId: 17 },
+    { word: "失敗", meaningsFr: ["Échec"], readings: ["しっぱい"], mnemonicFr: "L'ÉCHEC.", levelId: 17 },
+    { word: "結果", meaningsFr: ["Résultat"], readings: ["けっか"], mnemonicFr: "Le RÉSULTAT.", levelId: 17 },
+    { word: "梅", meaningsFr: ["Prunier"], readings: ["うめ"], mnemonicFr: "Le PRUNIER.", levelId: 17 },
+    { word: "無理", meaningsFr: ["Impossible"], readings: ["むり"], mnemonicFr: "C'est IMPOSSIBLE.", levelId: 17 },
+    { word: "結婚", meaningsFr: ["Mariage"], readings: ["けっこん"], mnemonicFr: "Le MARIAGE.", levelId: 17 },
+    { word: "常識", meaningsFr: ["Sens commun"], readings: ["じょうしき"], mnemonicFr: "Le SENS COMMUN.", levelId: 17 },
+    { word: "非常", meaningsFr: ["Urgence"], readings: ["ひじょう"], mnemonicFr: "L'URGENCE.", levelId: 17 },
+    { word: "警察", meaningsFr: ["Police"], readings: ["けいさつ"], mnemonicFr: "La POLICE.", levelId: 17 },
+    { word: "愛", meaningsFr: ["Amour"], readings: ["あい"], mnemonicFr: "L'AMOUR.", levelId: 17 },
+    { word: "恋", meaningsFr: ["Amour romantique"], readings: ["こい"], mnemonicFr: "L'AMOUR ROMANTIQUE.", levelId: 17 },
+    { word: "恋人", meaningsFr: ["Amoureux"], readings: ["こいびと"], mnemonicFr: "L'AMOUREUX.", levelId: 17 },
+    { word: "覚える", meaningsFr: ["Mémoriser"], readings: ["おぼえる"], mnemonicFr: "MÉMORISER.", levelId: 17 },
+    { word: "説明", meaningsFr: ["Explication"], readings: ["せつめい"], mnemonicFr: "L'EXPLICATION.", levelId: 17 },
+    { word: "喜ぶ", meaningsFr: ["Se réjouir"], readings: ["よろこぶ"], mnemonicFr: "Se RÉJOUIR.", levelId: 17 },
+    { word: "悲しい", meaningsFr: ["Triste"], readings: ["かなしい"], mnemonicFr: "C'est TRISTE.", levelId: 17 },
+  ];
+
+  for (const vocab of level17Vocab) {
+    await prisma.vocabulary.upsert({
+      where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
+      update: { ...vocab },
+      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+    });
+  }
+
+  console.log("Level 17 complete!");
+
+  // ============================================
+  // LEVEL 18 - WaniKani Level 18
+  // Kanji: 訓弓告種達類報祈等汽借焼座忘洗胸脳僧禅可許枚静句禁喫煙
+  // ============================================
+
+  const level18Kanji = [
+    { character: "弓", meaningsFr: ["Arc"], readingsOn: ["キュウ"], readingsKun: ["ゆみ"], meaningMnemonicFr: "La forme courbée - l'ARC.", readingMnemonicFr: "Yumi - l'ARC !" },
+    { character: "告", meaningsFr: ["Annoncer"], readingsOn: ["コク"], readingsKun: ["つ-げる"], meaningMnemonicFr: "La vache et la bouche - ANNONCER.", readingMnemonicFr: "Tsugeru - ANNONCER !" },
+    { character: "種", meaningsFr: ["Graine", "Type"], readingsOn: ["シュ"], readingsKun: ["たね"], meaningMnemonicFr: "Le riz et le lourd - une GRAINE.", readingMnemonicFr: "Tane - une GRAINE !" },
+    { character: "達", meaningsFr: ["Atteindre"], readingsOn: ["タツ"], readingsKun: [], meaningMnemonicFr: "Le chemin et le sol - ATTEINDRE.", readingMnemonicFr: "Tatsu - ATTEINDRE !" },
+    { character: "類", meaningsFr: ["Type", "Catégorie"], readingsOn: ["ルイ"], readingsKun: [], meaningMnemonicFr: "Le riz et la tête - un TYPE.", readingMnemonicFr: "Rui - un TYPE !" },
+    { character: "報", meaningsFr: ["Rapport", "Nouvelle"], readingsOn: ["ホウ"], readingsKun: [], meaningMnemonicFr: "Le bonheur et la main - un RAPPORT.", readingMnemonicFr: "Hou - un RAPPORT !" },
+    { character: "祈", meaningsFr: ["Prier"], readingsOn: ["キ"], readingsKun: ["いの-る"], meaningMnemonicFr: "L'autel et le couper - PRIER.", readingMnemonicFr: "Inoru - PRIER !" },
+    { character: "等", meaningsFr: ["Égal", "Classe"], readingsOn: ["トウ"], readingsKun: ["ひと-しい"], meaningMnemonicFr: "Le bambou et le temple - ÉGAL.", readingMnemonicFr: "Tou - ÉGAL !" },
+    { character: "借", meaningsFr: ["Emprunter"], readingsOn: ["シャク"], readingsKun: ["か-りる"], meaningMnemonicFr: "La personne et l'autrefois - EMPRUNTER.", readingMnemonicFr: "Kariru - EMPRUNTER !" },
+    { character: "焼", meaningsFr: ["Griller", "Brûler"], readingsOn: ["ショウ"], readingsKun: ["や-く"], meaningMnemonicFr: "Le feu et l'élégant - GRILLER.", readingMnemonicFr: "Yaku - GRILLER !" },
+    { character: "座", meaningsFr: ["S'asseoir"], readingsOn: ["ザ"], readingsKun: ["すわ-る"], meaningMnemonicFr: "Le bâtiment et la terre - S'ASSEOIR.", readingMnemonicFr: "Suwaru - S'ASSEOIR !" },
+    { character: "忘", meaningsFr: ["Oublier"], readingsOn: ["ボウ"], readingsKun: ["わす-れる"], meaningMnemonicFr: "Le coeur et le mourir - OUBLIER.", readingMnemonicFr: "Wasureru - OUBLIER !" },
+    { character: "洗", meaningsFr: ["Laver"], readingsOn: ["セン"], readingsKun: ["あら-う"], meaningMnemonicFr: "L'eau et le premier - LAVER.", readingMnemonicFr: "Arau - LAVER !" },
+    { character: "可", meaningsFr: ["Possible"], readingsOn: ["カ"], readingsKun: [], meaningMnemonicFr: "La bouche et le pouvoir - POSSIBLE.", readingMnemonicFr: "Ka - POSSIBLE !" },
+    { character: "許", meaningsFr: ["Permettre"], readingsOn: ["キョ"], readingsKun: ["ゆる-す"], meaningMnemonicFr: "Les mots et le midi - PERMETTRE.", readingMnemonicFr: "Yurusu - PERMETTRE !" },
+    { character: "静", meaningsFr: ["Calme", "Silencieux"], readingsOn: ["セイ"], readingsKun: ["しず-か"], meaningMnemonicFr: "Le bleu et la dispute - CALME.", readingMnemonicFr: "Shizuka - CALME !" },
+    { character: "禁", meaningsFr: ["Interdire"], readingsOn: ["キン"], readingsKun: [], meaningMnemonicFr: "L'autel et le bois - INTERDIRE.", readingMnemonicFr: "Kin - INTERDIT !" },
+    { character: "煙", meaningsFr: ["Fumée"], readingsOn: ["エン"], readingsKun: ["けむり"], meaningMnemonicFr: "Le feu et l'ouest - la FUMÉE.", readingMnemonicFr: "Kemuri - la FUMÉE !" },
+  ];
+
+  for (const kanji of level18Kanji) {
+    await prisma.kanji.upsert({
+      where: { character: kanji.character },
+      update: { ...kanji, levelId: 18 },
+      create: { ...kanji, levelId: 18 },
+    });
+  }
+
+  const level18Vocab = [
+    { word: "弓", meaningsFr: ["Arc"], readings: ["ゆみ"], mnemonicFr: "Un ARC.", levelId: 18 },
+    { word: "広告", meaningsFr: ["Publicité"], readings: ["こうこく"], mnemonicFr: "La PUBLICITÉ.", levelId: 18 },
+    { word: "種類", meaningsFr: ["Type"], readings: ["しゅるい"], mnemonicFr: "Un TYPE.", levelId: 18 },
+    { word: "友達", meaningsFr: ["Ami"], readings: ["ともだち"], mnemonicFr: "Un AMI.", levelId: 18 },
+    { word: "報告", meaningsFr: ["Rapport"], readings: ["ほうこく"], mnemonicFr: "Un RAPPORT.", levelId: 18 },
+    { word: "祈る", meaningsFr: ["Prier"], readings: ["いのる"], mnemonicFr: "PRIER.", levelId: 18 },
+    { word: "平等", meaningsFr: ["Égalité"], readings: ["びょうどう"], mnemonicFr: "L'ÉGALITÉ.", levelId: 18 },
+    { word: "借りる", meaningsFr: ["Emprunter"], readings: ["かりる"], mnemonicFr: "EMPRUNTER.", levelId: 18 },
+    { word: "焼く", meaningsFr: ["Griller"], readings: ["やく"], mnemonicFr: "GRILLER.", levelId: 18 },
+    { word: "座る", meaningsFr: ["S'asseoir"], readings: ["すわる"], mnemonicFr: "S'ASSEOIR.", levelId: 18 },
+    { word: "忘れる", meaningsFr: ["Oublier"], readings: ["わすれる"], mnemonicFr: "OUBLIER.", levelId: 18 },
+    { word: "洗う", meaningsFr: ["Laver"], readings: ["あらう"], mnemonicFr: "LAVER.", levelId: 18 },
+    { word: "可能", meaningsFr: ["Possible"], readings: ["かのう"], mnemonicFr: "POSSIBLE.", levelId: 18 },
+    { word: "許す", meaningsFr: ["Permettre"], readings: ["ゆるす"], mnemonicFr: "PERMETTRE.", levelId: 18 },
+    { word: "静か", meaningsFr: ["Calme"], readings: ["しずか"], mnemonicFr: "C'est CALME.", levelId: 18 },
+    { word: "禁止", meaningsFr: ["Interdit"], readings: ["きんし"], mnemonicFr: "C'est INTERDIT.", levelId: 18 },
+    { word: "煙", meaningsFr: ["Fumée"], readings: ["けむり"], mnemonicFr: "La FUMÉE.", levelId: 18 },
+    { word: "禁煙", meaningsFr: ["Non-fumeur"], readings: ["きんえん"], mnemonicFr: "NON-FUMEUR.", levelId: 18 },
+  ];
+
+  for (const vocab of level18Vocab) {
+    await prisma.vocabulary.upsert({
+      where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
+      update: { ...vocab },
+      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+    });
+  }
+
+  console.log("Level 18 complete!");
+
+  // ============================================
+  // LEVEL 19 - WaniKani Level 19
+  // Kanji: 加節減順容布易財若詞昆閥歴舌冊宇宙忙履団暴混乱徒得改続連善絡比笛史
+  // ============================================
+
+  const level19Kanji = [
+    { character: "加", meaningsFr: ["Ajouter"], readingsOn: ["カ"], readingsKun: ["くわ-える"], meaningMnemonicFr: "La force et la bouche - AJOUTER.", readingMnemonicFr: "Kuwaeru - AJOUTER !" },
+    { character: "節", meaningsFr: ["Noeud", "Saison"], readingsOn: ["セツ"], readingsKun: ["ふし"], meaningMnemonicFr: "Le bambou et l'arrêter - un NOEUD.", readingMnemonicFr: "Setsu - une SAISON !" },
+    { character: "減", meaningsFr: ["Diminuer"], readingsOn: ["ゲン"], readingsKun: ["へ-る"], meaningMnemonicFr: "L'eau et le gratter - DIMINUER.", readingMnemonicFr: "Heru - DIMINUER !" },
+    { character: "順", meaningsFr: ["Ordre"], readingsOn: ["ジュン"], readingsKun: [], meaningMnemonicFr: "La rivière et la page - l'ORDRE.", readingMnemonicFr: "Jun - l'ORDRE !" },
+    { character: "容", meaningsFr: ["Contenir"], readingsOn: ["ヨウ"], readingsKun: [], meaningMnemonicFr: "Le toit et la vallée - CONTENIR.", readingMnemonicFr: "You - CONTENIR !" },
+    { character: "布", meaningsFr: ["Tissu"], readingsOn: ["フ"], readingsKun: ["ぬの"], meaningMnemonicFr: "Le drap et le père - le TISSU.", readingMnemonicFr: "Nuno - le TISSU !" },
+    { character: "易", meaningsFr: ["Facile"], readingsOn: ["エキ", "イ"], readingsKun: ["やさ-しい"], meaningMnemonicFr: "Le soleil et le changement - FACILE.", readingMnemonicFr: "Yasashii - c'est FACILE !" },
+    { character: "財", meaningsFr: ["Richesse"], readingsOn: ["ザイ"], readingsKun: [], meaningMnemonicFr: "Le coquillage et le talent - la RICHESSE.", readingMnemonicFr: "Zai - la RICHESSE !" },
+    { character: "若", meaningsFr: ["Jeune"], readingsOn: ["ジャク"], readingsKun: ["わか-い"], meaningMnemonicFr: "L'herbe et la droite - JEUNE.", readingMnemonicFr: "Wakai - c'est JEUNE !" },
+    { character: "歴", meaningsFr: ["Histoire"], readingsOn: ["レキ"], readingsKun: [], meaningMnemonicFr: "Le falaise et le riz - l'HISTOIRE.", readingMnemonicFr: "Reki - l'HISTOIRE !" },
+    { character: "舌", meaningsFr: ["Langue"], readingsOn: ["ゼツ"], readingsKun: ["した"], meaningMnemonicFr: "Le mille et la bouche - la LANGUE.", readingMnemonicFr: "Shita - la LANGUE !" },
+    { character: "宇", meaningsFr: ["Univers"], readingsOn: ["ウ"], readingsKun: [], meaningMnemonicFr: "Le toit et le bras - l'UNIVERS.", readingMnemonicFr: "U - l'UNIVERS !" },
+    { character: "宙", meaningsFr: ["Espace"], readingsOn: ["チュウ"], readingsKun: [], meaningMnemonicFr: "Le toit et le centre - l'ESPACE.", readingMnemonicFr: "Chuu - l'ESPACE !" },
+    { character: "忙", meaningsFr: ["Occupé"], readingsOn: ["ボウ"], readingsKun: ["いそが-しい"], meaningMnemonicFr: "Le coeur et le mourir - OCCUPÉ.", readingMnemonicFr: "Isogashii - c'est OCCUPÉ !" },
+    { character: "団", meaningsFr: ["Groupe"], readingsOn: ["ダン"], readingsKun: [], meaningMnemonicFr: "L'enclos et le sol - un GROUPE.", readingMnemonicFr: "Dan - un GROUPE !" },
+    { character: "暴", meaningsFr: ["Violence"], readingsOn: ["ボウ"], readingsKun: ["あば-れる"], meaningMnemonicFr: "Le soleil et le commun - la VIOLENCE.", readingMnemonicFr: "Bou - la VIOLENCE !" },
+    { character: "混", meaningsFr: ["Mélanger"], readingsOn: ["コン"], readingsKun: ["ま-ぜる"], meaningMnemonicFr: "L'eau et le soleil - MÉLANGER.", readingMnemonicFr: "Mazeru - MÉLANGER !" },
+    { character: "乱", meaningsFr: ["Désordre"], readingsOn: ["ラン"], readingsKun: ["みだ-れる"], meaningMnemonicFr: "La langue et le crochet - le DÉSORDRE.", readingMnemonicFr: "Ran - le DÉSORDRE !" },
+    { character: "得", meaningsFr: ["Obtenir", "Gagner"], readingsOn: ["トク"], readingsKun: ["え-る"], meaningMnemonicFr: "Le chemin et le jour - OBTENIR.", readingMnemonicFr: "Eru - OBTENIR !" },
+    { character: "改", meaningsFr: ["Réformer"], readingsOn: ["カイ"], readingsKun: ["あらた-める"], meaningMnemonicFr: "Le soi-même et le frapper - RÉFORMER.", readingMnemonicFr: "Aratameru - RÉFORMER !" },
+    { character: "続", meaningsFr: ["Continuer"], readingsOn: ["ゾク"], readingsKun: ["つづ-く"], meaningMnemonicFr: "Le fil et le vendre - CONTINUER.", readingMnemonicFr: "Tsuzuku - CONTINUER !" },
+    { character: "連", meaningsFr: ["Connecter"], readingsOn: ["レン"], readingsKun: ["つら-なる"], meaningMnemonicFr: "Le chemin et la voiture - CONNECTER.", readingMnemonicFr: "Ren - CONNECTER !" },
+    { character: "善", meaningsFr: ["Bien", "Bon"], readingsOn: ["ゼン"], readingsKun: ["よ-い"], meaningMnemonicFr: "Le mouton et la parole - le BIEN.", readingMnemonicFr: "Zen - le BIEN !" },
+    { character: "比", meaningsFr: ["Comparer"], readingsOn: ["ヒ"], readingsKun: ["くら-べる"], meaningMnemonicFr: "Deux personnes côte à côte - COMPARER.", readingMnemonicFr: "Kuraberu - COMPARER !" },
+  ];
+
+  for (const kanji of level19Kanji) {
+    await prisma.kanji.upsert({
+      where: { character: kanji.character },
+      update: { ...kanji, levelId: 19 },
+      create: { ...kanji, levelId: 19 },
+    });
+  }
+
+  const level19Vocab = [
+    { word: "参加", meaningsFr: ["Participation"], readings: ["さんか"], mnemonicFr: "La PARTICIPATION.", levelId: 19 },
+    { word: "季節", meaningsFr: ["Saison"], readings: ["きせつ"], mnemonicFr: "Une SAISON.", levelId: 19 },
+    { word: "減る", meaningsFr: ["Diminuer"], readings: ["へる"], mnemonicFr: "DIMINUER.", levelId: 19 },
+    { word: "順番", meaningsFr: ["Ordre"], readings: ["じゅんばん"], mnemonicFr: "L'ORDRE.", levelId: 19 },
+    { word: "内容", meaningsFr: ["Contenu"], readings: ["ないよう"], mnemonicFr: "Le CONTENU.", levelId: 19 },
+    { word: "布", meaningsFr: ["Tissu"], readings: ["ぬの"], mnemonicFr: "Le TISSU.", levelId: 19 },
+    { word: "財布", meaningsFr: ["Portefeuille"], readings: ["さいふ"], mnemonicFr: "Un PORTEFEUILLE.", levelId: 19 },
+    { word: "若い", meaningsFr: ["Jeune"], readings: ["わかい"], mnemonicFr: "C'est JEUNE.", levelId: 19 },
+    { word: "歴史", meaningsFr: ["Histoire"], readings: ["れきし"], mnemonicFr: "L'HISTOIRE.", levelId: 19 },
+    { word: "舌", meaningsFr: ["Langue"], readings: ["した"], mnemonicFr: "La LANGUE.", levelId: 19 },
+    { word: "宇宙", meaningsFr: ["Univers"], readings: ["うちゅう"], mnemonicFr: "L'UNIVERS.", levelId: 19 },
+    { word: "忙しい", meaningsFr: ["Occupé"], readings: ["いそがしい"], mnemonicFr: "C'est OCCUPÉ.", levelId: 19 },
+    { word: "集団", meaningsFr: ["Groupe"], readings: ["しゅうだん"], mnemonicFr: "Un GROUPE.", levelId: 19 },
+    { word: "暴力", meaningsFr: ["Violence"], readings: ["ぼうりょく"], mnemonicFr: "La VIOLENCE.", levelId: 19 },
+    { word: "混乱", meaningsFr: ["Confusion"], readings: ["こんらん"], mnemonicFr: "La CONFUSION.", levelId: 19 },
+    { word: "得る", meaningsFr: ["Obtenir"], readings: ["える"], mnemonicFr: "OBTENIR.", levelId: 19 },
+    { word: "改善", meaningsFr: ["Amélioration"], readings: ["かいぜん"], mnemonicFr: "L'AMÉLIORATION.", levelId: 19 },
+    { word: "続く", meaningsFr: ["Continuer"], readings: ["つづく"], mnemonicFr: "CONTINUER.", levelId: 19 },
+    { word: "連絡", meaningsFr: ["Contact"], readings: ["れんらく"], mnemonicFr: "Le CONTACT.", levelId: 19 },
+    { word: "比べる", meaningsFr: ["Comparer"], readings: ["くらべる"], mnemonicFr: "COMPARER.", levelId: 19 },
+  ];
+
+  for (const vocab of level19Vocab) {
+    await prisma.vocabulary.upsert({
+      where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
+      update: { ...vocab },
+      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+    });
+  }
+
+  console.log("Level 19 complete!");
+
+  // ============================================
+  // LEVEL 20 - WaniKani Level 20
+  // Kanji: 困災機率飛害余難妨被裕震尻尾械確嫌個圧在夢産倒臭厚妻議犯罪防穴論経
+  // ============================================
+
+  const level20Kanji = [
+    { character: "困", meaningsFr: ["Être en difficulté"], readingsOn: ["コン"], readingsKun: ["こま-る"], meaningMnemonicFr: "L'enclos et l'arbre - être en DIFFICULTÉ.", readingMnemonicFr: "Komaru - être en DIFFICULTÉ !" },
+    { character: "災", meaningsFr: ["Désastre"], readingsOn: ["サイ"], readingsKun: ["わざわ-い"], meaningMnemonicFr: "Le fleuve et le feu - un DÉSASTRE.", readingMnemonicFr: "Sai - un DÉSASTRE !" },
+    { character: "機", meaningsFr: ["Machine", "Occasion"], readingsOn: ["キ"], readingsKun: [], meaningMnemonicFr: "L'arbre et le tissage - une MACHINE.", readingMnemonicFr: "Ki - une MACHINE !" },
+    { character: "飛", meaningsFr: ["Voler"], readingsOn: ["ヒ"], readingsKun: ["と-ぶ"], meaningMnemonicFr: "L'aile qui s'envole - VOLER.", readingMnemonicFr: "Tobu - VOLER !" },
+    { character: "害", meaningsFr: ["Dommage"], readingsOn: ["ガイ"], readingsKun: [], meaningMnemonicFr: "Le toit et la bouche - le DOMMAGE.", readingMnemonicFr: "Gai - le DOMMAGE !" },
+    { character: "余", meaningsFr: ["Extra", "Reste"], readingsOn: ["ヨ"], readingsKun: ["あま-る"], meaningMnemonicFr: "Le toit et le bois - l'EXTRA.", readingMnemonicFr: "Amaru - le RESTE !" },
+    { character: "難", meaningsFr: ["Difficile"], readingsOn: ["ナン"], readingsKun: ["むずか-しい"], meaningMnemonicFr: "Le difficile et l'oiseau - DIFFICILE.", readingMnemonicFr: "Muzukashii - c'est DIFFICILE !" },
+    { character: "震", meaningsFr: ["Trembler"], readingsOn: ["シン"], readingsKun: ["ふる-える"], meaningMnemonicFr: "La pluie et le dragon - TREMBLER.", readingMnemonicFr: "Furueru - TREMBLER !" },
+    { character: "確", meaningsFr: ["Certain"], readingsOn: ["カク"], readingsKun: ["たし-か"], meaningMnemonicFr: "La pierre et l'oiseau - CERTAIN.", readingMnemonicFr: "Tashika - c'est CERTAIN !" },
+    { character: "嫌", meaningsFr: ["Détester"], readingsOn: ["ケン"], readingsKun: ["きら-う"], meaningMnemonicFr: "La femme et le soupçon - DÉTESTER.", readingMnemonicFr: "Kirau - DÉTESTER !" },
+    { character: "個", meaningsFr: ["Individuel"], readingsOn: ["コ"], readingsKun: [], meaningMnemonicFr: "La personne et le solide - INDIVIDUEL.", readingMnemonicFr: "Ko - INDIVIDUEL !" },
+    { character: "夢", meaningsFr: ["Rêve"], readingsOn: ["ム"], readingsKun: ["ゆめ"], meaningMnemonicFr: "L'herbe et le soir - un RÊVE.", readingMnemonicFr: "Yume - un RÊVE !" },
+    { character: "産", meaningsFr: ["Produire", "Naissance"], readingsOn: ["サン"], readingsKun: ["う-む"], meaningMnemonicFr: "La falaise et la vie - PRODUIRE.", readingMnemonicFr: "San - PRODUIRE !" },
+    { character: "倒", meaningsFr: ["Tomber", "Renverser"], readingsOn: ["トウ"], readingsKun: ["たお-れる"], meaningMnemonicFr: "La personne et le couteau - TOMBER.", readingMnemonicFr: "Taoreru - TOMBER !" },
+    { character: "厚", meaningsFr: ["Épais"], readingsOn: ["コウ"], readingsKun: ["あつ-い"], meaningMnemonicFr: "La falaise et l'enfant - ÉPAIS.", readingMnemonicFr: "Atsui - c'est ÉPAIS !" },
+    { character: "妻", meaningsFr: ["Épouse"], readingsOn: ["サイ"], readingsKun: ["つま"], meaningMnemonicFr: "Le dix et la femme - l'ÉPOUSE.", readingMnemonicFr: "Tsuma - l'ÉPOUSE !" },
+    { character: "議", meaningsFr: ["Discussion"], readingsOn: ["ギ"], readingsKun: [], meaningMnemonicFr: "Les mots et le doute - la DISCUSSION.", readingMnemonicFr: "Gi - la DISCUSSION !" },
+    { character: "犯", meaningsFr: ["Crime"], readingsOn: ["ハン"], readingsKun: ["おか-す"], meaningMnemonicFr: "Le chien et le dangereux - le CRIME.", readingMnemonicFr: "Han - le CRIME !" },
+    { character: "罪", meaningsFr: ["Péché", "Crime"], readingsOn: ["ザイ"], readingsKun: ["つみ"], meaningMnemonicFr: "Le filet et le non - le PÉCHÉ.", readingMnemonicFr: "Tsumi - le CRIME !" },
+    { character: "防", meaningsFr: ["Défendre"], readingsOn: ["ボウ"], readingsKun: ["ふせ-ぐ"], meaningMnemonicFr: "La colline et la direction - DÉFENDRE.", readingMnemonicFr: "Fusegu - DÉFENDRE !" },
+    { character: "穴", meaningsFr: ["Trou"], readingsOn: ["ケツ"], readingsKun: ["あな"], meaningMnemonicFr: "Le toit et le huit - un TROU.", readingMnemonicFr: "Ana - un TROU !" },
+    { character: "論", meaningsFr: ["Théorie"], readingsOn: ["ロン"], readingsKun: [], meaningMnemonicFr: "Les mots et l'ordre - la THÉORIE.", readingMnemonicFr: "Ron - la THÉORIE !" },
+    { character: "経", meaningsFr: ["Passer", "Expérience"], readingsOn: ["ケイ"], readingsKun: ["へ-る"], meaningMnemonicFr: "Le fil et le léger - l'EXPÉRIENCE.", readingMnemonicFr: "Kei - l'EXPÉRIENCE !" },
+  ];
+
+  for (const kanji of level20Kanji) {
+    await prisma.kanji.upsert({
+      where: { character: kanji.character },
+      update: { ...kanji, levelId: 20 },
+      create: { ...kanji, levelId: 20 },
+    });
+  }
+
+  const level20Vocab = [
+    { word: "困る", meaningsFr: ["Être en difficulté"], readings: ["こまる"], mnemonicFr: "Être en DIFFICULTÉ.", levelId: 20 },
+    { word: "災害", meaningsFr: ["Désastre"], readings: ["さいがい"], mnemonicFr: "Un DÉSASTRE.", levelId: 20 },
+    { word: "機会", meaningsFr: ["Occasion"], readings: ["きかい"], mnemonicFr: "Une OCCASION.", levelId: 20 },
+    { word: "飛行機", meaningsFr: ["Avion"], readings: ["ひこうき"], mnemonicFr: "Un AVION.", levelId: 20 },
+    { word: "飛ぶ", meaningsFr: ["Voler"], readings: ["とぶ"], mnemonicFr: "VOLER.", levelId: 20 },
+    { word: "被害", meaningsFr: ["Dommage"], readings: ["ひがい"], mnemonicFr: "Le DOMMAGE.", levelId: 20 },
+    { word: "難しい", meaningsFr: ["Difficile"], readings: ["むずかしい"], mnemonicFr: "C'est DIFFICILE.", levelId: 20 },
+    { word: "地震", meaningsFr: ["Tremblement de terre"], readings: ["じしん"], mnemonicFr: "Un TREMBLEMENT DE TERRE.", levelId: 20 },
+    { word: "確か", meaningsFr: ["Certain"], readings: ["たしか"], mnemonicFr: "C'est CERTAIN.", levelId: 20 },
+    { word: "嫌い", meaningsFr: ["Détester"], readings: ["きらい"], mnemonicFr: "DÉTESTER.", levelId: 20 },
+    { word: "個人", meaningsFr: ["Individu"], readings: ["こじん"], mnemonicFr: "Un INDIVIDU.", levelId: 20 },
+    { word: "夢", meaningsFr: ["Rêve"], readings: ["ゆめ"], mnemonicFr: "Un RÊVE.", levelId: 20 },
+    { word: "生産", meaningsFr: ["Production"], readings: ["せいさん"], mnemonicFr: "La PRODUCTION.", levelId: 20 },
+    { word: "倒れる", meaningsFr: ["Tomber"], readings: ["たおれる"], mnemonicFr: "TOMBER.", levelId: 20 },
+    { word: "厚い", meaningsFr: ["Épais"], readings: ["あつい"], mnemonicFr: "C'est ÉPAIS.", levelId: 20 },
+    { word: "妻", meaningsFr: ["Épouse"], readings: ["つま"], mnemonicFr: "L'ÉPOUSE.", levelId: 20 },
+    { word: "会議", meaningsFr: ["Réunion"], readings: ["かいぎ"], mnemonicFr: "Une RÉUNION.", levelId: 20 },
+    { word: "犯罪", meaningsFr: ["Crime"], readings: ["はんざい"], mnemonicFr: "Un CRIME.", levelId: 20 },
+    { word: "予防", meaningsFr: ["Prévention"], readings: ["よぼう"], mnemonicFr: "La PRÉVENTION.", levelId: 20 },
+    { word: "穴", meaningsFr: ["Trou"], readings: ["あな"], mnemonicFr: "Un TROU.", levelId: 20 },
+    { word: "理論", meaningsFr: ["Théorie"], readings: ["りろん"], mnemonicFr: "La THÉORIE.", levelId: 20 },
+    { word: "経験", meaningsFr: ["Expérience"], readings: ["けいけん"], mnemonicFr: "L'EXPÉRIENCE.", levelId: 20 },
+    { word: "経済", meaningsFr: ["Économie"], readings: ["けいざい"], mnemonicFr: "L'ÉCONOMIE.", levelId: 20 },
+  ];
+
+  for (const vocab of level20Vocab) {
+    await prisma.vocabulary.upsert({
+      where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
+      update: { ...vocab },
+      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+    });
+  }
+
+  console.log("Level 20 complete!");
+  console.log("Seeding levels 11-20 complete!");
 }
 
 main()
