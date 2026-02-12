@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+
+const settingsSchema = z.object({
+  lessonsPerDay: z.number().int().min(1).max(100).optional(),
+  reviewBatchSize: z.number().int().min(1).max(50).optional(),
+  autoplayAudio: z.boolean().optional(),
+});
 
 export async function GET() {
   const session = await auth();
@@ -36,15 +43,24 @@ export async function PUT(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { lessonsPerDay, reviewBatchSize, autoplayAudio } = body;
+
+  const validation = settingsSchema.safeParse(body);
+  if (!validation.success) {
+    return NextResponse.json(
+      { error: validation.error.issues[0].message },
+      { status: 400 }
+    );
+  }
+
+  const { lessonsPerDay, reviewBatchSize, autoplayAudio } = validation.data;
 
   try {
     const user = await prisma.user.update({
       where: { id: session.user.id },
       data: {
-        lessonsPerDay: lessonsPerDay ?? undefined,
-        reviewBatchSize: reviewBatchSize ?? undefined,
-        autoplayAudio: autoplayAudio ?? undefined,
+        ...(lessonsPerDay !== undefined && { lessonsPerDay }),
+        ...(reviewBatchSize !== undefined && { reviewBatchSize }),
+        ...(autoplayAudio !== undefined && { autoplayAudio }),
       },
       select: {
         lessonsPerDay: true,

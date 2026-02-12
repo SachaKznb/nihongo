@@ -151,6 +151,7 @@ model UserRadicalProgress {
   @@id([userId, radicalId])
   @@index([userId, srsStage])
   @@index([userId, nextReviewAt])
+  @@index([userId, srsStage, nextReviewAt]) // Compound index for review queries
 }
 
 model UserKanjiProgress {
@@ -172,6 +173,7 @@ model UserKanjiProgress {
   @@id([userId, kanjiId])
   @@index([userId, srsStage])
   @@index([userId, nextReviewAt])
+  @@index([userId, srsStage, nextReviewAt]) // Compound index for review queries
 }
 
 model UserVocabularyProgress {
@@ -192,6 +194,7 @@ model UserVocabularyProgress {
   @@id([userId, vocabularyId])
   @@index([userId, srsStage])
   @@index([userId, nextReviewAt])
+  @@index([userId, srsStage, nextReviewAt]) // Compound index for review queries
 }
 
 model Review {

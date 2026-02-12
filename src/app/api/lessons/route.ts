@@ -49,6 +49,7 @@ export async function GET() {
       character: rp.radical.character,
       meaningsFr: [rp.radical.meaningFr],
       mnemonic: rp.radical.mnemonic,
+      customMnemonic: rp.customMnemonic,
       imageUrl: rp.radical.imageUrl,
       usedInKanji: rp.radical.kanji.map((k) => ({
         character: k.kanji.character,
@@ -86,6 +87,8 @@ export async function GET() {
       readingsKun: kp.kanji.readingsKun,
       mnemonic: kp.kanji.meaningMnemonicFr,
       readingMnemonic: kp.kanji.readingMnemonicFr,
+      customMnemonic: kp.customMeaningMnemonic,
+      customReadingMnemonic: kp.customReadingMnemonic,
       componentRadicals: kp.kanji.radicals.map((r) => ({
         character: r.radical.character,
         meaningFr: r.radical.meaningFr,
@@ -120,6 +123,7 @@ export async function GET() {
       meaningsFr: vp.vocabulary.meaningsFr,
       readings: vp.vocabulary.readings,
       mnemonic: vp.vocabulary.mnemonicFr,
+      customMnemonic: vp.customMnemonic,
       sentence: vp.vocabulary.sentenceJp
         ? { jp: vp.vocabulary.sentenceJp, fr: vp.vocabulary.sentenceFr || "" }
         : null,

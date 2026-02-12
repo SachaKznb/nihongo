@@ -124,57 +124,34 @@ export default function AdminVocabularyPage() {
         </div>
       </div>
 
-      {/* Vocabulary Table */}
+      {/* Vocabulary Grid */}
       <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
         {loading ? (
           <div className="p-12 text-center text-stone-500">Chargement...</div>
         ) : vocabulary.length === 0 ? (
           <div className="p-12 text-center text-stone-500">Aucun mot trouve</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-stone-50 border-b border-stone-200">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">
-                    Mot
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">
-                    Lecture
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">
-                    Signification
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">
-                    Niveau
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-stone-500 uppercase">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-stone-200">
-                {vocabulary.map((vocab) => (
-                  <tr key={vocab.id} className="hover:bg-stone-50">
-                    <td className="px-6 py-4 text-lg font-medium text-stone-900">
-                      {vocab.word}
-                    </td>
-                    <td className="px-6 py-4 text-stone-600">{vocab.readings.join(", ")}</td>
-                    <td className="px-6 py-4 text-stone-600">{vocab.meaningsFr.join(", ")}</td>
-                    <td className="px-6 py-4 text-stone-500">
-                      {vocab.level.id}
-                    </td>
-                    <td className="px-6 py-4">
-                      <Link
-                        href={`/admin/content/vocabulary/${vocab.id}`}
-                        className="text-amber-600 hover:text-amber-700 font-medium text-sm"
-                      >
-                        Modifier
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-4">
+            {vocabulary.map((vocab) => (
+              <Link
+                key={vocab.id}
+                href={`/admin/content/vocabulary/${vocab.id}`}
+                className="bg-stone-50 hover:bg-amber-50 border border-stone-200 hover:border-amber-300 rounded-lg p-4 text-center transition-colors"
+              >
+                <div className="text-2xl mb-2 font-japanese">{vocab.word}</div>
+                <div className="text-sm font-medium text-stone-900 truncate">
+                  {vocab.meaningsFr[0]}
+                </div>
+                <div className="text-xs text-stone-500 mt-1">
+                  Niveau {vocab.level.id}
+                </div>
+                {vocab.readings.length > 0 && (
+                  <div className="text-xs text-stone-400 mt-1 truncate">
+                    {vocab.readings.join(", ")}
+                  </div>
+                )}
+              </Link>
+            ))}
           </div>
         )}
 

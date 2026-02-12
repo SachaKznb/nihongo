@@ -40,8 +40,9 @@ export function useProgress() {
     "/api/progress",
     fetcher,
     {
-      revalidateOnFocus: true,
-      dedupingInterval: 30000, // 30 seconds
+      revalidateOnFocus: false, // Don't refetch on every tab switch
+      revalidateOnReconnect: true, // But do refetch on network restore
+      dedupingInterval: 60000, // 60 seconds - reduce redundant calls
       ...retryConfig,
     }
   );
@@ -60,8 +61,9 @@ export function useLessons() {
     lessons: LessonItem[];
     total: number;
   }>("/api/lessons", fetcher, {
-    revalidateOnFocus: true,
-    dedupingInterval: 30000,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+    dedupingInterval: 60000, // 60 seconds
     ...retryConfig,
   });
 
@@ -73,14 +75,15 @@ export function useLessons() {
   };
 }
 
-// Hook for pending reviews (shorter cache since it changes frequently)
+// Hook for pending reviews
 export function useReviews() {
   const { data, error, isLoading, mutate } = useSWR<{
     reviews: ReviewItem[];
     total: number;
   }>("/api/reviews", fetcher, {
-    revalidateOnFocus: true,
-    dedupingInterval: 10000, // 10 seconds
+    revalidateOnFocus: false,
+    revalidateOnReconnect: true,
+    dedupingInterval: 30000, // 30 seconds - reviews change more often
     ...retryConfig,
   });
 

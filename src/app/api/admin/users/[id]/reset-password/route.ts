@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { requireAdminApi } from "@/lib/admin-auth";
 import { prisma } from "@/lib/db";
 import { logAdminAction } from "@/lib/audit";
+import { sendAdminPasswordReset } from "@/lib/email";
 
 export async function POST(
   request: NextRequest,
@@ -44,19 +45,23 @@ export async function POST(
       data: { passwordHash },
     });
 
+    // Send email with temporary password
+    if (process.env.RESEND_API_KEY) {
+      await sendAdminPasswordReset(existingUser.email, existingUser.username, tempPassword);
+    }
+
     await logAdminAction({
       adminId: session.user.id,
       action: "user.reset-password",
       targetType: "user",
       targetId: id,
       details: { username: existingUser.username },
+      ipAddress: request.headers.get("x-forwarded-for")?.split(",")[0] || undefined,
+      userAgent: request.headers.get("user-agent") || undefined,
     });
 
-    // Return the temporary password to be communicated to the user
     return NextResponse.json({
-      message: "Mot de passe reinitialise",
-      temporaryPassword: tempPassword,
-      note: "Communiquez ce mot de passe a l'utilisateur et demandez-lui de le changer immediatement.",
+      message: "Mot de passe reinitialise. Un email a ete envoye a l'utilisateur avec les instructions.",
     });
   } catch (error) {
     console.error("Admin reset password error:", error);

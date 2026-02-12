@@ -93,16 +93,35 @@ export async function GET() {
     kanjiProgress.filter((kp) => kp.srsStage >= 1 && kp.srsStage < 9 && kp.nextReviewAt && kp.nextReviewAt <= now).length +
     vocabProgress.filter((vp) => vp.srsStage >= 1 && vp.srsStage < 9 && vp.nextReviewAt && vp.nextReviewAt <= now).length;
 
-  // Calculate upcoming reviews for next 24 hours
-  const upcomingReviews: { time: Date; count: number }[] = [];
+  // Calculate upcoming reviews for next 24 hours (single pass optimization)
   const intervals = [1, 2, 4, 8, 12, 24];
 
+  // Collect all future review times in a single pass
+  const futureReviewTimes: Date[] = [];
+  for (const rp of radicalProgress) {
+    if (rp.srsStage >= 1 && rp.srsStage < 9 && rp.nextReviewAt && rp.nextReviewAt > now) {
+      futureReviewTimes.push(rp.nextReviewAt);
+    }
+  }
+  for (const kp of kanjiProgress) {
+    if (kp.srsStage >= 1 && kp.srsStage < 9 && kp.nextReviewAt && kp.nextReviewAt > now) {
+      futureReviewTimes.push(kp.nextReviewAt);
+    }
+  }
+  for (const vp of vocabProgress) {
+    if (vp.srsStage >= 1 && vp.srsStage < 9 && vp.nextReviewAt && vp.nextReviewAt > now) {
+      futureReviewTimes.push(vp.nextReviewAt);
+    }
+  }
+
+  // Sort once and count for each interval
+  futureReviewTimes.sort((a, b) => a.getTime() - b.getTime());
+
+  const upcomingReviews: { time: Date; count: number }[] = [];
   for (const hours of intervals) {
     const futureTime = new Date(now.getTime() + hours * 60 * 60 * 1000);
-    const count =
-      radicalProgress.filter((rp) => rp.srsStage >= 1 && rp.srsStage < 9 && rp.nextReviewAt && rp.nextReviewAt <= futureTime && rp.nextReviewAt > now).length +
-      kanjiProgress.filter((kp) => kp.srsStage >= 1 && kp.srsStage < 9 && kp.nextReviewAt && kp.nextReviewAt <= futureTime && kp.nextReviewAt > now).length +
-      vocabProgress.filter((vp) => vp.srsStage >= 1 && vp.srsStage < 9 && vp.nextReviewAt && vp.nextReviewAt <= futureTime && vp.nextReviewAt > now).length;
+    // Binary search would be even faster, but simple filter on sorted array is good enough
+    const count = futureReviewTimes.filter(t => t <= futureTime).length;
     upcomingReviews.push({ time: futureTime, count });
   }
 

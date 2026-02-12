@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 interface Level {
-  id: string;
-  number: number;
+  id: number;
+  name: string | null;
   _count: {
     radicals: number;
     kanji: number;
@@ -70,7 +70,7 @@ export default function AdminLevelsPage() {
       return;
     }
 
-    if (!confirm(`Supprimer le niveau ${level.number} ?`)) return;
+    if (!confirm(`Supprimer le niveau ${level.id} ?`)) return;
 
     try {
       const res = await fetch(`/api/admin/content/levels/${level.id}`, {
@@ -161,7 +161,7 @@ export default function AdminLevelsPage() {
                     <tr key={level.id} className="hover:bg-stone-50">
                       <td className="px-6 py-4">
                         <span className="text-lg font-bold text-stone-900">
-                          {level.number}
+                          Niveau {level.id}
                         </span>
                       </td>
                       <td className="px-6 py-4">
