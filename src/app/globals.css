@@ -396,3 +396,41 @@ body {
 .animate-float-up {
   animation: float-up 4s ease-out infinite;
 }
+
+/* Ruby text (furigana) styles */
+ruby {
+  ruby-align: center;
+}
+
+ruby rt {
+  font-size: 0.5em;
+  color: #78716c;
+  font-weight: 400;
+}
+
+/* Ensure proper line height for ruby text */
+.furigana-text {
+  line-height: 2.5;
+}
+
+.furigana-text ruby {
+  ruby-position: over;
+}
+
+/* Hide ruby parentheses for browsers that don't support ruby */
+ruby rp {
+  display: none;
+}
+
+/* Ruby kanji hover effect */
+.ruby-kanji {
+  transition: color 0.15s ease;
+}
+
+.ruby-kanji:hover {
+  color: var(--vocab-color);
+}
+
+.ruby-kanji:hover rt {
+  color: var(--vocab-color);
+}

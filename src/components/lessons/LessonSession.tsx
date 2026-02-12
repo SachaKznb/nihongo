@@ -96,16 +96,16 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
       );
 
       if (forceRegenerate) {
-        addToast("Mnemonique regenere ! (1 credit utilise)", "success");
+        addToast("Mnémonique régénéré ! (1 crédit utilisé)", "success");
       } else if (fromCache) {
-        addToast("Mnemonique IA applique !", "success");
+        addToast("Mnémonique IA appliqué !", "success");
       } else {
-        addToast("Mnemonique cree avec l'IA !", "success");
+        addToast("Mnémonique créé avec l'IA !", "success");
       }
     } catch (error) {
       console.error("Mnemonic generation error:", error);
       addToast(
-        error instanceof Error ? error.message : "Erreur lors de la generation",
+        error instanceof Error ? error.message : "Erreur lors de la génération",
         "error"
       );
     } finally {

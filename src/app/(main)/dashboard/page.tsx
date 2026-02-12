@@ -118,19 +118,17 @@ export default function DashboardPage() {
       )}
 
       {/* Header with Greeting & Stats Bar */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <span className="text-5xl font-japanese text-teal-600">進</span>
-            <div>
-              <h1 className="text-3xl font-bold font-display text-stone-900">Tableau de bord</h1>
-              <p className="text-stone-500 font-display">Niveau {progress.currentLevel} • {motivationalMessage}</p>
-            </div>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-3">
+          <span className="text-4xl sm:text-5xl font-japanese text-teal-600">進</span>
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold font-display text-stone-900">Tableau de bord</h1>
+            <p className="text-sm sm:text-base text-stone-500 font-display">Niveau {progress.currentLevel} • {motivationalMessage}</p>
           </div>
         </div>
 
-        {/* Live Activity Indicator - Social Proof */}
-        <div className="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full">
+        {/* Live Activity Indicator - Hidden on small mobile */}
+        <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-200 rounded-full w-fit">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -272,7 +270,7 @@ export default function DashboardPage() {
               <p className="text-stone-500">Éléments prêts à réviser</p>
               {progress.pendingReviews > 0 && (
                 <div className="mt-4 flex items-center gap-2 text-orange-600 font-medium group-hover:gap-3 transition-all">
-                  <span>Reviser maintenant</span>
+                  <span>Réviser maintenant</span>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
@@ -284,7 +282,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Level Progress */}
         <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
@@ -440,56 +438,6 @@ export default function DashboardPage() {
 
       {/* Weakness Patterns Section */}
       <WeaknessPatterns />
-
-      {/* Quick Access with better styling */}
-      <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-2xl font-japanese text-stone-400">索</span>
-          <h3 className="font-bold font-display text-stone-900">Accès rapide</h3>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/radicals"
-            prefetch={true}
-            className="flex items-center gap-2 px-5 py-3 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
-          >
-            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-            Radicaux
-          </Link>
-          <Link
-            href="/kanji"
-            prefetch={true}
-            className="flex items-center gap-2 px-5 py-3 bg-pink-50 text-pink-700 rounded-xl hover:bg-pink-100 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
-          >
-            <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
-            Kanji
-          </Link>
-          <Link
-            href="/vocabulary"
-            prefetch={true}
-            className="flex items-center gap-2 px-5 py-3 bg-purple-50 text-purple-700 rounded-xl hover:bg-purple-100 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
-          >
-            <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-            Vocabulaire
-          </Link>
-          <Link
-            href={`/levels/${progress.currentLevel}`}
-            prefetch={true}
-            className="flex items-center gap-2 px-5 py-3 bg-stone-100 text-stone-700 rounded-xl hover:bg-stone-200 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
-          >
-            <span className="w-2 h-2 bg-stone-500 rounded-full"></span>
-            Niveau {progress.currentLevel}
-          </Link>
-          <Link
-            href="/study"
-            prefetch={true}
-            className="flex items-center gap-2 px-5 py-3 bg-indigo-50 text-indigo-700 rounded-xl hover:bg-indigo-100 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
-          >
-            <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
-            Étude ciblée
-          </Link>
-        </div>
-      </div>
 
       {/* Tanuki Pet - Fun companion at the bottom */}
       <TanukiPet

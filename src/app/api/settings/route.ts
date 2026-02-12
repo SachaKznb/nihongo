@@ -7,6 +7,7 @@ const settingsSchema = z.object({
   lessonsPerDay: z.number().int().min(1).max(100).optional(),
   reviewBatchSize: z.number().int().min(1).max(50).optional(),
   autoplayAudio: z.boolean().optional(),
+  levelAwareSentencesEnabled: z.boolean().optional(),
 });
 
 export async function GET() {
@@ -22,6 +23,7 @@ export async function GET() {
       lessonsPerDay: true,
       reviewBatchSize: true,
       autoplayAudio: true,
+      levelAwareSentencesEnabled: true,
     },
   });
 
@@ -52,7 +54,7 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  const { lessonsPerDay, reviewBatchSize, autoplayAudio } = validation.data;
+  const { lessonsPerDay, reviewBatchSize, autoplayAudio, levelAwareSentencesEnabled } = validation.data;
 
   try {
     const user = await prisma.user.update({
@@ -61,11 +63,13 @@ export async function PUT(request: NextRequest) {
         ...(lessonsPerDay !== undefined && { lessonsPerDay }),
         ...(reviewBatchSize !== undefined && { reviewBatchSize }),
         ...(autoplayAudio !== undefined && { autoplayAudio }),
+        ...(levelAwareSentencesEnabled !== undefined && { levelAwareSentencesEnabled }),
       },
       select: {
         lessonsPerDay: true,
         reviewBatchSize: true,
         autoplayAudio: true,
+        levelAwareSentencesEnabled: true,
       },
     });
 

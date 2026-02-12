@@ -134,7 +134,7 @@ export default function AdminVocabEditPage({ params }: { params: Promise<{ id: s
   };
 
   const handleDelete = async () => {
-    if (!confirm("Etes-vous sur de vouloir supprimer ce mot ?")) return;
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce mot ?")) return;
 
     setDeleting(true);
     try {

@@ -171,7 +171,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
         };
       } catch (error) {
         console.error("Error updating SRS:", error);
-        addToast("Erreur de sauvegarde. Votre progression sera resynchronisee.", "warning");
+        addToast("Erreur de sauvegarde. Votre progression sera resynchronisée.", "warning");
       }
     },
     [addToast]
@@ -200,7 +200,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Erreur de verification");
+        throw new Error("Erreur de vérification");
       }
 
       const result = await response.json();
@@ -272,7 +272,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
       checkAndUpdateSrs(itemKey, newState);
     } catch (error) {
       console.error("Error checking answer:", error);
-      addToast("Erreur de connexion. Veuillez reessayer.", "error");
+      addToast("Erreur de connexion. Veuillez réessayer.", "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -636,7 +636,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                       <h3 className="text-xl font-semibold text-amber-700">{resultMessage}</h3>
                     </div>
                     <div className="bg-white/60 rounded-xl p-4">
-                      <p className="text-stone-600 text-sm mb-1">La bonne reponse :</p>
+                      <p className="text-stone-600 text-sm mb-1">La bonne réponse :</p>
                       <p className="text-stone-900 font-bold text-lg">
                         {lastExpectedAnswers.join(", ")}
                       </p>
@@ -654,7 +654,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                           <div>
                             <p className="text-sm font-medium text-indigo-700 mb-1 flex items-center gap-1">
                               <span>💡</span>
-                              Le truc a retenir :
+                              Le truc à retenir :
                             </p>
                             <p className="text-indigo-900 text-sm leading-relaxed">{aiFeedback}</p>
                           </div>
@@ -702,8 +702,8 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
           )}
         </div>
 
-        {/* Keyboard shortcuts hint */}
-        <div className="mt-6 text-center text-sm text-stone-400">
+        {/* Keyboard shortcuts hint - hidden on mobile */}
+        <div className="mt-6 text-center text-sm text-stone-400 hidden sm:block">
           Appuyez sur Entrée pour soumettre
         </div>
       </div>

@@ -75,6 +75,9 @@ model User {
   aiFeedbackEnabled     Boolean   @default(true)
   lastPatternAnalysis   DateTime?
 
+  // Level-Aware Sentences setting
+  levelAwareSentencesEnabled  Boolean   @default(true)
+
   // Progress relations
   radicalProgress    UserRadicalProgress[]
   kanjiProgress      UserKanjiProgress[]
@@ -89,6 +92,9 @@ model User {
   // AI Feedback relations
   reviewMistakes     ReviewMistake[]
   weaknessPatterns   UserWeaknessPattern[]
+
+  // Level-Aware Sentences cache
+  sentenceCache      UserSentenceCache[]
 
   // Admin audit relations
   adminActions AdminAuditLog[] @relation("AdminPerformer")
@@ -148,8 +154,9 @@ model Vocabulary {
   levelId    Int
   level      Level    @relation(fields: [levelId], references: [id])
 
-  kanji        VocabularyKanji[]
-  userProgress UserVocabularyProgress[]
+  kanji         VocabularyKanji[]
+  userProgress  UserVocabularyProgress[]
+  sentenceCache UserSentenceCache[]
 
   @@unique([word, levelId])
   @@index([levelId])
@@ -401,4 +408,23 @@ model UserWeaknessPattern {
 
   @@index([userId, severity])
   @@index([userId, patternType])
+}
+
+// Level-Aware Example Sentences Cache (per user, per vocabulary)
+model UserSentenceCache {
+  id                  String   @id @default(cuid())
+  userId              String
+  vocabularyId        Int
+  sentences           Json     // Array of SentenceData objects
+  masteredKanjiHash   String   // Hash of user's mastered kanji at generation time
+  masteredVocabCount  Int      // Count of mastered vocab at generation time
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vocabulary Vocabulary @relation(fields: [vocabularyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, vocabularyId])
+  @@index([userId])
+  @@index([vocabularyId])
 }

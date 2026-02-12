@@ -222,21 +222,21 @@ export default function RewardsPage() {
   const maxCredits = Math.floor(data.totalXp / XP_PER_CREDIT);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
+    <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 space-y-6 sm:space-y-10">
       {/* Header with XP Balance */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-stone-900">Récompenses</h1>
-          <p className="text-stone-600 mt-1">Dépense ton XP pour débloquer des thèmes et des crédits IA</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-stone-900">Récompenses</h1>
+          <p className="text-sm sm:text-base text-stone-600 mt-1">Dépense ton XP pour débloquer des thèmes et des crédits IA</p>
         </div>
-        <div className="flex items-center gap-6">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-amber-600">{data.totalXp.toLocaleString()}</div>
-            <div className="text-sm text-stone-500">XP disponible</div>
+        <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex-1 sm:flex-none text-center bg-amber-50 rounded-xl p-3 sm:p-4">
+            <div className="text-2xl sm:text-3xl font-bold text-amber-600">{data.totalXp.toLocaleString()}</div>
+            <div className="text-xs sm:text-sm text-stone-500">XP disponible</div>
           </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-indigo-600">{data.mnemonicCredits}</div>
-            <div className="text-sm text-stone-500">Crédits IA</div>
+          <div className="flex-1 sm:flex-none text-center bg-indigo-50 rounded-xl p-3 sm:p-4">
+            <div className="text-2xl sm:text-3xl font-bold text-indigo-600">{data.mnemonicCredits}</div>
+            <div className="text-xs sm:text-sm text-stone-500">Crédits IA</div>
           </div>
         </div>
       </div>
@@ -255,14 +255,14 @@ export default function RewardsPage() {
       )}
 
       {/* XP to Credits Conversion */}
-      <section className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-200 p-6">
-        <h2 className="text-xl font-bold text-indigo-900 mb-2">Convertir XP en Crédits IA</h2>
-        <p className="text-indigo-700 mb-4">
+      <section className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-200 p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-bold text-indigo-900 mb-2">Convertir XP en Crédits IA</h2>
+        <p className="text-sm sm:text-base text-indigo-700 mb-4">
           Utilise tes crédits pour régénérer des mnémoniques personnalisés avec l'IA.
           <span className="font-medium"> {XP_PER_CREDIT} XP = 1 crédit</span>
         </p>
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
             <button
               onClick={() => setCreditsToConvert(Math.max(1, creditsToConvert - 1))}
               className="w-10 h-10 rounded-lg bg-white border border-indigo-200 text-indigo-600 font-bold hover:bg-indigo-50"
@@ -286,42 +286,42 @@ export default function RewardsPage() {
               +
             </button>
           </div>
-          <span className="text-indigo-600">
+          <span className="text-indigo-600 text-center sm:text-left w-full sm:w-auto">
             = <strong>{creditsToConvert * XP_PER_CREDIT}</strong> XP
           </span>
           <button
             onClick={convertXpToCredits}
             disabled={converting || maxCredits < 1}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full sm:w-auto px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {converting ? "Conversion..." : "Convertir"}
           </button>
           {maxCredits < 1 && (
-            <span className="text-indigo-500 text-sm">Il te faut au moins {XP_PER_CREDIT} XP</span>
+            <span className="text-indigo-500 text-sm text-center sm:text-left w-full sm:w-auto">Il te faut au moins {XP_PER_CREDIT} XP</span>
           )}
         </div>
       </section>
 
       {/* Tanuki Pet Section */}
       {tanukiData && (
-        <section className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 rounded-2xl border border-amber-200 p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-4xl">🦝</span>
+        <section className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 rounded-2xl border border-amber-200 p-4 sm:p-6">
+          <div className="flex items-center gap-3 mb-4 sm:mb-6">
+            <span className="text-3xl sm:text-4xl">🦝</span>
             <div>
-              <h2 className="text-2xl font-bold text-amber-900">Mon Tanuki</h2>
-              <p className="text-amber-700">Ton compagnon d'apprentissage évolue avec ton XP !</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-amber-900">Mon Tanuki</h2>
+              <p className="text-sm sm:text-base text-amber-700">Ton compagnon d'apprentissage évolue avec ton XP !</p>
             </div>
           </div>
 
           {/* Current stage info */}
-          <div className="bg-white/70 rounded-xl p-4 mb-6">
+          <div className="bg-white/70 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-amber-800">Évolution actuelle</span>
-              <span className="text-sm text-amber-600">
+              <span className="text-xs sm:text-sm font-medium text-amber-800">Évolution actuelle</span>
+              <span className="text-xs sm:text-sm text-amber-600">
                 {getTanukiStage(data?.totalXp || 0).name}
               </span>
             </div>
-            <div className="grid grid-cols-6 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
               {TANUKI_STAGES.map((stage) => {
                 const isReached = (data?.totalXp || 0) >= stage.xpRequired;
                 return (

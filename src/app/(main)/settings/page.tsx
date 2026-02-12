@@ -12,6 +12,7 @@ interface UserSettings {
   lessonsPerDay: number;
   reviewBatchSize: number;
   autoplayAudio: boolean;
+  levelAwareSentencesEnabled: boolean;
 }
 
 interface NotificationPreferences {
@@ -51,6 +52,7 @@ export default function SettingsPage() {
     lessonsPerDay: 20,
     reviewBatchSize: 10,
     autoplayAudio: true,
+    levelAwareSentencesEnabled: true,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -511,6 +513,39 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
+          <Card>
+            <CardHeader>
+              <CardTitle>Phrases d&apos;exemple</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-gray-900">Phrases personnalisees</p>
+                  <p className="text-sm text-gray-500">
+                    Generer des phrases utilisant uniquement les kanji que vous maitrisez
+                  </p>
+                </div>
+                <button
+                  onClick={() =>
+                    setSettings({
+                      ...settings,
+                      levelAwareSentencesEnabled: !settings.levelAwareSentencesEnabled,
+                    })
+                  }
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                    settings.levelAwareSentencesEnabled ? "bg-teal-500" : "bg-gray-200"
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      settings.levelAwareSentencesEnabled ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+
           {message && (
             <p
               className={`text-center ${
@@ -680,19 +715,19 @@ export default function SettingsPage() {
           {/* Export Data */}
           <Card>
             <CardHeader>
-              <CardTitle>Exporter mes donnees</CardTitle>
+              <CardTitle>Exporter mes données</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-stone-600">
-                Telechargez une copie de toutes vos donnees personnelles (profil, progression,
-                historique des revisions) au format JSON.
+                Téléchargez une copie de toutes vos données personnelles (profil, progression,
+                historique des révisions) au format JSON.
               </p>
               <Button
                 variant="secondary"
                 onClick={handleExportData}
                 disabled={actionLoading === "export"}
               >
-                {actionLoading === "export" ? "Export en cours..." : "Telecharger mes donnees"}
+                {actionLoading === "export" ? "Export en cours..." : "Télécharger mes données"}
               </Button>
             </CardContent>
           </Card>
@@ -704,8 +739,8 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-stone-600">
-                La suppression de votre compte est irreversible. Toutes vos donnees seront
-                definitivement supprimees.
+                La suppression de votre compte est irréversible. Toutes vos données seront
+                définitivement supprimées.
               </p>
               <Button variant="danger" onClick={() => setShowDeleteModal(true)}>
                 Supprimer mon compte
@@ -763,9 +798,9 @@ export default function SettingsPage() {
                   {/* Reviews Waiting */}
                   <div className="flex items-center justify-between py-2 border-b border-stone-100">
                     <div>
-                      <p className="font-medium text-gray-900">Revisions en attente</p>
+                      <p className="font-medium text-gray-900">Révisions en attente</p>
                       <p className="text-sm text-gray-500">
-                        Rappel quotidien quand vous avez des revisions a faire
+                        Rappel quotidien quand vous avez des révisions à faire
                       </p>
                     </div>
                     <button

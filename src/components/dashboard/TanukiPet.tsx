@@ -61,27 +61,27 @@ export default function TanukiPet({
   const displayName = tanukiName || stage.name;
 
   return (
-    <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 rounded-2xl border border-amber-200 p-6 relative overflow-hidden">
+    <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 rounded-2xl border border-amber-200 p-4 sm:p-6 relative overflow-hidden">
       {/* Evolution overlay */}
       {showEvolution && (
         <div className="absolute inset-0 bg-gradient-to-br from-amber-300/80 to-yellow-300/80 flex items-center justify-center z-20 animate-pulse">
           <div className="text-center">
-            <div className="text-5xl mb-2">✨</div>
-            <div className="text-2xl font-bold text-amber-900">Évolution !</div>
+            <div className="text-4xl sm:text-5xl mb-2">✨</div>
+            <div className="text-xl sm:text-2xl font-bold text-amber-900">Évolution !</div>
             <div className="text-amber-800">{stage.name}</div>
           </div>
         </div>
       )}
 
       {/* Background decorations */}
-      <div className="absolute top-2 right-2 text-4xl opacity-10">🍃</div>
-      <div className="absolute bottom-2 left-2 text-3xl opacity-10">🌸</div>
+      <div className="absolute top-2 right-2 text-3xl sm:text-4xl opacity-10">🍃</div>
+      <div className="absolute bottom-2 left-2 text-2xl sm:text-3xl opacity-10">🌸</div>
 
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3 sm:gap-4">
         {/* Tanuki Avatar */}
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <div
-            className={`w-24 h-24 rounded-2xl flex items-center justify-center relative transition-transform duration-300 ${
+            className={`w-16 h-16 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl flex items-center justify-center relative transition-transform duration-300 ${
               isAnimating ? "scale-110" : ""
             } ${mood === "happy" || mood === "excited" ? "animate-bounce" : ""}`}
             style={{
@@ -94,7 +94,7 @@ export default function TanukiPet({
               // Egg
               <div className="relative">
                 <div
-                  className="text-5xl animate-pulse"
+                  className="text-3xl sm:text-5xl animate-pulse"
                   style={{ filter: `drop-shadow(0 0 10px ${skin.colors.accent})` }}
                 >
                   🥚
@@ -110,7 +110,7 @@ export default function TanukiPet({
               // Tanuki
               <div className="relative">
                 <div
-                  className="text-5xl"
+                  className="text-3xl sm:text-5xl"
                   style={{
                     filter: stage.id >= 5 ? `drop-shadow(0 0 8px ${skin.colors.accent})` : undefined,
                   }}

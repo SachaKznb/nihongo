@@ -50,11 +50,11 @@ const patternColors: Record<string, { bg: string; border: string; text: string }
 };
 
 const encouragementMessages = [
-  "Excellent travail ! Tu progresses a vue d'oeil !",
+  "Excellent travail ! Tu progresses à vue d'œil !",
   "Bravo ! Ces kanji n'ont plus de secrets pour toi !",
-  "Super session ! Continue comme ca !",
-  "Impressionnant ! Tu maitrises de mieux en mieux !",
-  "Genial ! Tes points faibles deviennent tes forces !",
+  "Super session ! Continue comme ça !",
+  "Impressionnant ! Tu maîtrises de mieux en mieux !",
+  "Génial ! Tes points faibles deviennent tes forces !",
 ];
 
 export default function StudyPage() {
@@ -132,7 +132,7 @@ export default function StudyPage() {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 text-white text-center shadow-2xl">
           <div className="text-7xl mb-4 animate-bounce">🎉</div>
-          <h1 className="text-3xl font-bold font-display mb-2">Session terminee !</h1>
+          <h1 className="text-3xl font-bold font-display mb-2">Session terminée !</h1>
           <p className="text-emerald-100 text-lg mb-6">{randomMessage}</p>
 
           {/* XP Reward */}
@@ -159,7 +159,7 @@ export default function StudyPage() {
               onClick={handleCloseCompletion}
               className="px-6 py-3 bg-emerald-400/30 text-white font-semibold rounded-xl hover:bg-emerald-400/40 transition-colors"
             >
-              Continuer l&apos;etude
+              Continuer l&apos;étude
             </button>
           </div>
         </div>
@@ -168,7 +168,7 @@ export default function StudyPage() {
         <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
           <p className="text-amber-800 text-sm">
             💡 <strong>Conseil :</strong> Reviens demain pour consolider ces acquis.
-            La repetition espacee est la cle de la memorisation !
+            La répétition espacée est la clé de la mémorisation !
           </p>
         </div>
       </div>
@@ -187,49 +187,49 @@ export default function StudyPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-4 sm:space-y-8">
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
         <Link
           href="/dashboard"
-          className="p-2 hover:bg-stone-100 rounded-xl transition-colors"
+          className="p-2 hover:bg-stone-100 rounded-xl transition-colors flex-shrink-0"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-stone-500">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
           </svg>
         </Link>
         <div>
-          <h1 className="text-3xl font-bold font-display text-stone-900">Etude ciblee</h1>
-          <p className="text-stone-500">Renforce tes points faibles avec des sessions personnalisees</p>
+          <h1 className="text-2xl sm:text-3xl font-bold font-display text-stone-900">Étude ciblée</h1>
+          <p className="text-sm sm:text-base text-stone-500">Renforce tes points faibles</p>
         </div>
       </div>
 
       {/* XP Reward Banner */}
-      <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl p-4 text-white flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-3xl">⚡</span>
+      <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-white">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <span className="text-2xl sm:text-3xl">⚡</span>
           <div>
-            <p className="font-semibold">Gagne des XP bonus !</p>
-            <p className="text-emerald-100 text-sm">5 XP par element + 20 XP bonus par session</p>
+            <p className="font-semibold text-sm sm:text-base">Gagne des XP bonus !</p>
+            <p className="text-emerald-100 text-xs sm:text-sm">5 XP/élément + 20 XP bonus</p>
           </div>
         </div>
       </div>
 
       {suggestions.length === 0 ? (
-        <div className="bg-white rounded-3xl border border-stone-200 p-12 text-center">
-          <span className="text-6xl mb-4 block">🎉</span>
-          <h2 className="text-xl font-bold font-display text-stone-900 mb-2">
-            Aucun point faible detecte
+        <div className="bg-white rounded-2xl sm:rounded-3xl border border-stone-200 p-6 sm:p-12 text-center">
+          <span className="text-4xl sm:text-6xl mb-3 sm:mb-4 block">🎉</span>
+          <h2 className="text-lg sm:text-xl font-bold font-display text-stone-900 mb-2">
+            Aucun point faible détecté
           </h2>
-          <p className="text-stone-500 mb-6 max-w-md mx-auto">
-            Continue tes revisions ! Une fois que tu auras fait quelques erreurs,
-            je pourrai t&apos;aider a cibler tes difficultes.
+          <p className="text-sm sm:text-base text-stone-500 mb-4 sm:mb-6 max-w-md mx-auto">
+            Continue tes révisions ! Une fois que tu auras fait quelques erreurs,
+            je pourrai t&apos;aider à cibler tes difficultés.
           </p>
           <Link
             href="/reviews"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors text-sm sm:text-base"
           >
-            <span>Commencer les revisions</span>
+            <span>Commencer les révisions</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
@@ -245,47 +245,51 @@ export default function StudyPage() {
             return (
               <div
                 key={suggestion.id}
-                className={`${colors.bg} rounded-3xl border-2 ${colors.border} p-6 transition-all hover:shadow-lg cursor-pointer`}
+                className={`${colors.bg} rounded-2xl sm:rounded-3xl border-2 ${colors.border} p-4 sm:p-6 transition-all hover:shadow-lg cursor-pointer`}
                 onClick={() => setSelectedSession(suggestion)}
               >
-                <div className="flex items-start gap-4">
-                  <div className="text-4xl">{emoji}</div>
+                <div className="flex items-start gap-3 sm:gap-4">
+                  <div className="text-2xl sm:text-4xl">{emoji}</div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-lg font-bold font-display text-stone-900">
+                    {/* Title and play button row */}
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <h3 className="text-base sm:text-lg font-bold font-display text-stone-900">
                         {suggestion.title}
                       </h3>
-                      <div className="flex items-center gap-3 text-sm">
-                        <span className="text-stone-500">{suggestion.itemCount} elements</span>
-                        <span className="text-stone-300">•</span>
-                        <span className="text-stone-500">{suggestion.estimatedTime}</span>
-                        <span className="text-stone-300">•</span>
-                        <span className="text-emerald-600 font-medium">+{potentialXp} XP</span>
+                      <div className={`p-2 sm:p-3 rounded-xl ${colors.bg} flex-shrink-0`}>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-4 h-4 sm:w-6 sm:h-6 ${colors.text}`}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                        </svg>
                       </div>
                     </div>
-                    <p className="text-stone-600 mb-4">{suggestion.description}</p>
+
+                    {/* Stats row - stacked on mobile */}
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm mb-2 sm:mb-3">
+                      <span className="text-stone-500">{suggestion.itemCount} éléments</span>
+                      <span className="text-stone-300 hidden sm:inline">•</span>
+                      <span className="text-stone-500">{suggestion.estimatedTime}</span>
+                      <span className="text-stone-300 hidden sm:inline">•</span>
+                      <span className="text-emerald-600 font-medium">+{potentialXp} XP</span>
+                    </div>
+
+                    <p className="text-sm sm:text-base text-stone-600 mb-3 sm:mb-4">{suggestion.description}</p>
 
                     {/* Preview items */}
-                    <div className="flex flex-wrap gap-2">
-                      {suggestion.items.slice(0, 8).map((item, i) => (
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      {suggestion.items.slice(0, 6).map((item, i) => (
                         <span
                           key={i}
-                          className="inline-flex items-center px-3 py-1.5 bg-white border border-stone-200 rounded-lg font-japanese text-lg"
+                          className="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 bg-white border border-stone-200 rounded-lg font-japanese text-base sm:text-lg"
                         >
                           {item.character}
                         </span>
                       ))}
-                      {suggestion.items.length > 8 && (
-                        <span className="inline-flex items-center px-3 py-1.5 text-sm text-stone-400">
-                          +{suggestion.items.length - 8}
+                      {suggestion.items.length > 6 && (
+                        <span className="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm text-stone-400">
+                          +{suggestion.items.length - 6}
                         </span>
                       )}
                     </div>
-                  </div>
-                  <div className={`p-3 rounded-xl ${colors.bg}`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className={`w-6 h-6 ${colors.text}`}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-                    </svg>
                   </div>
                 </div>
               </div>
@@ -295,16 +299,14 @@ export default function StudyPage() {
       )}
 
       {/* Tips section */}
-      <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">💡</span>
+      <div className="bg-indigo-50 border border-indigo-100 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+        <div className="flex items-start gap-2 sm:gap-3">
+          <span className="text-xl sm:text-2xl">💡</span>
           <div>
-            <h3 className="font-bold text-indigo-900 mb-1">Comment ca marche ?</h3>
-            <p className="text-sm text-indigo-700 leading-relaxed">
-              L&apos;etude ciblee analyse tes erreurs recurrentes et te propose des sessions
-              focalisees sur tes points faibles. Chaque session te montre les elements
-              que tu confonds le plus souvent, avec des explications pour t&apos;aider a
-              les differencier.
+            <h3 className="font-bold text-indigo-900 mb-1 text-sm sm:text-base">Comment ça marche ?</h3>
+            <p className="text-xs sm:text-sm text-indigo-700 leading-relaxed">
+              L&apos;étude ciblée analyse tes erreurs récurrentes et te propose des sessions
+              focalisées sur tes points faibles.
             </p>
           </div>
         </div>
@@ -488,7 +490,7 @@ function StudySession({
           <button
             onClick={handlePlayAudio}
             className="absolute bottom-4 right-4 p-3 bg-white/20 hover:bg-white/30 rounded-full transition-colors"
-            title="Ecouter la prononciation"
+            title="Écouter la prononciation"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
@@ -526,7 +528,7 @@ function StudySession({
                     <button
                       onClick={handlePlayAudio}
                       className="text-indigo-600 hover:text-indigo-700 transition-colors"
-                      title="Ecouter"
+                      title="Écouter"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
@@ -558,7 +560,7 @@ function StudySession({
                 <div className="bg-indigo-50 rounded-xl p-4">
                   <h4 className="text-sm font-medium text-indigo-600 uppercase tracking-wide mb-2 flex items-center gap-2">
                     <span>💡</span>
-                    Mnemonique (sens)
+                    Mnémonique (sens)
                   </h4>
                   <p className="text-indigo-900 text-sm leading-relaxed">
                     {getMnemonic()}
@@ -571,7 +573,7 @@ function StudySession({
                 <div className="bg-purple-50 rounded-xl p-4">
                   <h4 className="text-sm font-medium text-purple-600 uppercase tracking-wide mb-2 flex items-center gap-2">
                     <span>🎵</span>
-                    Mnemonique (lecture)
+                    Mnémonique (lecture)
                   </h4>
                   <p className="text-purple-900 text-sm leading-relaxed">
                     {getReadingMnemonic()}
@@ -582,13 +584,13 @@ function StudySession({
           ) : (
             <div className="text-center py-8">
               <p className="text-stone-500 mb-4">
-                Essaie de te rappeler la signification et les lectures de ce caractere
+                Essaie de te rappeler la signification et les lectures de ce caractère
               </p>
               <button
                 onClick={() => setShowAnswer(true)}
                 className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors"
               >
-                Voir la reponse
+                Voir la réponse
               </button>
             </div>
           )}
@@ -606,7 +608,7 @@ function StudySession({
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
-            <span>Precedent</span>
+            <span>Précédent</span>
           </button>
           <button
             onClick={handleNext}
@@ -631,7 +633,7 @@ function StudySession({
       {/* Encouragement nudge */}
       {currentIndex > 0 && currentIndex < session.items.length - 1 && (
         <div className="text-center text-sm text-stone-400">
-          Plus que {session.items.length - currentIndex - 1} element{session.items.length - currentIndex - 1 > 1 ? "s" : ""} !
+          Plus que {session.items.length - currentIndex - 1} élément{session.items.length - currentIndex - 1 > 1 ? "s" : ""} !
         </div>
       )}
     </div>

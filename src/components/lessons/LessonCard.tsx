@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { LessonItem } from "@/types";
 import { playReading } from "@/lib/audio";
+import { ExampleSentences } from "@/components/vocabulary/ExampleSentences";
 
 interface LessonCardProps {
   item: LessonItem;
@@ -11,6 +12,7 @@ interface LessonCardProps {
   onGenerateMnemonic?: (mnemonicType: "meaning" | "reading", forceRegenerate: boolean) => Promise<void>;
   isGenerating?: boolean;
   generatingType?: "meaning" | "reading" | null;
+  showPersonalizedSentences?: boolean;
 }
 
 export function LessonCard({
@@ -20,6 +22,7 @@ export function LessonCard({
   onGenerateMnemonic,
   isGenerating = false,
   generatingType = null,
+  showPersonalizedSentences = true,
 }: LessonCardProps) {
   const [showDefaultMeaning, setShowDefaultMeaning] = useState(false);
   const [showDefaultReading, setShowDefaultReading] = useState(false);
@@ -365,6 +368,16 @@ export function LessonCard({
             <p className="text-lg font-japanese text-stone-800 mb-1">{item.sentence.jp}</p>
             <p className="text-stone-600">{item.sentence.fr}</p>
           </div>
+        )}
+
+        {/* Personalized sentences for vocabulary */}
+        {item.type === "vocabulary" && showPersonalizedSentences && (
+          <ExampleSentences
+            vocabularyId={item.id}
+            collapsible={true}
+            defaultExpanded={false}
+            showRegenerate={true}
+          />
         )}
       </div>
     </div>

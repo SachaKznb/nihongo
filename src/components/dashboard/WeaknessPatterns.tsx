@@ -18,7 +18,7 @@ const patternLabels: Record<string, { label: string; emoji: string; color: strin
     color: "text-rose-600 bg-rose-50",
   },
   reading_confusion: {
-    label: "Lectures melangees",
+    label: "Lectures mélangées",
     emoji: "🔤",
     color: "text-amber-600 bg-amber-50",
   },
@@ -80,11 +80,11 @@ export default function WeaknessPatterns() {
   const displayedPatterns = expanded ? patterns : patterns.slice(0, 2);
 
   return (
-    <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
+    <div className="bg-white rounded-3xl border border-stone-200 p-4 sm:p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-2xl">🎯</span>
-          <h3 className="font-bold font-display text-stone-900">Mes points faibles</h3>
+          <span className="text-xl sm:text-2xl">🎯</span>
+          <h3 className="font-bold font-display text-stone-900 text-sm sm:text-base">Mes points faibles</h3>
         </div>
         <button
           onClick={triggerAnalysis}
@@ -164,7 +164,7 @@ export default function WeaknessPatterns() {
           href="/study"
           className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-medium hover:bg-indigo-700 transition-colors ml-auto"
         >
-          <span>Session ciblee</span>
+          <span>Session ciblée</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>

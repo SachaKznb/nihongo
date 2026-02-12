@@ -162,7 +162,7 @@ export default function ReviewsPage() {
             onClick={() => setStarted(true)}
             className="group px-8 py-4 bg-gradient-to-r from-orange-500 to-rose-500 text-white rounded-xl font-semibold hover:shadow-2xl hover:shadow-orange-200/50 transition-all hover:-translate-y-1 inline-flex items-center gap-3"
           >
-            <span>Commencer les revisions</span>
+            <span>Commencer les révisions</span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 group-hover:translate-x-1 transition-transform">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
@@ -172,7 +172,7 @@ export default function ReviewsPage() {
         {/* Streak reminder */}
         <div className="mt-8 inline-flex items-center gap-2 text-amber-600 bg-amber-50 px-4 py-2 rounded-full">
           <span className="text-lg">🔥</span>
-          <span className="text-sm font-medium">Complete tes revisions pour maintenir ta serie !</span>
+          <span className="text-sm font-medium">Complète tes révisions pour maintenir ta série !</span>
         </div>
       </div>
     </div>
