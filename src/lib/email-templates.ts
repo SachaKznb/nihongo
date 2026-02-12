@@ -155,11 +155,17 @@ export async function getReviewsWaitingContent(username: string, reviewCount: nu
   };
 
   const headline = custom ? replaceVariables(custom.headline, vars) : "Tes revisions t'attendent !";
-  const bodyText = custom
-    ? replaceVariables(custom.bodyText, vars)
-    : `Bonjour ${username}, tu as <strong style="color: #0d9488;">${reviewCount} revision${reviewCount > 1 ? "s" : ""}</strong> en attente.\n\nPrends quelques minutes pour les completer et renforcer ta memoire. Chaque revision te rapproche de la maitrise !`;
-  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Commencer les revisions";
-  const footerText = custom?.footerText ? replaceVariables(custom.footerText, vars) : `+${reviewCount * 5} XP a gagner`;
+  const defaultBody = `Bonjour ${username},
+
+Tu as <strong style="color: #0d9488;">${reviewCount} revision${reviewCount > 1 ? "s" : ""}</strong> en attente. C'est le moment ideal pour renforcer ce que tu as appris.
+
+Le systeme de repetition espacee fonctionne mieux quand tu fais tes revisions au bon moment. Ton cerveau est pret a consolider ces kanji et vocabulaire, et quelques minutes suffisent pour ancrer ces connaissances sur le long terme.
+
+Plus tu revises regulierement, plus la memorisation devient facile. Les premiers niveaux demandent un peu d'effort, mais tu verras vite que les kanji commencent a rester naturellement.`;
+
+  const bodyText = custom ? replaceVariables(custom.bodyText, vars) : defaultBody;
+  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Faire mes revisions";
+  const footerText = custom?.footerText ? replaceVariables(custom.footerText, vars) : `${reviewCount * 5} XP t'attendent`;
 
   return `
     <h2 style="color: #1c1917; font-size: 20px; margin-bottom: 16px;">
@@ -167,12 +173,12 @@ export async function getReviewsWaitingContent(username: string, reviewCount: nu
     </h2>
 
     <p style="color: #57534e; line-height: 1.6; margin-bottom: 24px;">
-      ${bodyText.replace(/\n/g, "<br>")}
+      ${bodyText.replace(/\n\n/g, "</p><p style=\"color: #57534e; line-height: 1.6; margin-bottom: 16px;\">").replace(/\n/g, "<br>")}
     </p>
 
     <div style="background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); border-radius: 12px; padding: 20px; text-align: center; margin: 24px 0;">
       <div style="font-size: 36px; font-weight: bold; color: white;">${reviewCount}</div>
-      <div style="font-size: 14px; color: rgba(255,255,255,0.9);">revisions en attente</div>
+      <div style="font-size: 14px; color: rgba(255,255,255,0.9);">revision${reviewCount > 1 ? "s" : ""} en attente</div>
     </div>
 
     ${getButton(buttonText, `${BASE_URL}/reviews`, "#f97316")}
@@ -190,14 +196,21 @@ export async function getStreakAtRiskContent(username: string, currentStreak: nu
   const custom = await getCustomTemplate("streak_at_risk");
   const vars = { username, streak: currentStreak };
 
-  const headline = custom ? replaceVariables(custom.headline, vars) : `Ne perds pas ta serie de ${currentStreak} jours !`;
-  const bodyText = custom
-    ? replaceVariables(custom.bodyText, vars)
-    : `Bonjour ${username}, tu n'as pas encore etudie aujourd'hui. Complete au moins une revision pour maintenir ta serie !`;
-  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Proteger ma serie";
+  const headline = custom ? replaceVariables(custom.headline, vars) : `Ta serie de ${currentStreak} jours est en danger`;
+
+  const defaultBody = `Bonjour ${username},
+
+Tu as construit une serie de ${currentStreak} jours consecutifs d'apprentissage. C'est un vrai accomplissement, et ca serait dommage de la perdre maintenant.
+
+Une seule revision suffit pour maintenir ta serie. Ca prend moins de deux minutes, et tu gardes tout l'elan que tu as accumule.
+
+La regularite est la cle pour apprendre le japonais. Chaque jour compte, meme les jours ou tu n'as pas beaucoup de temps. Fais une revision rapide et ta serie continue.`;
+
+  const bodyText = custom ? replaceVariables(custom.bodyText, vars) : defaultBody;
+  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Sauver ma serie";
   const footerText = custom?.footerText
     ? replaceVariables(custom.footerText, vars)
-    : "Ta serie sera perdue demain si tu n'etudies pas aujourd'hui !";
+    : "Ta serie sera remise a zero demain matin si tu ne fais pas au moins une revision aujourd'hui.";
 
   return `
     <h2 style="color: #1c1917; font-size: 20px; margin-bottom: 16px;">
@@ -205,13 +218,13 @@ export async function getStreakAtRiskContent(username: string, currentStreak: nu
     </h2>
 
     <p style="color: #57534e; line-height: 1.6; margin-bottom: 24px;">
-      ${bodyText.replace(/\n/g, "<br>")}
+      ${bodyText.replace(/\n\n/g, "</p><p style=\"color: #57534e; line-height: 1.6; margin-bottom: 16px;\">").replace(/\n/g, "<br>")}
     </p>
 
     <div style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0;">
       <div style="font-size: 48px; margin-bottom: 8px;">&#128293;</div>
       <div style="font-size: 36px; font-weight: bold; color: white;">${currentStreak}</div>
-      <div style="font-size: 14px; color: rgba(255,255,255,0.9);">jours de serie</div>
+      <div style="font-size: 14px; color: rgba(255,255,255,0.9);">jours consecutifs</div>
     </div>
 
     ${getButton(buttonText, `${BASE_URL}/reviews`, "#ea580c")}
@@ -229,11 +242,18 @@ export async function getLevelUpContent(username: string, newLevel: number): Pro
   const custom = await getCustomTemplate("level_up");
   const vars = { username, level: newLevel };
 
-  const headline = custom ? replaceVariables(custom.headline, vars) : `Felicitations ! Tu passes au niveau ${newLevel} !`;
-  const bodyText = custom
-    ? replaceVariables(custom.bodyText, vars)
-    : `Bravo ${username} ! Tu as maitrise suffisamment de kanji pour debloquer le niveau ${newLevel}. De nouveaux radicaux, kanji et vocabulaire t'attendent !`;
-  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Decouvrir les nouvelles lecons";
+  const headline = custom ? replaceVariables(custom.headline, vars) : `Niveau ${newLevel} debloque`;
+
+  const defaultBody = `Felicitations ${username},
+
+Tu viens de passer au niveau ${newLevel}. Tu as prouve que tu maitrises les kanji du niveau precedent, et c'est une vraie progression.
+
+De nouveaux radicaux, kanji et vocabulaire sont maintenant disponibles dans tes lecons. Ces nouveaux elements s'appuient sur ce que tu connais deja, donc tu vas voir des connexions avec ce que tu as appris.
+
+Continue a ton rythme. L'important n'est pas d'aller vite, mais d'aller regulierement. Chaque niveau te rapproche de la lecture fluide du japonais.`;
+
+  const bodyText = custom ? replaceVariables(custom.bodyText, vars) : defaultBody;
+  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Voir les nouvelles lecons";
 
   return `
     <h2 style="color: #1c1917; font-size: 20px; margin-bottom: 16px;">
@@ -241,7 +261,7 @@ export async function getLevelUpContent(username: string, newLevel: number): Pro
     </h2>
 
     <p style="color: #57534e; line-height: 1.6; margin-bottom: 24px;">
-      ${bodyText.replace(/\n/g, "<br>")}
+      ${bodyText.replace(/\n\n/g, "</p><p style=\"color: #57534e; line-height: 1.6; margin-bottom: 16px;\">").replace(/\n/g, "<br>")}
     </p>
 
     <div style="background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%); border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0;">
@@ -269,28 +289,44 @@ export async function getReengagementContent(
   let defaultMessage: string;
   let emoji: string;
 
-  if (daysInactive <= 3) {
-    defaultHeadline = "Tu nous manques !";
-    defaultMessage = `Ca fait ${daysInactive} jours qu'on ne t'a pas vu. Reviens faire quelques revisions pour ne pas perdre tes acquis.`;
+  if (daysInactive <= 5) {
+    defaultHeadline = "Tes kanji t'attendent";
+    defaultMessage = `Bonjour ${username},
+
+Ca fait ${daysInactive} jours que tu n'as pas fait de revisions. Tes kanji et vocabulaire sont encore frais dans ta memoire, mais ils commencent a s'estomper.
+
+Le systeme de repetition espacee fonctionne mieux avec une pratique reguliere. Quelques minutes maintenant te permettront de garder tout ce que tu as appris.
+
+${pendingReviews > 0 ? `Tu as ${pendingReviews} revisions en attente. C'est le bon moment pour les faire.` : "Reviens faire quelques revisions pour maintenir tes acquis."}`;
     emoji = "&#128075;"; // waving hand
-  } else if (daysInactive <= 7) {
-    defaultHeadline = "Ta memoire a besoin de toi";
-    defaultMessage = `Ca fait une semaine ! Tes connaissances commencent a s'effacer. Quelques minutes suffisent pour les rafraichir.`;
+  } else if (daysInactive <= 14) {
+    defaultHeadline = "Ta progression t'attend";
+    defaultMessage = `Bonjour ${username},
+
+Ca fait ${daysInactive} jours. Les kanji que tu as appris commencent a s'effacer de ta memoire, mais tout n'est pas perdu.
+
+Reprendre maintenant te permettra de recuperer une grande partie de ce que tu as appris. Le cerveau oublie progressivement, mais il se souvient aussi vite quand on revise.
+
+${pendingReviews > 0 ? `${pendingReviews} revisions t'attendent. Commence par quelques-unes, sans pression.` : "Fais quelques revisions pour reactiver ta memoire."}`;
     emoji = "&#129504;"; // brain
   } else {
-    defaultHeadline = "Reprenons ensemble";
-    defaultMessage = `Ca fait ${daysInactive} jours. Pas d'inquietude, on peut reprendre doucement. Tes kanji t'attendent patiemment.`;
+    defaultHeadline = "Reprendre le japonais";
+    defaultMessage = `Bonjour ${username},
+
+Ca fait un moment qu'on ne t'a pas vu. Apprendre une langue demande de la regularite, et parfois on fait une pause plus longue que prevu.
+
+La bonne nouvelle, c'est que tu peux reprendre a ton rythme. Les premiers jours de reprise seront peut-etre un peu plus difficiles, mais ta memoire va vite se reactiver.
+
+${pendingReviews > 0 ? `Tu as ${pendingReviews} revisions en attente. Pas besoin de tout faire d'un coup. Commence doucement.` : "Reviens quand tu es pret, tes kanji t'attendent."}`;
     emoji = "&#127793;"; // seedling
   }
 
   const headline = custom ? replaceVariables(custom.headline, vars) : defaultHeadline;
-  const bodyText = custom
-    ? replaceVariables(custom.bodyText, vars)
-    : `Bonjour ${username}, ${defaultMessage}`;
-  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Reprendre l'apprentissage";
+  const bodyText = custom ? replaceVariables(custom.bodyText, vars) : defaultMessage;
+  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Reprendre mes revisions";
   const footerText = custom?.footerText
     ? replaceVariables(custom.footerText, vars)
-    : "Meme 5 minutes par jour font une grande difference !";
+    : "Meme 5 minutes par jour font une vraie difference sur le long terme.";
 
   return `
     <h2 style="color: #1c1917; font-size: 20px; margin-bottom: 16px;">
@@ -298,12 +334,12 @@ export async function getReengagementContent(
     </h2>
 
     <p style="color: #57534e; line-height: 1.6; margin-bottom: 24px;">
-      ${bodyText.replace(/\n/g, "<br>")}
+      ${bodyText.replace(/\n\n/g, "</p><p style=\"color: #57534e; line-height: 1.6; margin-bottom: 16px;\">").replace(/\n/g, "<br>")}
     </p>
 
     <div style="background: #f5f5f4; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0;">
       <div style="font-size: 48px; margin-bottom: 12px;">${emoji}</div>
-      ${pendingReviews > 0 ? `<div style="font-size: 16px; color: #57534e;"><strong>${pendingReviews}</strong> revisions t'attendent</div>` : ""}
+      ${pendingReviews > 0 ? `<div style="font-size: 16px; color: #57534e;"><strong>${pendingReviews}</strong> revisions en attente</div>` : ""}
     </div>
 
     ${getButton(buttonText, `${BASE_URL}/dashboard`, "#0d9488")}
@@ -342,14 +378,39 @@ export async function getWeeklySummaryContent(
     items: totalItemsLearned,
   };
 
-  const headline = custom ? replaceVariables(custom.headline, vars) : "Ton resume de la semaine";
-  const bodyText = custom
-    ? replaceVariables(custom.bodyText, vars)
-    : `Bonjour ${username}, voici ce que tu as accompli cette semaine !`;
-  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Continuer l'apprentissage";
+  const headline = custom ? replaceVariables(custom.headline, vars) : "Ta semaine en japonais";
+
+  let progressComment = "";
+  if (stats.accuracy >= 90) {
+    progressComment = "Ta precision est excellente cette semaine. Les kanji rentrent bien.";
+  } else if (stats.accuracy >= 75) {
+    progressComment = "Bonne semaine de travail. Quelques erreurs, mais c'est comme ca qu'on apprend.";
+  } else if (stats.reviewsCompleted > 0) {
+    progressComment = "Tu as fait des revisions cette semaine, c'est l'essentiel. La precision viendra avec la pratique.";
+  }
+
+  let streakComment = "";
+  if (stats.currentStreak >= 30) {
+    streakComment = `${stats.currentStreak} jours de serie, c'est impressionnant. Cette regularite fait vraiment la difference.`;
+  } else if (stats.currentStreak >= 7) {
+    streakComment = `${stats.currentStreak} jours consecutifs. Tu as pris un bon rythme.`;
+  } else if (stats.currentStreak > 0) {
+    streakComment = `Serie de ${stats.currentStreak} jour${stats.currentStreak > 1 ? "s" : ""}. Continue a construire cette habitude.`;
+  }
+
+  const defaultBody = `Bonjour ${username},
+
+Voici ton resume de la semaine. ${stats.reviewsCompleted > 0 ? `Tu as complete ${stats.reviewsCompleted} revision${stats.reviewsCompleted > 1 ? "s" : ""}` : ""}${stats.lessonsCompleted > 0 ? ` et appris ${stats.lessonsCompleted} nouvelle${stats.lessonsCompleted > 1 ? "s" : ""} lecon${stats.lessonsCompleted > 1 ? "s" : ""}` : ""}.
+
+${progressComment}
+
+${streakComment}`;
+
+  const bodyText = custom ? replaceVariables(custom.bodyText, vars) : defaultBody;
+  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Continuer";
   const footerText = custom?.footerText
     ? replaceVariables(custom.footerText, vars)
-    : "Continue comme ca, tu progresses bien !";
+    : "A la semaine prochaine pour un nouveau bilan.";
 
   return `
     <h2 style="color: #1c1917; font-size: 20px; margin-bottom: 16px;">
@@ -357,7 +418,7 @@ export async function getWeeklySummaryContent(
     </h2>
 
     <p style="color: #57534e; line-height: 1.6; margin-bottom: 24px;">
-      ${bodyText.replace(/\n/g, "<br>")}
+      ${bodyText.replace(/\n\n/g, "</p><p style=\"color: #57534e; line-height: 1.6; margin-bottom: 16px;\">").replace(/\n/g, "<br>")}
     </p>
 
     <div style="background: linear-gradient(135deg, #0d9488 0%, #10b981 100%); border-radius: 12px; padding: 24px; margin: 24px 0;">
