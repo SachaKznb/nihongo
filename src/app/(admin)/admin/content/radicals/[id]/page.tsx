@@ -11,18 +11,18 @@ interface Level {
 
 interface Kanji {
   kanji: {
-    id: string;
+    id: number;
     character: string;
-    meaning: string;
+    meaningsFr: string[];
   };
 }
 
 interface Radical {
-  id: string;
+  id: number;
   character: string | null;
-  meaning: string;
-  meaningMnemonic: string | null;
-  image: string | null;
+  meaningFr: string;
+  mnemonic: string;
+  imageUrl: string | null;
   level: Level;
   kanji: Kanji[];
 }
@@ -38,10 +38,10 @@ export default function AdminRadicalEditPage({ params }: { params: Promise<{ id:
   const [error, setError] = useState("");
 
   const [character, setCharacter] = useState("");
-  const [meaning, setMeaning] = useState("");
-  const [meaningMnemonic, setMeaningMnemonic] = useState("");
-  const [image, setImage] = useState("");
-  const [levelId, setLevelId] = useState("");
+  const [meaningFr, setMeaningFr] = useState("");
+  const [mnemonic, setMnemonic] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [levelId, setLevelId] = useState<number | "">("");
 
   useEffect(() => {
     Promise.all([fetchRadical(), fetchLevels()]);
@@ -54,9 +54,9 @@ export default function AdminRadicalEditPage({ params }: { params: Promise<{ id:
         const data = await res.json();
         setRadical(data.radical);
         setCharacter(data.radical.character || "");
-        setMeaning(data.radical.meaning);
-        setMeaningMnemonic(data.radical.meaningMnemonic || "");
-        setImage(data.radical.image || "");
+        setMeaningFr(data.radical.meaningFr);
+        setMnemonic(data.radical.mnemonic || "");
+        setImageUrl(data.radical.imageUrl || "");
         setLevelId(data.radical.level.id);
       } else if (res.status === 404) {
         router.push("/admin/content/radicals");
@@ -91,9 +91,9 @@ export default function AdminRadicalEditPage({ params }: { params: Promise<{ id:
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           character: character || null,
-          meaning,
-          meaningMnemonic: meaningMnemonic || null,
-          image: image || null,
+          meaningFr,
+          mnemonic: mnemonic || null,
+          imageUrl: imageUrl || null,
           levelId,
         }),
       });
@@ -192,7 +192,7 @@ export default function AdminRadicalEditPage({ params }: { params: Promise<{ id:
               </label>
               <select
                 value={levelId}
-                onChange={(e) => setLevelId(e.target.value)}
+                onChange={(e) => setLevelId(parseInt(e.target.value))}
                 required
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               >
@@ -210,8 +210,8 @@ export default function AdminRadicalEditPage({ params }: { params: Promise<{ id:
               </label>
               <input
                 type="text"
-                value={meaning}
-                onChange={(e) => setMeaning(e.target.value)}
+                value={meaningFr}
+                onChange={(e) => setMeaningFr(e.target.value)}
                 required
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 placeholder="Sol, terre"
@@ -224,8 +224,8 @@ export default function AdminRadicalEditPage({ params }: { params: Promise<{ id:
               </label>
               <input
                 type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 placeholder="/radicals/ground.svg"
               />
@@ -241,8 +241,8 @@ export default function AdminRadicalEditPage({ params }: { params: Promise<{ id:
               Mnemonique de signification
             </label>
             <textarea
-              value={meaningMnemonic}
-              onChange={(e) => setMeaningMnemonic(e.target.value)}
+              value={mnemonic}
+              onChange={(e) => setMnemonic(e.target.value)}
               rows={4}
               className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               placeholder="Une histoire pour retenir la signification..."
@@ -264,7 +264,7 @@ export default function AdminRadicalEditPage({ params }: { params: Promise<{ id:
                   className="px-3 py-2 bg-stone-100 hover:bg-amber-100 rounded-lg text-center"
                 >
                   <span className="text-xl">{kanji.character}</span>
-                  <span className="text-xs text-stone-500 ml-2">{kanji.meaning}</span>
+                  <span className="text-xs text-stone-500 ml-2">{kanji.meaningsFr[0]}</span>
                 </Link>
               ))}
             </div>

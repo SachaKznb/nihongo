@@ -16,10 +16,10 @@ export default function AdminNewRadicalPage() {
   const [error, setError] = useState("");
 
   const [character, setCharacter] = useState("");
-  const [meaning, setMeaning] = useState("");
-  const [meaningMnemonic, setMeaningMnemonic] = useState("");
-  const [image, setImage] = useState("");
-  const [levelId, setLevelId] = useState("");
+  const [meaningFr, setMeaningFr] = useState("");
+  const [mnemonic, setMnemonic] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [levelId, setLevelId] = useState<number | "">("");
 
   useEffect(() => {
     fetchLevels();
@@ -51,9 +51,9 @@ export default function AdminNewRadicalPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           character: character || undefined,
-          meaning,
-          meaningMnemonic: meaningMnemonic || undefined,
-          image: image || undefined,
+          meaningFr,
+          mnemonic: mnemonic || undefined,
+          imageUrl: imageUrl || undefined,
           levelId,
         }),
       });
@@ -117,7 +117,7 @@ export default function AdminNewRadicalPage() {
               </label>
               <select
                 value={levelId}
-                onChange={(e) => setLevelId(e.target.value)}
+                onChange={(e) => setLevelId(parseInt(e.target.value))}
                 required
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               >
@@ -135,8 +135,8 @@ export default function AdminNewRadicalPage() {
               </label>
               <input
                 type="text"
-                value={meaning}
-                onChange={(e) => setMeaning(e.target.value)}
+                value={meaningFr}
+                onChange={(e) => setMeaningFr(e.target.value)}
                 required
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 placeholder="Sol, terre"
@@ -149,8 +149,8 @@ export default function AdminNewRadicalPage() {
               </label>
               <input
                 type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 placeholder="/radicals/ground.svg"
               />
@@ -166,8 +166,8 @@ export default function AdminNewRadicalPage() {
               Mnemonique de signification
             </label>
             <textarea
-              value={meaningMnemonic}
-              onChange={(e) => setMeaningMnemonic(e.target.value)}
+              value={mnemonic}
+              onChange={(e) => setMnemonic(e.target.value)}
               rows={4}
               className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               placeholder="Une histoire pour retenir la signification..."
