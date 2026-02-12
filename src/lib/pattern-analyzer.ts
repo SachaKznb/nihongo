@@ -297,48 +297,76 @@ async function generatePatternDescription(
     )
   );
 
-  const mistakeDetails = relevantMistakes
-    .map(
-      (m) =>
-        `- ${m.character} (${m.itemType}): reponses "${m.wrongAnswers.slice(0, 3).join('", "')}" au lieu de "${m.correctAnswers.join('", "')}"`
-    )
-    .join("\n");
+  // Build detailed confusion pairs for visual confusion
+  let promptContent = "";
 
-  let patternContext = "";
-  switch (pattern.patternType) {
-    case "visual_confusion":
-      patternContext =
-        "L'eleve confond des caracteres qui se ressemblent visuellement.";
-      break;
-    case "reading_confusion":
-      patternContext =
-        "L'eleve a du mal avec les lectures (on'yomi/kun'yomi) de certains caracteres.";
-      break;
-    case "translation_nuance":
-      patternContext =
-        "L'eleve confond des nuances de traduction en francais.";
-      break;
+  if (pattern.patternType === "visual_confusion") {
+    // Find actual confusion pairs (A answered with B's meaning)
+    const confusionPairs: string[] = [];
+    for (let i = 0; i < relevantMistakes.length; i++) {
+      for (let j = i + 1; j < relevantMistakes.length; j++) {
+        const a = relevantMistakes[i];
+        const b = relevantMistakes[j];
+
+        const aConfusedWithB = a.wrongAnswers.some((wa) =>
+          b.correctAnswers.some((cb) => wa.toLowerCase().includes(cb.toLowerCase()) || cb.toLowerCase().includes(wa.toLowerCase()))
+        );
+        const bConfusedWithA = b.wrongAnswers.some((wb) =>
+          a.correctAnswers.some((ca) => wb.toLowerCase().includes(ca.toLowerCase()) || ca.toLowerCase().includes(wb.toLowerCase()))
+        );
+
+        if (aConfusedWithB || bConfusedWithA) {
+          confusionPairs.push(
+            `${a.character} (${a.correctAnswers[0]}) <-> ${b.character} (${b.correctAnswers[0]})`
+          );
+        }
+      }
+    }
+
+    promptContent = `L'eleve confond ces paires de kanji visuellement similaires:
+${confusionPairs.length > 0 ? confusionPairs.slice(0, 3).join("\n") : relevantMistakes.slice(0, 4).map(m => `${m.character} (${m.correctAnswers[0]})`).join(", ")}
+
+Pour chaque paire, donne UNE difference visuelle CONCRETE et SPECIFIQUE (ex: "大 a un trait horizontal en plus que 犬" ou "水 a des gouttes sur les cotes, 氷 a un point en haut").`;
+
+  } else if (pattern.patternType === "reading_confusion") {
+    const readingDetails = relevantMistakes.slice(0, 4).map((m) => {
+      const wrongReadings = [...new Set(m.wrongAnswers)].slice(0, 2).join(", ");
+      return `${m.character}: a ecrit "${wrongReadings}" au lieu de "${m.correctAnswers.slice(0, 2).join("/")}"`;
+    });
+
+    promptContent = `L'eleve se trompe sur les lectures de ces kanji:
+${readingDetails.join("\n")}
+
+Identifie le pattern specifique (confond on'yomi/kun'yomi? melange des lectures similaires?) et donne UN conseil CONCRET pour ces kanji precis.`;
+
+  } else if (pattern.patternType === "translation_nuance") {
+    const translationDetails = relevantMistakes.slice(0, 4).map((m) => {
+      const wrongAnswers = [...new Set(m.wrongAnswers)].slice(0, 2).join(", ");
+      return `${m.character}: a repondu "${wrongAnswers}" au lieu de "${m.correctAnswers[0]}"`;
+    });
+
+    promptContent = `L'eleve confond ces nuances de sens:
+${translationDetails.join("\n")}
+
+Explique la difference de sens PRECISE entre ce que l'eleve a repondu et la bonne reponse. Par exemple, si il confond "grand" et "gros", explique quand utiliser chaque terme en japonais.`;
   }
 
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-20250514",
-    max_tokens: 150,
-    system: `Tu es un tuteur de japonais bienveillant. Tu analyses les erreurs d'un eleve francophone pour lui donner un conseil personnalise.
+    max_tokens: 200,
+    system: `Tu es un tuteur de japonais expert. Tu donnes des conseils ULTRA-SPECIFIQUES bases sur les erreurs exactes de l'eleve.
 
-REGLES:
-1. Ecris en francais
-2. Maximum 2-3 phrases
-3. Sois encourageant, pas condescendant
-4. Donne un conseil pratique et memorable`,
+REGLES STRICTES:
+1. NE DIS JAMAIS "cree des mnemoniques" ou "utilise des associations" - l'app a deja des mnemoniques
+2. Donne des differences CONCRETES et VISUELLES specifiques aux kanji mentionnes
+3. Maximum 2-3 phrases, va droit au but
+4. Commence directement par le conseil, pas de "Je vois que..." ou "Tu sembles..."
+5. Utilise les caracteres japonais dans ta reponse pour illustrer
+6. Sois precis: "le trait du haut" > "les elements"`,
     messages: [
       {
         role: "user",
-        content: `${patternContext}
-
-Erreurs detectees:
-${mistakeDetails}
-
-Ecris une courte explication de ce pattern et un conseil pour s'ameliorer.`,
+        content: promptContent,
       },
     ],
   });
@@ -379,19 +407,20 @@ export async function analyzeUserPatterns(userId: string): Promise<WeaknessPatte
       pattern.description = await generatePatternDescription(pattern, mistakes);
     } catch (err) {
       console.error("Failed to generate pattern description:", err);
-      // Use fallback descriptions
+      // Use fallback descriptions with specific characters
+      const chars = pattern.affectedItems.slice(0, 4).map(i => i.character).join(", ");
       switch (pattern.patternType) {
         case "visual_confusion":
           pattern.description =
-            "Tu confonds parfois des kanji qui se ressemblent. Concentre-toi sur les petites differences.";
+            `Compare attentivement les traits de ${chars}. Cherche le detail qui les differencie (un point, un trait horizontal, une courbe).`;
           break;
         case "reading_confusion":
           pattern.description =
-            "Les lectures de certains kanji te posent probleme. Revise les lectures on'yomi et kun'yomi separement.";
+            `Pour ${chars}, verifie si tu melanges les lectures on'yomi et kun'yomi. Revois chaque lecture individuellement.`;
           break;
         case "translation_nuance":
           pattern.description =
-            "Certaines nuances de traduction te echappent. Essaie de memoriser le contexte d'utilisation.";
+            `Les sens de ${chars} sont proches mais distincts. Relis les exemples de phrases pour comprendre le contexte d'usage.`;
           break;
       }
     }
