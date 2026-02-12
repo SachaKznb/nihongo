@@ -5,6 +5,8 @@ import {
   sendStreakReminders,
   sendWeeklySummaries,
   onLevelUp,
+  aggregateDailyStats,
+  resetWeeklyXp,
 } from "@/lib/inngest/functions";
 
 // Export the Inngest serve handler
@@ -15,5 +17,7 @@ export const { GET, POST, PUT } = serve({
     sendStreakReminders,
     sendWeeklySummaries,
     onLevelUp,
+    aggregateDailyStats,
+    resetWeeklyXp,
   ],
 });

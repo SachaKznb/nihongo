@@ -78,6 +78,9 @@ model User {
   // Level-Aware Sentences setting
   levelAwareSentencesEnabled  Boolean   @default(true)
 
+  // Leaderboard & Analytics
+  leaderboardOptIn  Boolean   @default(false)
+
   // Progress relations
   radicalProgress    UserRadicalProgress[]
   kanjiProgress      UserKanjiProgress[]
@@ -95,6 +98,10 @@ model User {
 
   // Level-Aware Sentences cache
   sentenceCache      UserSentenceCache[]
+
+  // Analytics relations
+  levelHistory       UserLevelHistory[]
+  dailyStats         UserDailyStats[]
 
   // Admin audit relations
   adminActions AdminAuditLog[] @relation("AdminPerformer")
@@ -427,4 +434,36 @@ model UserSentenceCache {
   @@unique([userId, vocabularyId])
   @@index([userId])
   @@index([vocabularyId])
+}
+
+// Track user level-up history for progress visualization
+model UserLevelHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  level     Int
+  reachedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([reachedAt])
+}
+
+// Daily aggregated stats for analytics charts (reduces query load)
+model UserDailyStats {
+  id               String   @id @default(cuid())
+  userId           String
+  date             DateTime @db.Date
+  reviewsCompleted Int      @default(0)
+  lessonsCompleted Int      @default(0)
+  correctCount     Int      @default(0)
+  incorrectCount   Int      @default(0)
+  xpEarned         Int      @default(0)
+  studyTimeMinutes Int      @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId])
+  @@index([date])
 }

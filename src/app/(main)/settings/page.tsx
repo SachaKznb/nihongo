@@ -13,6 +13,7 @@ interface UserSettings {
   reviewBatchSize: number;
   autoplayAudio: boolean;
   levelAwareSentencesEnabled: boolean;
+  leaderboardOptIn: boolean;
 }
 
 interface NotificationPreferences {
@@ -53,6 +54,7 @@ export default function SettingsPage() {
     reviewBatchSize: 10,
     autoplayAudio: true,
     levelAwareSentencesEnabled: true,
+    leaderboardOptIn: false,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -539,6 +541,39 @@ export default function SettingsPage() {
                   <span
                     className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
                       settings.levelAwareSentencesEnabled ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Confidentialite</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium text-gray-900">Apparaitre dans le classement</p>
+                  <p className="text-sm text-gray-500">
+                    Les autres joueurs verront votre pseudo, niveau et progression
+                  </p>
+                </div>
+                <button
+                  onClick={() =>
+                    setSettings({
+                      ...settings,
+                      leaderboardOptIn: !settings.leaderboardOptIn,
+                    })
+                  }
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 ${
+                    settings.leaderboardOptIn ? "bg-teal-500" : "bg-gray-200"
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                      settings.leaderboardOptIn ? "translate-x-5" : "translate-x-0"
                     }`}
                   />
                 </button>

@@ -260,3 +260,122 @@ export const onLevelUp = inngest.createFunction(
     return { success: true };
   }
 );
+
+// Aggregate daily stats for analytics (runs at 1 AM daily)
+export const aggregateDailyStats = inngest.createFunction(
+  {
+    id: "aggregate-daily-stats",
+    name: "Aggregate Daily Stats",
+  },
+  { cron: "0 1 * * *" }, // Every day at 1 AM
+  async ({ step }) => {
+    // Aggregate yesterday's stats
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    yesterday.setHours(0, 0, 0, 0);
+
+    const endOfYesterday = new Date(yesterday);
+    endOfYesterday.setHours(23, 59, 59, 999);
+
+    const users = await step.run("fetch-active-users", async () => {
+      // Get users who had activity yesterday
+      const activeUserIds = await prisma.review.findMany({
+        where: {
+          createdAt: {
+            gte: yesterday,
+            lte: endOfYesterday,
+          },
+        },
+        select: { userId: true },
+        distinct: ["userId"],
+      });
+
+      return activeUserIds.map((u) => u.userId);
+    });
+
+    let aggregated = 0;
+    for (const userId of users) {
+      await step.run(`aggregate-${userId}`, async () => {
+        // Get all reviews for yesterday
+        const reviews = await prisma.review.findMany({
+          where: {
+            userId,
+            createdAt: {
+              gte: yesterday,
+              lte: endOfYesterday,
+            },
+          },
+          select: {
+            correct: true,
+            srsStageFrom: true,
+          },
+        });
+
+        const reviewsCompleted = reviews.length;
+        const lessonsCompleted = reviews.filter((r) => r.srsStageFrom === 0).length;
+        const correctCount = reviews.filter((r) => r.correct).length;
+        const incorrectCount = reviewsCompleted - correctCount;
+
+        // Calculate XP earned
+        const xpEarned = lessonsCompleted * 10 + (reviewsCompleted - lessonsCompleted) * 5;
+
+        // Upsert daily stats
+        await prisma.userDailyStats.upsert({
+          where: {
+            userId_date: {
+              userId,
+              date: yesterday,
+            },
+          },
+          update: {
+            reviewsCompleted,
+            lessonsCompleted,
+            correctCount,
+            incorrectCount,
+            xpEarned,
+          },
+          create: {
+            userId,
+            date: yesterday,
+            reviewsCompleted,
+            lessonsCompleted,
+            correctCount,
+            incorrectCount,
+            xpEarned,
+            studyTimeMinutes: 0, // We don't track this yet
+          },
+        });
+
+        aggregated++;
+      });
+    }
+
+    return { aggregated, total: users.length };
+  }
+);
+
+// Reset weekly XP every Monday at midnight
+export const resetWeeklyXp = inngest.createFunction(
+  {
+    id: "reset-weekly-xp",
+    name: "Reset Weekly XP",
+  },
+  { cron: "0 0 * * 1" }, // Monday at midnight
+  async ({ step }) => {
+    const result = await step.run("reset-weekly-xp", async () => {
+      const updated = await prisma.user.updateMany({
+        where: {
+          weeklyXp: { gt: 0 },
+        },
+        data: {
+          weeklyXp: 0,
+          weeklyXpResetAt: new Date(),
+        },
+      });
+
+      return updated.count;
+    });
+
+    return { reset: result };
+  }
+);
