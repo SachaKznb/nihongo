@@ -3,6 +3,10 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { calculateNewStage, calculateNextReview, SRS_STAGES } from "@/lib/srs";
 import { unlockAvailableItems, levelUpUser } from "@/lib/unlocks";
+import {
+  getMistakeCountSinceAnalysis,
+  analyzeUserPatterns,
+} from "@/lib/pattern-analyzer";
 import type { ItemType } from "@/types";
 
 // Update gamification stats
@@ -207,6 +211,17 @@ export async function POST(request: NextRequest) {
     // Check for unlocks and level up
     await unlockAvailableItems(userId);
     await levelUpUser(userId);
+
+    // Trigger pattern analysis after enough mistakes (fire and forget)
+    if (!allCorrect) {
+      getMistakeCountSinceAnalysis(userId)
+        .then((count) => {
+          if (count >= 20) {
+            return analyzeUserPatterns(userId);
+          }
+        })
+        .catch((err) => console.error("Pattern analysis trigger failed:", err));
+    }
 
     return NextResponse.json({
       success: true,

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import type { UserProgress } from "@/types";
 import { useProgress } from "@/lib/hooks";
+import WeaknessPatterns from "@/components/dashboard/WeaknessPatterns";
 
 // Motivational messages based on context
 const getMotivationalMessage = (streak: number, pendingReviews: number, todayReviews: number) => {
@@ -436,6 +437,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* Weakness Patterns Section */}
+      <WeaknessPatterns />
+
       {/* Quick Access with better styling */}
       <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
@@ -474,6 +478,14 @@ export default function DashboardPage() {
           >
             <span className="w-2 h-2 bg-stone-500 rounded-full"></span>
             Niveau {progress.currentLevel}
+          </Link>
+          <Link
+            href="/study"
+            prefetch={true}
+            className="flex items-center gap-2 px-5 py-3 bg-indigo-50 text-indigo-700 rounded-xl hover:bg-indigo-100 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
+          >
+            <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+            Etude ciblee
           </Link>
         </div>
       </div>
