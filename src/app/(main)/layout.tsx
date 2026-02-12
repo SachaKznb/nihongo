@@ -43,14 +43,14 @@ export default async function MainLayout({
                   prefetch={true}
                   className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
                 >
-                  Lecons
+                  Leçons
                 </Link>
                 <Link
                   href="/reviews"
                   prefetch={true}
                   className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
                 >
-                  Revisions
+                  Révisions
                 </Link>
                 <div className="w-px h-6 bg-stone-200 mx-2"></div>
                 <Link
@@ -76,7 +76,7 @@ export default async function MainLayout({
                   href="/rewards"
                   className="px-4 py-2 text-sm text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors font-medium"
                 >
-                  Recompenses
+                  Récompenses
                 </Link>
               </div>
             </div>
@@ -109,7 +109,7 @@ export default async function MainLayout({
                     type="submit"
                     className="text-sm text-stone-500 hover:text-stone-700 transition-colors"
                   >
-                    Deconnexion
+                    Déconnexion
                   </button>
                 </form>
               </div>

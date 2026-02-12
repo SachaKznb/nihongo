@@ -63,7 +63,7 @@ export async function GET() {
   } catch (error) {
     console.error("Failed to get rewards:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la recuperation des recompenses" },
+      { error: "Erreur lors de la récupération des récompenses" },
       { status: 500 }
     );
   }

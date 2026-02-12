@@ -226,8 +226,8 @@ export default function RewardsPage() {
       {/* Header with XP Balance */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-stone-900">Recompenses</h1>
-          <p className="text-stone-600 mt-1">Depense ton XP pour debloquer des themes et des credits IA</p>
+          <h1 className="text-3xl font-bold text-stone-900">Récompenses</h1>
+          <p className="text-stone-600 mt-1">Dépense ton XP pour débloquer des thèmes et des crédits IA</p>
         </div>
         <div className="flex items-center gap-6">
           <div className="text-center">
@@ -236,7 +236,7 @@ export default function RewardsPage() {
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-indigo-600">{data.mnemonicCredits}</div>
-            <div className="text-sm text-stone-500">Credits IA</div>
+            <div className="text-sm text-stone-500">Crédits IA</div>
           </div>
         </div>
       </div>
@@ -256,10 +256,10 @@ export default function RewardsPage() {
 
       {/* XP to Credits Conversion */}
       <section className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-200 p-6">
-        <h2 className="text-xl font-bold text-indigo-900 mb-2">Convertir XP en Credits IA</h2>
+        <h2 className="text-xl font-bold text-indigo-900 mb-2">Convertir XP en Crédits IA</h2>
         <p className="text-indigo-700 mb-4">
-          Utilise tes credits pour regenerer des mnemoniques personnalises avec l'IA.
-          <span className="font-medium"> {XP_PER_CREDIT} XP = 1 credit</span>
+          Utilise tes crédits pour régénérer des mnémoniques personnalisés avec l'IA.
+          <span className="font-medium"> {XP_PER_CREDIT} XP = 1 crédit</span>
         </p>
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
@@ -309,14 +309,14 @@ export default function RewardsPage() {
             <span className="text-4xl">🦝</span>
             <div>
               <h2 className="text-2xl font-bold text-amber-900">Mon Tanuki</h2>
-              <p className="text-amber-700">Ton compagnon d'apprentissage evolue avec ton XP !</p>
+              <p className="text-amber-700">Ton compagnon d'apprentissage évolue avec ton XP !</p>
             </div>
           </div>
 
           {/* Current stage info */}
           <div className="bg-white/70 rounded-xl p-4 mb-6">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-amber-800">Evolution actuelle</span>
+              <span className="text-sm font-medium text-amber-800">Évolution actuelle</span>
               <span className="text-sm text-amber-600">
                 {getTanukiStage(data?.totalXp || 0).name}
               </span>
@@ -437,12 +437,12 @@ export default function RewardsPage() {
 
       {/* Themes Section */}
       <section>
-        <h2 className="text-2xl font-bold text-stone-900 mb-4">Themes</h2>
+        <h2 className="text-2xl font-bold text-stone-900 mb-4">Thèmes</h2>
 
         {/* Unlocked Themes */}
         {data.unlockedThemes.length > 0 && (
           <div className="mb-6">
-            <h3 className="text-lg font-medium text-stone-700 mb-3">Tes themes</h3>
+            <h3 className="text-lg font-medium text-stone-700 mb-3">Tes thèmes</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {data.unlockedThemes.map((theme) => (
                 <div
@@ -483,7 +483,7 @@ export default function RewardsPage() {
         {/* Locked Themes */}
         {data.lockedThemes.length > 0 && (
           <div>
-            <h3 className="text-lg font-medium text-stone-700 mb-3">A debloquer</h3>
+            <h3 className="text-lg font-medium text-stone-700 mb-3">À débloquer</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {data.lockedThemes.map((theme) => (
                 <div
@@ -521,7 +521,7 @@ export default function RewardsPage() {
       <section>
         <h2 className="text-2xl font-bold text-stone-900 mb-4">Badges</h2>
         <p className="text-stone-600 mb-6">
-          Les badges sont gagnes automatiquement en atteignant des objectifs. Continue a progresser pour tous les debloquer !
+          Les badges sont gagnés automatiquement en atteignant des objectifs. Continue à progresser pour tous les débloquer !
         </p>
 
         {/* Badge categories */}
@@ -529,9 +529,9 @@ export default function RewardsPage() {
           const categoryBadges = data.allBadges.filter((b) => b.category === category);
           const categoryNames: Record<string, string> = {
             milestone: "Jalons",
-            streak: "Series",
-            mastery: "Maitrise",
-            dedication: "Dedication",
+            streak: "Séries",
+            mastery: "Maîtrise",
+            dedication: "Dédication",
           };
 
           return (

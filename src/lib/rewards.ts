@@ -31,7 +31,7 @@ export const THEMES: Theme[] = [
   {
     id: "default",
     name: "Classique",
-    description: "Le theme par defaut, clair et epure",
+    description: "Le thème par défaut, clair et épuré",
     price: 0,
     colors: {
       primary: "teal-600",
@@ -47,7 +47,7 @@ export const THEMES: Theme[] = [
   {
     id: "dark",
     name: "Mode Sombre",
-    description: "Un theme sombre elegant pour etudier la nuit",
+    description: "Un thème sombre élégant pour étudier la nuit",
     price: 1000,
     colors: {
       primary: "teal-400",
@@ -63,7 +63,7 @@ export const THEMES: Theme[] = [
   {
     id: "sakura",
     name: "Sakura",
-    description: "Inspire des fleurs de cerisier japonaises",
+    description: "Inspiré des fleurs de cerisier japonaises",
     price: 2000,
     colors: {
       primary: "pink-500",
@@ -78,8 +78,8 @@ export const THEMES: Theme[] = [
   },
   {
     id: "ocean",
-    name: "Ocean",
-    description: "Les profondeurs bleues de l'ocean pacifique",
+    name: "Océan",
+    description: "Les profondeurs bleues de l'océan pacifique",
     price: 2000,
     colors: {
       primary: "blue-500",
@@ -94,8 +94,8 @@ export const THEMES: Theme[] = [
   },
   {
     id: "gold",
-    name: "Or Imperial",
-    description: "L'elegance doree de l'ere Edo",
+    name: "Or Impérial",
+    description: "L'élégance dorée de l'ère Edo",
     price: 3000,
     colors: {
       primary: "amber-500",
@@ -116,78 +116,78 @@ export const BADGES: Badge[] = [
   {
     id: "first-lesson",
     name: "Premier Pas",
-    description: "Completer ta premiere lecon",
+    description: "Compléter ta première leçon",
     icon: "🎓",
     category: "milestone",
-    condition: "Completer 1 lecon",
+    condition: "Compléter 1 leçon",
   },
   {
     id: "hundred-reviews",
     name: "Centurion",
-    description: "Completer 100 revisions",
+    description: "Compléter 100 révisions",
     icon: "💯",
     category: "milestone",
-    condition: "Completer 100 revisions",
+    condition: "Compléter 100 révisions",
   },
   {
     id: "thousand-reviews",
     name: "Marathonien",
-    description: "Completer 1000 revisions",
+    description: "Compléter 1000 révisions",
     icon: "🏃",
     category: "milestone",
-    condition: "Completer 1000 revisions",
+    condition: "Compléter 1000 révisions",
   },
 
   // Streak badges
   {
     id: "streak-7",
     name: "Semaine Parfaite",
-    description: "Maintenir une serie de 7 jours",
+    description: "Maintenir une série de 7 jours",
     icon: "📅",
     category: "streak",
-    condition: "Serie de 7 jours",
+    condition: "Série de 7 jours",
   },
   {
     id: "streak-30",
-    name: "Mois Dedié",
-    description: "Maintenir une serie de 30 jours",
+    name: "Mois Dédié",
+    description: "Maintenir une série de 30 jours",
     icon: "🗓️",
     category: "streak",
-    condition: "Serie de 30 jours",
+    condition: "Série de 30 jours",
   },
   {
     id: "streak-100",
     name: "Centenaire",
-    description: "Maintenir une serie de 100 jours",
+    description: "Maintenir une série de 100 jours",
     icon: "🔥",
     category: "streak",
-    condition: "Serie de 100 jours",
+    condition: "Série de 100 jours",
   },
 
   // Mastery badges (SRS stage achievements)
   {
     id: "first-guru",
     name: "Premier Guru",
-    description: "Atteindre Guru avec un element",
+    description: "Atteindre Guru avec un élément",
     icon: "🧘",
     category: "mastery",
-    condition: "1 element au stage Guru",
+    condition: "1 élément au stage Guru",
   },
   {
     id: "first-master",
-    name: "Premier Maitre",
-    description: "Atteindre Maitre avec un element",
+    name: "Premier Maître",
+    description: "Atteindre Maître avec un élément",
     icon: "👨‍🏫",
     category: "mastery",
-    condition: "1 element au stage Maitre",
+    condition: "1 élément au stage Maître",
   },
   {
     id: "first-satori",
     name: "Illumination",
-    description: "Atteindre Satori avec un element",
+    description: "Atteindre Satori avec un élément",
     icon: "✨",
     category: "mastery",
-    condition: "1 element au stage Satori",
+    condition: "1 élément au stage Satori",
   },
 
   // Level badges

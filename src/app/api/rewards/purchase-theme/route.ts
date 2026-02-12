@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Theme "${theme.name}" debloque !`,
+      message: `Thème "${theme.name}" débloqué !`,
       remainingXp: updatedUser.totalXp,
       selectedTheme: updatedUser.selectedTheme,
       unlockedThemes: updatedUser.unlockedThemes,

@@ -48,13 +48,13 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Theme "${theme.name}" active !`,
+      message: `Thème "${theme.name}" activé !`,
       selectedTheme: themeId,
     });
   } catch (error) {
     console.error("Select theme error:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la selection du theme" },
+      { error: "Erreur lors de la sélection du thème" },
       { status: 500 }
     );
   }

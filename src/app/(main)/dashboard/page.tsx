@@ -9,10 +9,10 @@ import TanukiPet from "@/components/dashboard/TanukiPet";
 
 // Motivational messages based on context
 const getMotivationalMessage = (streak: number, pendingReviews: number, todayReviews: number) => {
-  if (streak >= 7) return "Une semaine complete ! Tu es en feu !";
-  if (streak >= 3) return "Belle serie ! Continue comme ca !";
-  if (pendingReviews > 0 && todayReviews === 0) return "Tes revisions t'attendent !";
-  if (todayReviews >= 50) return "Impressionnant ! Tu maitrises !";
+  if (streak >= 7) return "Une semaine complète ! Tu es en feu !";
+  if (streak >= 3) return "Belle série ! Continue comme ça !";
+  if (pendingReviews > 0 && todayReviews === 0) return "Tes révisions t'attendent !";
+  if (todayReviews >= 50) return "Impressionnant ! Tu maîtrises !";
   if (todayReviews >= 20) return "Super progression aujourd'hui !";
   return "Chaque jour compte. Commence maintenant !";
 };
@@ -61,7 +61,7 @@ export default function DashboardPage() {
   if (!progress) {
     return (
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <p className="text-stone-600">Erreur lors du chargement des donnees</p>
+        <p className="text-stone-600">Erreur lors du chargement des données</p>
       </div>
     );
   }
@@ -147,7 +147,7 @@ export default function DashboardPage() {
         <div className="relative overflow-hidden bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-4 text-white shadow-lg card-hover">
           <div className="absolute -right-4 -top-4 text-6xl opacity-20">🔥</div>
           <div className="relative">
-            <p className="text-amber-100 text-xs font-medium uppercase tracking-wide">Serie</p>
+            <p className="text-amber-100 text-xs font-medium uppercase tracking-wide">Série</p>
             <div className="flex items-baseline gap-1">
               <span className="text-4xl font-bold font-display">{gamification.currentStreak}</span>
               <span className="text-amber-200 text-sm">jours</span>
@@ -188,10 +188,10 @@ export default function DashboardPage() {
             <p className="text-violet-100 text-xs font-medium uppercase tracking-wide">Aujourd&apos;hui</p>
             <div className="flex items-baseline gap-1">
               <span className="text-4xl font-bold font-display">{gamification.todayReviews}</span>
-              <span className="text-violet-200 text-sm">revisions</span>
+              <span className="text-violet-200 text-sm">révisions</span>
             </div>
             <p className="text-violet-200 text-xs mt-1">
-              {gamification.todayAccuracy}% de precision
+              {gamification.todayAccuracy}% de précision
             </p>
           </div>
         </div>
@@ -209,16 +209,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-
-      {/* Tanuki Pet */}
-      <TanukiPet
-        totalXp={gamification.totalXp}
-        skinId={gamification.tanukiSkin || "classic"}
-        tanukiName={gamification.tanukiName}
-        lastStudyDate={gamification.lastStudyDate ? new Date(gamification.lastStudyDate) : null}
-        currentStreak={gamification.currentStreak}
-        pendingReviews={progress.pendingReviews}
-      />
 
       {/* Main Action Cards */}
       <div className="grid md:grid-cols-2 gap-6">
@@ -303,7 +293,7 @@ export default function DashboardPage() {
               <h3 className="font-bold font-display text-stone-900">Niveau {progress.currentLevel}</h3>
             </div>
             <span className="text-xs font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
-              {gamification.levelProgress}% terminé
+              {gamification.levelProgress}% complété
             </span>
           </div>
 
@@ -496,48 +486,20 @@ export default function DashboardPage() {
             className="flex items-center gap-2 px-5 py-3 bg-indigo-50 text-indigo-700 rounded-xl hover:bg-indigo-100 transition-all hover:shadow-md hover:-translate-y-0.5 font-medium"
           >
             <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
-            Etude ciblee
+            Étude ciblée
           </Link>
         </div>
       </div>
 
-      {/* Weekly Challenge / Goal - Variable Reward */}
-      <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl p-6 text-white shadow-xl">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-indigo-200 text-sm font-medium uppercase tracking-wide mb-1">Objectif hebdomadaire</p>
-            <h3 className="text-2xl font-bold font-display">Gagne {1000 - gamification.weeklyXp} XP de plus cette semaine</h3>
-            <p className="text-indigo-200 mt-1">{gamification.weeklyXp} / 1000 XP</p>
-          </div>
-          <div className="hidden md:block">
-            <div className="w-24 h-24 relative">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="8" />
-                <circle
-                  cx="50"
-                  cy="50"
-                  r="40"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={`${(gamification.weeklyXp / 1000) * 251.2} 251.2`}
-                  className="transition-all duration-500"
-                />
-              </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-xl font-bold font-display">{Math.round((gamification.weeklyXp / 1000) * 100)}%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="mt-4 h-2 bg-white/20 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-white rounded-full transition-all duration-500"
-            style={{ width: `${Math.min(100, (gamification.weeklyXp / 1000) * 100)}%` }}
-          ></div>
-        </div>
-      </div>
+      {/* Tanuki Pet - Fun companion at the bottom */}
+      <TanukiPet
+        totalXp={gamification.totalXp}
+        skinId={gamification.tanukiSkin || "classic"}
+        tanukiName={gamification.tanukiName}
+        lastStudyDate={gamification.lastStudyDate ? new Date(gamification.lastStudyDate) : null}
+        currentStreak={gamification.currentStreak}
+        pendingReviews={progress.pendingReviews}
+      />
     </div>
   );
 }

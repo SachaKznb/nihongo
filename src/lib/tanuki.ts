@@ -26,17 +26,17 @@ export interface TanukiSkin {
 export const TANUKI_STAGES: TanukiStage[] = [
   {
     id: 1,
-    name: "Oeuf Mysterieux",
-    description: "Un oeuf qui brille doucement...",
+    name: "Œuf Mystérieux",
+    description: "Un œuf qui brille doucement...",
     xpRequired: 0,
-    emoji: "🥒",
+    emoji: "🥚",
     mood: "dormant",
-    message: "Continue a etudier pour me faire eclore !",
+    message: "Continue à étudier pour me faire éclore !",
   },
   {
     id: 2,
-    name: "Bebe Tanuki",
-    description: "Un petit tanuki vient de naitre !",
+    name: "Bébé Tanuki",
+    description: "Un petit tanuki vient de naître !",
     xpRequired: 500,
     emoji: "🦝",
     mood: "sleepy",
@@ -45,7 +45,7 @@ export const TANUKI_STAGES: TanukiStage[] = [
   {
     id: 3,
     name: "Tanuki Curieux",
-    description: "Il commence a explorer le monde",
+    description: "Il commence à explorer le monde",
     xpRequired: 2000,
     emoji: "🦝",
     mood: "curious",
@@ -53,12 +53,12 @@ export const TANUKI_STAGES: TanukiStage[] = [
   },
   {
     id: 4,
-    name: "Tanuki Etudiant",
-    description: "Il a trouve sa vocation : apprendre !",
+    name: "Tanuki Étudiant",
+    description: "Il a trouvé sa vocation : apprendre !",
     xpRequired: 5000,
     emoji: "🦝",
     mood: "studious",
-    message: "Revisons ensemble !",
+    message: "Révisons ensemble !",
   },
   {
     id: 5,
@@ -67,16 +67,16 @@ export const TANUKI_STAGES: TanukiStage[] = [
     xpRequired: 15000,
     emoji: "🦝",
     mood: "wise",
-    message: "La perseverance est la cle.",
+    message: "La persévérance est la clé.",
   },
   {
     id: 6,
     name: "Tanuki Sensei",
-    description: "Un maitre respecte de tous",
+    description: "Un maître respecté de tous",
     xpRequired: 50000,
     emoji: "🦝",
     mood: "master",
-    message: "Tu es devenu mon egal, mon ami.",
+    message: "Tu es devenu mon égal, mon ami.",
   },
 ];
 
@@ -107,7 +107,7 @@ export const TANUKI_SKINS: TanukiSkin[] = [
   {
     id: "sakura",
     name: "Sakura",
-    description: "Pare de fleurs de cerisier",
+    description: "Paré de fleurs de cerisier",
     price: 2000,
     colors: {
       primary: "#ffb7c5",
@@ -117,8 +117,8 @@ export const TANUKI_SKINS: TanukiSkin[] = [
   },
   {
     id: "golden",
-    name: "Dore",
-    description: "Un tanuki legendaire",
+    name: "Doré",
+    description: "Un tanuki légendaire",
     price: 3500,
     colors: {
       primary: "#ffd700",
@@ -129,7 +129,7 @@ export const TANUKI_SKINS: TanukiSkin[] = [
   {
     id: "spirit",
     name: "Esprit",
-    description: "Un tanuki etheree",
+    description: "Un tanuki éthéré",
     price: 5000,
     colors: {
       primary: "#e0e7ff",
@@ -191,23 +191,23 @@ export function getTanukiMoodMessage(
   // Stage 1 (egg) has special messages
   if (stage.id === 1) {
     if (pendingReviews > 0) {
-      return { mood: "excited", message: "L'oeuf fremit... il veut des revisions !" };
+      return { mood: "excited", message: "L'œuf frémit... il veut des révisions !" };
     }
     return { mood: "neutral", message: stage.message };
   }
 
   // High streak celebration
   if (currentStreak >= 7 && studiedToday) {
-    return { mood: "excited", message: `${currentStreak} jours ! On est inarretables !` };
+    return { mood: "excited", message: `${currentStreak} jours ! On est inarrêtables !` };
   }
 
   // Pending reviews
   if (pendingReviews > 50) {
-    return { mood: "neutral", message: `${pendingReviews} revisions... on s'y met ?` };
+    return { mood: "neutral", message: `${pendingReviews} révisions... on s'y met ?` };
   }
 
   if (pendingReviews > 0 && pendingReviews <= 10) {
-    return { mood: "happy", message: "Juste quelques revisions, allez !" };
+    return { mood: "happy", message: "Juste quelques révisions, allez !" };
   }
 
   // No activity recently
@@ -216,10 +216,10 @@ export function getTanukiMoodMessage(
       (now.getTime() - new Date(lastStudyDate).getTime()) / (1000 * 60 * 60 * 24)
     );
     if (daysSinceStudy >= 3) {
-      return { mood: "sleepy", message: "Zzz... tu m'as manque..." };
+      return { mood: "sleepy", message: "Zzz... tu m'as manqué..." };
     }
     if (daysSinceStudy >= 1) {
-      return { mood: "neutral", message: "On etudie aujourd'hui ?" };
+      return { mood: "neutral", message: "On étudie aujourd'hui ?" };
     }
   }
 

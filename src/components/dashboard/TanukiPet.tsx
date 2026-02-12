@@ -67,7 +67,7 @@ export default function TanukiPet({
         <div className="absolute inset-0 bg-gradient-to-br from-amber-300/80 to-yellow-300/80 flex items-center justify-center z-20 animate-pulse">
           <div className="text-center">
             <div className="text-5xl mb-2">✨</div>
-            <div className="text-2xl font-bold text-amber-900">Evolution !</div>
+            <div className="text-2xl font-bold text-amber-900">Évolution !</div>
             <div className="text-amber-800">{stage.name}</div>
           </div>
         </div>
@@ -175,7 +175,7 @@ export default function TanukiPet({
       {nextStage && (
         <div className="mt-4">
           <div className="flex items-center justify-between text-xs text-amber-700 mb-1">
-            <span>Prochaine evolution : {nextStage.name}</span>
+            <span>Prochaine évolution : {nextStage.name}</span>
             <span>{nextStage.xpRequired.toLocaleString()} XP</span>
           </div>
           <div className="h-2 bg-amber-200 rounded-full overflow-hidden">

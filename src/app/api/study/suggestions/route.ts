@@ -36,19 +36,19 @@ export async function GET() {
       switch (pattern.patternType) {
         case "visual_confusion":
           title = "Kanji visuellement proches";
-          description = `${pattern.affectedItems.length} caractere${pattern.affectedItems.length > 1 ? "s" : ""} que tu confonds souvent`;
+          description = `${pattern.affectedItems.length} caractère${pattern.affectedItems.length > 1 ? "s" : ""} que tu confonds souvent`;
           break;
         case "reading_confusion":
-          title = "Lectures a revoir";
-          description = `${pattern.affectedItems.length} lecture${pattern.affectedItems.length > 1 ? "s" : ""} qui te posent probleme`;
+          title = "Lectures à revoir";
+          description = `${pattern.affectedItems.length} lecture${pattern.affectedItems.length > 1 ? "s" : ""} qui te posent problème`;
           break;
         case "translation_nuance":
           title = "Nuances de sens";
-          description = `${pattern.affectedItems.length} element${pattern.affectedItems.length > 1 ? "s" : ""} avec des traductions proches`;
+          description = `${pattern.affectedItems.length} élément${pattern.affectedItems.length > 1 ? "s" : ""} avec des traductions proches`;
           break;
         default:
-          title = "Elements a revoir";
-          description = `${pattern.affectedItems.length} element${pattern.affectedItems.length > 1 ? "s" : ""}`;
+          title = "Éléments à revoir";
+          description = `${pattern.affectedItems.length} élément${pattern.affectedItems.length > 1 ? "s" : ""}`;
       }
 
       // Estimate 30 seconds per item
