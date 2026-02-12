@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { playReading } from "@/lib/audio";
 
 interface StudyItem {
   type: string;
@@ -17,6 +18,11 @@ interface StudySuggestion {
   estimatedTime: string;
   items: StudyItem[];
   patternType?: string;
+}
+
+interface CompletionResult {
+  xpEarned: number;
+  totalXp: number;
 }
 
 const patternEmojis: Record<string, string> = {
@@ -43,16 +49,22 @@ const patternColors: Record<string, { bg: string; border: string; text: string }
   },
 };
 
+const encouragementMessages = [
+  "Excellent travail ! Tu progresses a vue d'oeil !",
+  "Bravo ! Ces kanji n'ont plus de secrets pour toi !",
+  "Super session ! Continue comme ca !",
+  "Impressionnant ! Tu maitrises de mieux en mieux !",
+  "Genial ! Tes points faibles deviennent tes forces !",
+];
+
 export default function StudyPage() {
   const [suggestions, setSuggestions] = useState<StudySuggestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSession, setSelectedSession] = useState<StudySuggestion | null>(null);
+  const [completionResult, setCompletionResult] = useState<CompletionResult | null>(null);
 
-  useEffect(() => {
-    fetchSuggestions();
-  }, []);
-
-  const fetchSuggestions = async () => {
+  const fetchSuggestions = useCallback(async () => {
+    setLoading(true);
     try {
       const res = await fetch("/api/study/suggestions");
       if (res.ok) {
@@ -64,6 +76,40 @@ export default function StudyPage() {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    fetchSuggestions();
+  }, [fetchSuggestions]);
+
+  const handleSessionComplete = async (session: StudySuggestion) => {
+    try {
+      const res = await fetch("/api/study/complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          patternType: session.patternType,
+          itemCount: session.items.length,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setCompletionResult({
+          xpEarned: data.xpEarned,
+          totalXp: data.totalXp,
+        });
+      }
+    } catch (err) {
+      console.error("Failed to complete session:", err);
+    }
+
+    setSelectedSession(null);
+  };
+
+  const handleCloseCompletion = () => {
+    setCompletionResult(null);
+    fetchSuggestions(); // Refresh to remove completed pattern
   };
 
   if (loading) {
@@ -78,12 +124,64 @@ export default function StudyPage() {
     );
   }
 
+  // Completion screen
+  if (completionResult) {
+    const randomMessage = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
+
+    return (
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-3xl p-8 text-white text-center shadow-2xl">
+          <div className="text-7xl mb-4 animate-bounce">🎉</div>
+          <h1 className="text-3xl font-bold font-display mb-2">Session terminee !</h1>
+          <p className="text-emerald-100 text-lg mb-6">{randomMessage}</p>
+
+          {/* XP Reward */}
+          <div className="bg-white/20 backdrop-blur rounded-2xl p-6 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <span className="text-4xl">⚡</span>
+              <span className="text-5xl font-bold font-display">+{completionResult.xpEarned}</span>
+              <span className="text-2xl">XP</span>
+            </div>
+            <p className="text-emerald-100 text-sm">
+              Total: {completionResult.totalXp.toLocaleString()} XP
+            </p>
+          </div>
+
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/dashboard"
+              className="px-6 py-3 bg-white text-emerald-600 font-semibold rounded-xl hover:bg-emerald-50 transition-colors"
+            >
+              Retour au dashboard
+            </Link>
+            <button
+              onClick={handleCloseCompletion}
+              className="px-6 py-3 bg-emerald-400/30 text-white font-semibold rounded-xl hover:bg-emerald-400/40 transition-colors"
+            >
+              Continuer l&apos;etude
+            </button>
+          </div>
+        </div>
+
+        {/* Motivational tip */}
+        <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 text-center">
+          <p className="text-amber-800 text-sm">
+            💡 <strong>Conseil :</strong> Reviens demain pour consolider ces acquis.
+            La repetition espacee est la cle de la memorisation !
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   // Study mode active
   if (selectedSession) {
     return (
       <StudySession
         session={selectedSession}
         onClose={() => setSelectedSession(null)}
+        onComplete={handleSessionComplete}
       />
     );
   }
@@ -103,6 +201,17 @@ export default function StudyPage() {
         <div>
           <h1 className="text-3xl font-bold font-display text-stone-900">Etude ciblee</h1>
           <p className="text-stone-500">Renforce tes points faibles avec des sessions personnalisees</p>
+        </div>
+      </div>
+
+      {/* XP Reward Banner */}
+      <div className="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl p-4 text-white flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span className="text-3xl">⚡</span>
+          <div>
+            <p className="font-semibold">Gagne des XP bonus !</p>
+            <p className="text-emerald-100 text-sm">5 XP par element + 20 XP bonus par session</p>
+          </div>
         </div>
       </div>
 
@@ -131,6 +240,7 @@ export default function StudyPage() {
           {suggestions.map((suggestion) => {
             const colors = patternColors[suggestion.patternType || "visual_confusion"] || patternColors.visual_confusion;
             const emoji = patternEmojis[suggestion.patternType || "visual_confusion"] || "📚";
+            const potentialXp = suggestion.itemCount * 5 + 20;
 
             return (
               <div
@@ -145,10 +255,12 @@ export default function StudyPage() {
                       <h3 className="text-lg font-bold font-display text-stone-900">
                         {suggestion.title}
                       </h3>
-                      <div className="flex items-center gap-3 text-sm text-stone-500">
-                        <span>{suggestion.itemCount} elements</span>
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="text-stone-500">{suggestion.itemCount} elements</span>
                         <span className="text-stone-300">•</span>
-                        <span>{suggestion.estimatedTime}</span>
+                        <span className="text-stone-500">{suggestion.estimatedTime}</span>
+                        <span className="text-stone-300">•</span>
+                        <span className="text-emerald-600 font-medium">+{potentialXp} XP</span>
                       </div>
                     </div>
                     <p className="text-stone-600 mb-4">{suggestion.description}</p>
@@ -201,21 +313,43 @@ export default function StudyPage() {
   );
 }
 
+// Item details interface
+interface ItemDetails {
+  id: number;
+  character?: string;
+  word?: string;
+  meaningFr?: string;
+  meaningsFr?: string[];
+  readingsOn?: string[];
+  readingsKun?: string[];
+  readings?: string[];
+  mnemonic?: string;
+  meaningMnemonicFr?: string;
+  readingMnemonicFr?: string;
+  mnemonicFr?: string;
+  customMnemonic?: string;
+  customMeaningMnemonic?: string;
+  customReadingMnemonic?: string;
+}
+
 // Study Session Component
 function StudySession({
   session,
   onClose,
+  onComplete,
 }: {
   session: StudySuggestion;
   onClose: () => void;
+  onComplete: (session: StudySuggestion) => void;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showAnswer, setShowAnswer] = useState(false);
-  const [itemDetails, setItemDetails] = useState<Record<string, unknown> | null>(null);
+  const [itemDetails, setItemDetails] = useState<ItemDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
   const currentItem = session.items[currentIndex];
   const progress = ((currentIndex + 1) / session.items.length) * 100;
+  const isLastItem = currentIndex === session.items.length - 1;
 
   useEffect(() => {
     if (currentItem) {
@@ -248,11 +382,32 @@ function StudySession({
     }
   };
 
-  const handleNext = () => {
-    if (currentIndex < session.items.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+  const handlePlayAudio = () => {
+    if (!itemDetails) return;
+
+    // Get the text to speak
+    let textToSpeak = "";
+
+    if (currentItem.type === "vocabulary" && itemDetails.word) {
+      textToSpeak = itemDetails.word;
+    } else if (currentItem.type === "kanji" && itemDetails.character) {
+      // For kanji, use the first reading
+      const reading = itemDetails.readingsKun?.[0] || itemDetails.readingsOn?.[0];
+      textToSpeak = reading || itemDetails.character;
+    } else if (currentItem.type === "radical" && itemDetails.character) {
+      textToSpeak = itemDetails.character;
     } else {
-      onClose();
+      textToSpeak = currentItem.character;
+    }
+
+    playReading(textToSpeak);
+  };
+
+  const handleNext = () => {
+    if (isLastItem) {
+      onComplete(session);
+    } else {
+      setCurrentIndex(currentIndex + 1);
     }
   };
 
@@ -260,6 +415,34 @@ function StudySession({
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
     }
+  };
+
+  // Get the best mnemonic (custom AI-generated > default)
+  const getMnemonic = () => {
+    if (!itemDetails) return null;
+
+    // For radicals
+    if (currentItem.type === "radical") {
+      return itemDetails.mnemonic || null;
+    }
+
+    // For kanji - check for custom meaning mnemonic first
+    if (currentItem.type === "kanji") {
+      return itemDetails.meaningMnemonicFr || null;
+    }
+
+    // For vocabulary
+    if (currentItem.type === "vocabulary") {
+      return itemDetails.mnemonicFr || null;
+    }
+
+    return null;
+  };
+
+  // Get reading mnemonic for kanji
+  const getReadingMnemonic = () => {
+    if (!itemDetails || currentItem.type !== "kanji") return null;
+    return itemDetails.readingMnemonicFr || null;
   };
 
   return (
@@ -275,26 +458,42 @@ function StudySession({
           </svg>
           <span>Quitter</span>
         </button>
-        <span className="text-sm text-stone-500">
-          {currentIndex + 1} / {session.items.length}
-        </span>
+        <div className="flex items-center gap-4">
+          <span className="text-sm text-stone-500">
+            {currentIndex + 1} / {session.items.length}
+          </span>
+          <span className="text-sm text-emerald-600 font-medium">
+            +{(currentIndex + 1) * 5} XP
+          </span>
+        </div>
       </div>
 
       {/* Progress bar */}
       <div className="h-2 bg-stone-200 rounded-full overflow-hidden">
         <div
-          className="h-full bg-indigo-500 rounded-full transition-all duration-300"
+          className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all duration-300"
           style={{ width: `${progress}%` }}
         ></div>
       </div>
 
       {/* Main card */}
       <div className="bg-white rounded-3xl border-2 border-stone-200 shadow-lg overflow-hidden">
-        {/* Character display */}
-        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-8 text-center">
+        {/* Character display with audio button */}
+        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-8 text-center relative">
           <span className="text-8xl font-japanese text-white drop-shadow-lg">
             {currentItem.character}
           </span>
+
+          {/* Audio button */}
+          <button
+            onClick={handlePlayAudio}
+            className="absolute bottom-4 right-4 p-3 bg-white/20 hover:bg-white/30 rounded-full transition-colors"
+            title="Ecouter la prononciation"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+            </svg>
+          </button>
         </div>
 
         {/* Content */}
@@ -313,32 +512,39 @@ function StudySession({
                   Signification
                 </h4>
                 <p className="text-lg font-bold text-stone-900">
-                  {(itemDetails as { meaningsFr?: string[]; meaningFr?: string }).meaningsFr?.join(", ") ||
-                    (itemDetails as { meaningFr?: string }).meaningFr ||
-                    "-"}
+                  {itemDetails.meaningsFr?.join(", ") || itemDetails.meaningFr || "-"}
                 </p>
               </div>
 
               {/* Readings (for kanji/vocab) */}
-              {((itemDetails as { readingsOn?: string[] }).readingsOn ||
-                (itemDetails as { readingsKun?: string[] }).readingsKun ||
-                (itemDetails as { readings?: string[] }).readings) && (
+              {(itemDetails.readingsOn || itemDetails.readingsKun || itemDetails.readings) && (
                 <div>
-                  <h4 className="text-sm font-medium text-stone-500 uppercase tracking-wide mb-1">
-                    Lectures
-                  </h4>
+                  <div className="flex items-center justify-between mb-1">
+                    <h4 className="text-sm font-medium text-stone-500 uppercase tracking-wide">
+                      Lectures
+                    </h4>
+                    <button
+                      onClick={handlePlayAudio}
+                      className="text-indigo-600 hover:text-indigo-700 transition-colors"
+                      title="Ecouter"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+                      </svg>
+                    </button>
+                  </div>
                   <div className="flex flex-wrap gap-2">
-                    {(itemDetails as { readingsOn?: string[] }).readingsOn?.map((r: string, i: number) => (
+                    {itemDetails.readingsOn?.map((r, i) => (
                       <span key={`on-${i}`} className="px-2 py-1 bg-pink-100 text-pink-700 rounded-lg text-sm font-japanese">
-                        {r}
+                        {r} <span className="text-pink-400 text-xs">(on)</span>
                       </span>
                     ))}
-                    {(itemDetails as { readingsKun?: string[] }).readingsKun?.map((r: string, i: number) => (
+                    {itemDetails.readingsKun?.map((r, i) => (
                       <span key={`kun-${i}`} className="px-2 py-1 bg-purple-100 text-purple-700 rounded-lg text-sm font-japanese">
-                        {r}
+                        {r} <span className="text-purple-400 text-xs">(kun)</span>
                       </span>
                     ))}
-                    {(itemDetails as { readings?: string[] }).readings?.map((r: string, i: number) => (
+                    {itemDetails.readings?.map((r, i) => (
                       <span key={`r-${i}`} className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm font-japanese">
                         {r}
                       </span>
@@ -347,18 +553,28 @@ function StudySession({
                 </div>
               )}
 
-              {/* Mnemonic */}
-              {((itemDetails as { mnemonic?: string }).mnemonic ||
-                (itemDetails as { meaningMnemonicFr?: string }).meaningMnemonicFr ||
-                (itemDetails as { mnemonicFr?: string }).mnemonicFr) && (
-                <div className="bg-stone-50 rounded-xl p-4">
-                  <h4 className="text-sm font-medium text-stone-500 uppercase tracking-wide mb-2">
-                    Mnemonique
+              {/* Meaning Mnemonic */}
+              {getMnemonic() && (
+                <div className="bg-indigo-50 rounded-xl p-4">
+                  <h4 className="text-sm font-medium text-indigo-600 uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <span>💡</span>
+                    Mnemonique (sens)
                   </h4>
-                  <p className="text-stone-700 text-sm leading-relaxed">
-                    {(itemDetails as { mnemonic?: string }).mnemonic ||
-                      (itemDetails as { meaningMnemonicFr?: string }).meaningMnemonicFr ||
-                      (itemDetails as { mnemonicFr?: string }).mnemonicFr}
+                  <p className="text-indigo-900 text-sm leading-relaxed">
+                    {getMnemonic()}
+                  </p>
+                </div>
+              )}
+
+              {/* Reading Mnemonic (for kanji) */}
+              {getReadingMnemonic() && (
+                <div className="bg-purple-50 rounded-xl p-4">
+                  <h4 className="text-sm font-medium text-purple-600 uppercase tracking-wide mb-2 flex items-center gap-2">
+                    <span>🎵</span>
+                    Mnemonique (lecture)
+                  </h4>
+                  <p className="text-purple-900 text-sm leading-relaxed">
+                    {getReadingMnemonic()}
                   </p>
                 </div>
               )}
@@ -394,13 +610,28 @@ function StudySession({
           </button>
           <button
             onClick={handleNext}
-            className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition-colors"
+            className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-colors ${
+              isLastItem
+                ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white hover:from-emerald-600 hover:to-teal-600"
+                : "bg-indigo-600 text-white hover:bg-indigo-700"
+            }`}
           >
-            <span>{currentIndex < session.items.length - 1 ? "Suivant" : "Terminer"}</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-            </svg>
+            <span>{isLastItem ? "Terminer et gagner XP !" : "Suivant"}</span>
+            {isLastItem ? (
+              <span>⚡</span>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
+            )}
           </button>
+        </div>
+      )}
+
+      {/* Encouragement nudge */}
+      {currentIndex > 0 && currentIndex < session.items.length - 1 && (
+        <div className="text-center text-sm text-stone-400">
+          Plus que {session.items.length - currentIndex - 1} element{session.items.length - currentIndex - 1 > 1 ? "s" : ""} !
         </div>
       )}
     </div>
