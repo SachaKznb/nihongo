@@ -483,7 +483,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
@@ -919,7 +919,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
@@ -1044,7 +1044,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
@@ -1131,7 +1131,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
@@ -1231,7 +1231,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
@@ -1317,7 +1317,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
@@ -1394,7 +1394,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
@@ -1459,7 +1459,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
@@ -1532,7 +1532,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
@@ -1607,7 +1607,7 @@ async function main() {
     await prisma.vocabulary.upsert({
       where: { word_levelId: { word: vocab.word, levelId: vocab.levelId } },
       update: { ...vocab },
-      create: { ...vocab, readingMnemonicFr: vocab.mnemonicFr },
+      create: { ...vocab },
     });
   }
 
