@@ -30,6 +30,14 @@ export async function POST(request: NextRequest) {
         return await clearMistakes(adminId);
       case "trigger_pattern_analysis":
         return await triggerPatternAnalysis(adminId);
+      case "set_xp":
+        return await setXp(adminId, params);
+      case "set_tanuki_stage":
+        return await setTanukiStage(adminId, params);
+      case "unlock_all_skins":
+        return await unlockAllSkins(adminId);
+      case "reset_rewards":
+        return await resetRewards(adminId);
       default:
         return NextResponse.json({ error: "Action inconnue" }, { status: 400 });
     }
@@ -489,5 +497,89 @@ async function triggerPatternAnalysis(userId: string) {
     success: true,
     message: `Analyse terminee: ${patterns.length} pattern(s) detecte(s)`,
     patterns,
+  });
+}
+
+// Set XP to a specific amount (for testing Tanuki evolution)
+async function setXp(userId: string, params: { amount: number }) {
+  const { amount } = params;
+
+  if (typeof amount !== "number" || amount < 0) {
+    return NextResponse.json({ error: "Montant XP invalide" }, { status: 400 });
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { totalXp: amount },
+  });
+
+  // Get Tanuki stage for feedback
+  const { getTanukiStage } = await import("@/lib/tanuki");
+  const stage = getTanukiStage(amount);
+
+  return NextResponse.json({
+    success: true,
+    message: `XP defini a ${amount}. Tanuki au stade ${stage.id}: ${stage.name}`,
+  });
+}
+
+// Set Tanuki to a specific evolution stage
+async function setTanukiStage(userId: string, params: { stage: number }) {
+  const { stage } = params;
+  const { TANUKI_STAGES } = await import("@/lib/tanuki");
+
+  const targetStage = TANUKI_STAGES.find((s) => s.id === stage);
+  if (!targetStage) {
+    return NextResponse.json({ error: "Stage invalide (1-6)" }, { status: 400 });
+  }
+
+  // Set XP to minimum required for this stage
+  await prisma.user.update({
+    where: { id: userId },
+    data: { totalXp: targetStage.xpRequired },
+  });
+
+  return NextResponse.json({
+    success: true,
+    message: `Tanuki evolue en "${targetStage.name}" (${targetStage.xpRequired} XP)`,
+  });
+}
+
+// Unlock all Tanuki skins
+async function unlockAllSkins(userId: string) {
+  const { TANUKI_SKINS } = await import("@/lib/tanuki");
+  const allSkinIds = TANUKI_SKINS.map((s) => s.id);
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { unlockedSkins: allSkinIds },
+  });
+
+  return NextResponse.json({
+    success: true,
+    message: `${allSkinIds.length} skins Tanuki debloques`,
+  });
+}
+
+// Reset all rewards (themes, badges, skins, XP)
+async function resetRewards(userId: string) {
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      totalXp: 0,
+      weeklyXp: 0,
+      mnemonicCredits: 0,
+      selectedTheme: "default",
+      unlockedThemes: ["default"],
+      unlockedBadges: [],
+      tanukiName: null,
+      tanukiSkin: "classic",
+      unlockedSkins: ["classic"],
+    },
+  });
+
+  return NextResponse.json({
+    success: true,
+    message: "Recompenses reinitialises (XP, themes, badges, Tanuki)",
   });
 }

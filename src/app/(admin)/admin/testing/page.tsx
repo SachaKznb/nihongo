@@ -25,6 +25,10 @@ export default function AdminTestingPage() {
 
   const [mistakePattern, setMistakePattern] = useState<"visual" | "reading" | "translation">("visual");
 
+  // Tanuki/XP testing states
+  const [xpAmount, setXpAmount] = useState(500);
+  const [tanukiStage, setTanukiStage] = useState(2);
+
   const executeAction = async (action: string, params: Record<string, unknown> = {}) => {
     setLoading(action);
     setResult(null);
@@ -409,13 +413,148 @@ export default function AdminTestingPage() {
         </div>
       </div>
 
+      {/* Tanuki & XP Section */}
+      <div className="mt-8 mb-8">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-2xl">🦝</span>
+          <h2 className="text-xl font-bold text-gray-900">Tanuki & Recompenses</h2>
+        </div>
+        <p className="text-gray-600 mb-4">
+          Testez le systeme de pet Tanuki et les recompenses XP. Voir le Tanuki sur le <Link href="/dashboard" className="text-indigo-600 underline">dashboard</Link> ou les recompenses sur <Link href="/rewards" className="text-indigo-600 underline">/rewards</Link>.
+        </p>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Set XP */}
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-amber-50 border-b border-amber-200 px-4 py-2">
+              <h3 className="font-semibold text-amber-900 flex items-center gap-2">
+                <span>⚡</span>
+                Definir XP
+              </h3>
+            </div>
+            <div className="p-4">
+              <p className="text-xs text-gray-500 mb-3">
+                Change votre XP total pour tester l&apos;evolution du Tanuki.
+              </p>
+              <div className="space-y-2">
+                <input
+                  type="number"
+                  min={0}
+                  value={xpAmount}
+                  onChange={(e) => setXpAmount(parseInt(e.target.value) || 0)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                />
+                <div className="flex flex-wrap gap-1">
+                  {[0, 500, 2000, 5000, 15000, 50000].map((xp) => (
+                    <button
+                      key={xp}
+                      onClick={() => setXpAmount(xp)}
+                      className="px-2 py-1 text-xs bg-amber-100 text-amber-700 rounded hover:bg-amber-200"
+                    >
+                      {xp.toLocaleString()}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => executeAction("set_xp", { amount: xpAmount })}
+                  disabled={!!loading}
+                  className="w-full px-3 py-2 bg-amber-600 text-white text-sm font-medium rounded-md hover:bg-amber-700 disabled:opacity-50"
+                >
+                  {loading === "set_xp" ? "..." : "Appliquer"}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Set Tanuki Stage */}
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-orange-50 border-b border-orange-200 px-4 py-2">
+              <h3 className="font-semibold text-orange-900 flex items-center gap-2">
+                <span>🥚</span>
+                Evolution Tanuki
+              </h3>
+            </div>
+            <div className="p-4">
+              <p className="text-xs text-gray-500 mb-3">
+                Force l&apos;evolution du Tanuki a un stade specifique.
+              </p>
+              <div className="space-y-2">
+                <select
+                  value={tanukiStage}
+                  onChange={(e) => setTanukiStage(parseInt(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                >
+                  <option value={1}>1 - Oeuf (0 XP)</option>
+                  <option value={2}>2 - Bebe Tanuki (500 XP)</option>
+                  <option value={3}>3 - Tanuki Curieux (2000 XP)</option>
+                  <option value={4}>4 - Tanuki Etudiant (5000 XP)</option>
+                  <option value={5}>5 - Tanuki Sage (15000 XP)</option>
+                  <option value={6}>6 - Tanuki Sensei (50000 XP)</option>
+                </select>
+                <button
+                  onClick={() => executeAction("set_tanuki_stage", { stage: tanukiStage })}
+                  disabled={!!loading}
+                  className="w-full px-3 py-2 bg-orange-600 text-white text-sm font-medium rounded-md hover:bg-orange-700 disabled:opacity-50"
+                >
+                  {loading === "set_tanuki_stage" ? "..." : "Evoluer"}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Unlock All Skins */}
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-purple-50 border-b border-purple-200 px-4 py-2">
+              <h3 className="font-semibold text-purple-900 flex items-center gap-2">
+                <span>🎨</span>
+                Debloquer skins
+              </h3>
+            </div>
+            <div className="p-4">
+              <p className="text-xs text-gray-500 mb-3">
+                Debloque tous les skins Tanuki (Ninja, Sakura, Dore, Esprit).
+              </p>
+              <button
+                onClick={() => executeAction("unlock_all_skins")}
+                disabled={!!loading}
+                className="w-full px-3 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 disabled:opacity-50"
+              >
+                {loading === "unlock_all_skins" ? "..." : "Tout debloquer"}
+              </button>
+            </div>
+          </div>
+
+          {/* Reset Rewards */}
+          <div className="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-gray-50 border-b border-gray-200 px-4 py-2">
+              <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+                <span>🔄</span>
+                Reset recompenses
+              </h3>
+            </div>
+            <div className="p-4">
+              <p className="text-xs text-gray-500 mb-3">
+                Remet a zero XP, themes, badges, et Tanuki.
+              </p>
+              <button
+                onClick={() => executeAction("reset_rewards")}
+                disabled={!!loading}
+                className="w-full px-3 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 disabled:opacity-50"
+              >
+                {loading === "reset_rewards" ? "..." : "Reinitialiser"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Testing Workflow Guide */}
       <div className="mt-8 bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
         <div className="bg-gray-50 border-b border-gray-200 px-5 py-3">
           <h2 className="font-semibold text-gray-900">📋 Guide de test rapide</h2>
         </div>
         <div className="p-5">
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             <div>
               <h3 className="font-medium text-gray-900 mb-2">Pour tester le feedback IA en temps reel :</h3>
               <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
@@ -433,6 +572,15 @@ export default function AdminTestingPage() {
                 <li>Allez sur le <Link href="/dashboard" className="text-indigo-600 underline">dashboard</Link></li>
                 <li>Regardez la section &quot;Mes points faibles&quot;</li>
                 <li>Cliquez sur &quot;Etude ciblee&quot; pour voir les sessions</li>
+              </ol>
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900 mb-2">Pour tester le Tanuki & XP :</h3>
+              <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
+                <li>Utilisez &quot;Definir XP&quot; ou &quot;Evolution Tanuki&quot;</li>
+                <li>Allez sur le <Link href="/dashboard" className="text-indigo-600 underline">dashboard</Link> pour voir votre Tanuki</li>
+                <li>Testez les skins sur <Link href="/rewards" className="text-indigo-600 underline">/rewards</Link></li>
+                <li>Utilisez &quot;Reset recompenses&quot; pour recommencer</li>
               </ol>
             </div>
           </div>
