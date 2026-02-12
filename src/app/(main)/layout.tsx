@@ -74,6 +74,19 @@ export default async function MainLayout({
                 </Link>
                 <div className="w-px h-6 bg-stone-200 mx-2"></div>
                 <Link
+                  href="/stats"
+                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
+                >
+                  Stats
+                </Link>
+                <Link
+                  href="/leaderboard"
+                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
+                >
+                  Classement
+                </Link>
+                <div className="w-px h-6 bg-stone-200 mx-2"></div>
+                <Link
                   href="/rewards"
                   className="px-4 py-2 text-sm text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors font-medium"
                 >

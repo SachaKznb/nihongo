@@ -19,6 +19,8 @@ export default function MobileNav({ userName }: MobileNavProps) {
     { href: "/radicals", label: "Radicaux", icon: "部" },
     { href: "/kanji", label: "Kanji", icon: "漢" },
     { href: "/vocabulary", label: "Vocabulaire", icon: "語" },
+    { href: "/stats", label: "Statistiques", icon: "📊" },
+    { href: "/leaderboard", label: "Classement", icon: "🏆" },
     { href: "/rewards", label: "Récompenses", icon: "🎁", highlight: true },
     { href: "/settings", label: "Paramètres", icon: "⚙️" },
   ];
