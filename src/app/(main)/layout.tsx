@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
+import NotificationInbox from "@/components/NotificationInbox";
 
 export default async function MainLayout({
   children,
@@ -72,7 +73,10 @@ export default async function MainLayout({
                 </Link>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              {/* Notification Inbox */}
+              <NotificationInbox />
+
               <Link
                 href="/settings"
                 className="p-2 text-stone-500 hover:text-stone-700 hover:bg-stone-100 rounded-lg transition-colors"
