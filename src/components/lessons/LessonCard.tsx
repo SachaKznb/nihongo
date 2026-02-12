@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { LessonItem } from "@/types";
 import { playReading } from "@/lib/audio";
 
@@ -7,13 +8,24 @@ interface LessonCardProps {
   item: LessonItem;
   showMnemonic?: boolean;
   autoplayAudio?: boolean;
+  onGenerateMnemonic?: (mnemonicType: "meaning" | "reading", forceRegenerate: boolean) => Promise<void>;
+  isGenerating?: boolean;
+  generatingType?: "meaning" | "reading" | null;
 }
 
 export function LessonCard({
   item,
   showMnemonic = true,
   autoplayAudio = true,
+  onGenerateMnemonic,
+  isGenerating = false,
+  generatingType = null,
 }: LessonCardProps) {
+  const [showDefaultMeaning, setShowDefaultMeaning] = useState(false);
+  const [showDefaultReading, setShowDefaultReading] = useState(false);
+
+  const hasMeaningCustom = !!item.customMnemonic;
+  const hasReadingCustom = !!item.customReadingMnemonic;
   const handlePlayAudio = () => {
     if (item.readings && item.readings.length > 0) {
       playReading(item.readings[0]);
@@ -140,20 +152,170 @@ export function LessonCard({
         {/* Mnemonic */}
         {showMnemonic && (
           <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-4 border border-amber-100">
-            <h4 className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2 flex items-center gap-2">
-              <span>💡</span> Mnémonique
-            </h4>
-            <p className="text-stone-700 leading-relaxed">{item.mnemonic}</p>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-xs font-semibold text-amber-700 uppercase tracking-wide flex items-center gap-2">
+                <span>💡</span> Mnémonique
+              </h4>
+              {onGenerateMnemonic && !hasMeaningCustom && (
+                <button
+                  onClick={() => onGenerateMnemonic("meaning", false)}
+                  disabled={isGenerating}
+                  className="text-xs text-amber-600 hover:text-amber-800 flex items-center gap-1 disabled:opacity-50 transition-colors"
+                >
+                  {isGenerating && generatingType === "meaning" ? (
+                    <>
+                      <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Creation...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                      </svg>
+                      <span>Creer avec l'IA</span>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+
+            {item.customMnemonic ? (
+              <div className="space-y-2">
+                <div className="bg-amber-100 rounded-lg p-3 border-l-4 border-amber-400">
+                  <p className="text-stone-700 leading-relaxed text-sm font-medium">
+                    {item.customMnemonic}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setShowDefaultMeaning(!showDefaultMeaning)}
+                    className="text-xs text-stone-500 hover:text-stone-700 flex items-center gap-1"
+                  >
+                    <svg className={`w-3 h-3 transition-transform ${showDefaultMeaning ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    Voir l'original
+                  </button>
+                  {onGenerateMnemonic && (
+                    <button
+                      onClick={() => onGenerateMnemonic("meaning", true)}
+                      disabled={isGenerating}
+                      className="text-xs text-amber-600 hover:text-amber-800 flex items-center gap-1 disabled:opacity-50"
+                    >
+                      {isGenerating && generatingType === "meaning" ? (
+                        <>
+                          <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <span>Regeneration...</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
+                          <span>Regenerer (1 credit)</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+                {showDefaultMeaning && (
+                  <p className="text-stone-500 leading-relaxed text-sm pl-4">{item.mnemonic}</p>
+                )}
+              </div>
+            ) : (
+              <p className="text-stone-700 leading-relaxed">{item.mnemonic}</p>
+            )}
           </div>
         )}
 
         {/* Reading mnemonic for kanji */}
         {showMnemonic && item.readingMnemonic && (
           <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4 border border-purple-100">
-            <h4 className="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-2 flex items-center gap-2">
-              <span>🎵</span> Mnémonique de lecture
-            </h4>
-            <p className="text-stone-700 leading-relaxed">{item.readingMnemonic}</p>
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-xs font-semibold text-purple-700 uppercase tracking-wide flex items-center gap-2">
+                <span>🎵</span> Mnémonique de lecture
+              </h4>
+              {onGenerateMnemonic && !hasReadingCustom && (
+                <button
+                  onClick={() => onGenerateMnemonic("reading", false)}
+                  disabled={isGenerating}
+                  className="text-xs text-purple-600 hover:text-purple-800 flex items-center gap-1 disabled:opacity-50 transition-colors"
+                >
+                  {isGenerating && generatingType === "reading" ? (
+                    <>
+                      <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Creation...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                      </svg>
+                      <span>Creer avec l'IA</span>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+
+            {item.customReadingMnemonic ? (
+              <div className="space-y-2">
+                <div className="bg-purple-100 rounded-lg p-3 border-l-4 border-purple-400">
+                  <p className="text-stone-700 leading-relaxed text-sm font-medium">
+                    {item.customReadingMnemonic}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setShowDefaultReading(!showDefaultReading)}
+                    className="text-xs text-stone-500 hover:text-stone-700 flex items-center gap-1"
+                  >
+                    <svg className={`w-3 h-3 transition-transform ${showDefaultReading ? "rotate-90" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    Voir l'original
+                  </button>
+                  {onGenerateMnemonic && (
+                    <button
+                      onClick={() => onGenerateMnemonic("reading", true)}
+                      disabled={isGenerating}
+                      className="text-xs text-purple-600 hover:text-purple-800 flex items-center gap-1 disabled:opacity-50"
+                    >
+                      {isGenerating && generatingType === "reading" ? (
+                        <>
+                          <svg className="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <span>Regeneration...</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
+                          <span>Regenerer (1 credit)</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+                {showDefaultReading && (
+                  <p className="text-stone-500 leading-relaxed text-sm pl-4">{item.readingMnemonic}</p>
+                )}
+              </div>
+            ) : (
+              <p className="text-stone-700 leading-relaxed">{item.readingMnemonic}</p>
+            )}
           </div>
         )}
 

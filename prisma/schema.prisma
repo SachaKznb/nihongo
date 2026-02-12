@@ -37,6 +37,9 @@ model User {
   totalLessonsDone  Int       @default(0)
   perfectDays       Int       @default(0)  // Days with 100% accuracy
 
+  // AI Mnemonic Credits
+  mnemonicCredits   Int       @default(0)  // Paid credits for regeneration
+
   // Progress relations
   radicalProgress    UserRadicalProgress[]
   kanjiProgress      UserKanjiProgress[]
@@ -73,6 +76,7 @@ model Radical {
   userProgress UserRadicalProgress[]
 
   @@unique([character, levelId])
+  @@index([levelId])
 }
 
 model Kanji {
@@ -89,6 +93,8 @@ model Kanji {
   radicals     KanjiRadical[]
   vocabulary   VocabularyKanji[]
   userProgress UserKanjiProgress[]
+
+  @@index([levelId])
 }
 
 model Vocabulary {
@@ -106,6 +112,7 @@ model Vocabulary {
   userProgress UserVocabularyProgress[]
 
   @@unique([word, levelId])
+  @@index([levelId])
 }
 
 // Junction tables
@@ -136,11 +143,14 @@ model UserRadicalProgress {
   nextReviewAt     DateTime?
   meaningCorrect   Int       @default(0)
   meaningIncorrect Int       @default(0)
+  customMnemonic   String?   @db.Text // User's custom AI-generated mnemonic
 
   user    User    @relation(fields: [userId], references: [id])
   radical Radical @relation(fields: [radicalId], references: [id])
 
   @@id([userId, radicalId])
+  @@index([userId, srsStage])
+  @@index([userId, nextReviewAt])
 }
 
 model UserKanjiProgress {
@@ -153,11 +163,15 @@ model UserKanjiProgress {
   meaningIncorrect Int       @default(0)
   readingCorrect   Int       @default(0)
   readingIncorrect Int       @default(0)
+  customMeaningMnemonic  String?   @db.Text // Custom mnemonic for meaning
+  customReadingMnemonic  String?   @db.Text // Custom mnemonic for reading
 
   user  User  @relation(fields: [userId], references: [id])
   kanji Kanji @relation(fields: [kanjiId], references: [id])
 
   @@id([userId, kanjiId])
+  @@index([userId, srsStage])
+  @@index([userId, nextReviewAt])
 }
 
 model UserVocabularyProgress {
@@ -170,11 +184,14 @@ model UserVocabularyProgress {
   meaningIncorrect Int       @default(0)
   readingCorrect   Int       @default(0)
   readingIncorrect Int       @default(0)
+  customMnemonic   String?   @db.Text // User's custom AI-generated mnemonic
 
   user       User       @relation(fields: [userId], references: [id])
   vocabulary Vocabulary @relation(fields: [vocabularyId], references: [id])
 
   @@id([userId, vocabularyId])
+  @@index([userId, srsStage])
+  @@index([userId, nextReviewAt])
 }
 
 model Review {
@@ -246,4 +263,18 @@ model AdminAuditLog {
   @@index([adminId, createdAt])
   @@index([targetType, targetId])
   @@index([createdAt])
+}
+
+// Shared AI-generated mnemonics (cache for all users)
+model SharedMnemonic {
+  id            String   @id @default(cuid())
+  itemType      String   // 'radical' | 'kanji' | 'vocabulary'
+  itemId        Int
+  mnemonicType  String   // 'meaning' | 'reading'
+  content       String   @db.Text
+  createdAt     DateTime @default(now())
+  usageCount    Int      @default(1)  // Track how many users use this
+
+  @@unique([itemType, itemId, mnemonicType])
+  @@index([itemType, itemId])
 }

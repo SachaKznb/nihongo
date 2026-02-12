@@ -14,6 +14,22 @@ interface ReviewSessionProps {
   reviews: ReviewItem[];
 }
 
+const CORRECT_MESSAGES = [
+  "Parfait !",
+  "Excellent !",
+  "Bravo !",
+  "Magnifique !",
+  "Superbe !",
+  "Bien joué !",
+];
+
+const INCORRECT_MESSAGES = [
+  "Pas tout à fait...",
+  "Presque !",
+  "Continue comme ça !",
+  "Tu y es presque !",
+];
+
 // Track the state of each item being reviewed
 interface ItemReviewState {
   item: ReviewItem;
@@ -51,6 +67,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
   const [showResult, setShowResult] = useState(false);
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
   const [lastExpectedAnswers, setLastExpectedAnswers] = useState<string[]>([]);
+  const [resultMessage, setResultMessage] = useState("");
   const [isComplete, setIsComplete] = useState(false);
 
   // Summary data
@@ -186,19 +203,16 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
 
       setLastCorrect(correct);
       setLastExpectedAnswers(result.expectedAnswers || []);
+      setResultMessage(
+        correct
+          ? CORRECT_MESSAGES[Math.floor(Math.random() * CORRECT_MESSAGES.length)]
+          : INCORRECT_MESSAGES[Math.floor(Math.random() * INCORRECT_MESSAGES.length)]
+      );
       setShowResult(true);
 
       // Update stats
       if (correct) {
         setStats((s) => ({ ...s, correct: s.correct + 1 }));
-
-        // Play audio for correct reading answers
-        if (
-          currentQuestion.reviewType === "reading" &&
-          currentQuestion.item.readings
-        ) {
-          playReading(currentQuestion.item.readings[0]);
-        }
       } else {
         setStats((s) => ({ ...s, incorrect: s.incorrect + 1 }));
       }
@@ -233,6 +247,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
     setShowResult(false);
     setLastCorrect(null);
     setLastExpectedAnswers([]);
+    setResultMessage("");
     lastSrsUpdate.current = null;
 
     // Find next unanswered question
@@ -559,44 +574,69 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
           ) : (
             <div className="space-y-4">
               <div
-                className={`p-5 rounded-2xl ${
+                className={`p-6 rounded-2xl text-center ${
                   lastCorrect
-                    ? "bg-emerald-100 border border-emerald-200"
-                    : "bg-rose-100 border border-rose-200"
+                    ? "bg-gradient-to-b from-emerald-50 to-emerald-100 border border-emerald-200"
+                    : "bg-gradient-to-b from-amber-50 to-orange-50 border border-amber-200"
                 }`}
               >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p
-                      className={`font-semibold text-lg ${
-                        lastCorrect ? "text-emerald-700" : "text-rose-700"
-                      }`}
-                    >
-                      {lastCorrect ? "Correct ! ✓" : "Incorrect ✗"}
-                    </p>
-                    {!lastCorrect && (
-                      <p className="text-stone-700 mt-1">
-                        Réponse attendue : {lastExpectedAnswers.join(", ")}
+                {lastCorrect ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-center gap-3">
+                      <span className="text-4xl animate-bounce">🎯</span>
+                      <h3 className="text-2xl font-bold text-emerald-600">{resultMessage}</h3>
+                    </div>
+                    {lastExpectedAnswers.length > 0 && (
+                      <p className="text-emerald-700 font-medium text-lg">
+                        {lastExpectedAnswers[0]}
                       </p>
                     )}
                   </div>
-                  {/* Show SRS change if this was the final answer for the item */}
-                  {lastSrsUpdate.current &&
-                    lastSrsUpdate.current.itemKey === currentItemKey && (
-                      <div className="text-right text-sm">
-                        <p
-                          className={
-                            lastSrsUpdate.current.to > lastSrsUpdate.current.from
-                              ? "text-emerald-600"
-                              : "text-rose-600"
-                          }
-                        >
-                          {SRS_STAGE_NAMES[lastSrsUpdate.current.from]} →{" "}
-                          {SRS_STAGE_NAMES[lastSrsUpdate.current.to]}
-                        </p>
-                      </div>
-                    )}
-                </div>
+                ) : (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-2xl">💪</span>
+                      <h3 className="text-xl font-semibold text-amber-700">{resultMessage}</h3>
+                    </div>
+                    <div className="bg-white/60 rounded-xl p-4">
+                      <p className="text-stone-600 text-sm mb-1">La bonne réponse :</p>
+                      <p className="text-stone-900 font-bold text-lg">
+                        {lastExpectedAnswers.join(", ")}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Audio button for reading reviews */}
+                {currentQuestion?.reviewType === "reading" &&
+                  currentQuestion?.item.readings &&
+                  currentQuestion.item.readings.length > 0 && (
+                    <button
+                      onClick={() => playReading(currentQuestion.item.readings![0])}
+                      className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-stone-600 bg-white/80 hover:bg-white rounded-lg transition-colors shadow-sm"
+                    >
+                      <span>🔊</span>
+                      <span>Écouter la prononciation</span>
+                    </button>
+                  )}
+
+                {/* Show SRS change if this was the final answer for the item */}
+                {lastSrsUpdate.current &&
+                  lastSrsUpdate.current.itemKey === currentItemKey && (
+                    <div className="mt-4 pt-3 border-t border-stone-200/50">
+                      <p
+                        className={`text-sm font-medium ${
+                          lastSrsUpdate.current.to > lastSrsUpdate.current.from
+                            ? "text-emerald-600"
+                            : "text-rose-600"
+                        }`}
+                      >
+                        {lastSrsUpdate.current.to > lastSrsUpdate.current.from ? "↑" : "↓"}{" "}
+                        {SRS_STAGE_NAMES[lastSrsUpdate.current.from]} →{" "}
+                        {SRS_STAGE_NAMES[lastSrsUpdate.current.to]}
+                      </p>
+                    </div>
+                  )}
               </div>
               <Button onClick={handleNext} className="w-full py-4">
                 Continuer (Entrée)

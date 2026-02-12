@@ -38,6 +38,8 @@ export interface LessonItem {
   readingsKun?: string[];
   mnemonic: string;
   readingMnemonic?: string;
+  customMnemonic?: string | null; // User's custom AI-generated mnemonic
+  customReadingMnemonic?: string | null; // For kanji only
   imageUrl?: string | null;
   sentence?: { jp: string; fr: string } | null;
   // For radicals: kanji that use this radical

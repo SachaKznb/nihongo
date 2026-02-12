@@ -30,9 +30,10 @@ const INCORRECT_MESSAGES = [
   "Tu y es presque !",
 ];
 
-export function LessonSession({ lessons }: LessonSessionProps) {
+export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
   const router = useRouter();
   const { addToast } = useToast();
+  const [lessons, setLessons] = useState<LessonItem[]>(initialLessons);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<SessionPhase>("learning");
   const [quizItems, setQuizItems] = useState<LessonItem[]>([]);
@@ -44,10 +45,74 @@ export function LessonSession({ lessons }: LessonSessionProps) {
   const [showXpAnimation, setShowXpAnimation] = useState(false);
   const [earnedXp, setEarnedXp] = useState(0);
   const [resultMessage, setResultMessage] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatingType, setGeneratingType] = useState<"meaning" | "reading" | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const currentLesson = lessons[currentIndex];
   const currentQuizItem = quizItems[quizIndex];
+
+  // Handle mnemonic generation
+  const handleGenerateMnemonic = async (mnemonicType: "meaning" | "reading", forceRegenerate: boolean = false) => {
+    setIsGenerating(true);
+    setGeneratingType(mnemonicType);
+
+    try {
+      const response = await fetch("/api/mnemonics/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: currentLesson.type,
+          id: currentLesson.id,
+          mnemonicType,
+          forceRegenerate,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 402 && data.requiresCredits) {
+          addToast("Tu n'as plus de credits IA pour regenerer ce mnemonique. Mais tu peux continuer tes lecons normalement !", "warning");
+          return;
+        }
+        throw new Error(data.error || "Generation failed");
+      }
+
+      const { mnemonic, fromCache } = data;
+
+      // Update the lesson in state with the new custom mnemonic
+      setLessons((prev) =>
+        prev.map((lesson) => {
+          if (lesson.type === currentLesson.type && lesson.id === currentLesson.id) {
+            if (mnemonicType === "meaning") {
+              return { ...lesson, customMnemonic: mnemonic };
+            } else {
+              return { ...lesson, customReadingMnemonic: mnemonic };
+            }
+          }
+          return lesson;
+        })
+      );
+
+      if (forceRegenerate) {
+        addToast("Mnemonique regenere ! (1 credit utilise)", "success");
+      } else if (fromCache) {
+        addToast("Mnemonique IA applique !", "success");
+      } else {
+        addToast("Mnemonique cree avec l'IA !", "success");
+      }
+    } catch (error) {
+      console.error("Mnemonic generation error:", error);
+      addToast(
+        error instanceof Error ? error.message : "Erreur lors de la generation",
+        "error"
+      );
+    } finally {
+      setIsGenerating(false);
+      setGeneratingType(null);
+    }
+  };
 
   // Normalize text by removing accents and special characters
   const normalizeText = (text: string): string => {
@@ -388,7 +453,12 @@ export function LessonSession({ lessons }: LessonSessionProps) {
         </div>
 
         {/* Lesson Card */}
-        <LessonCard item={currentLesson} />
+        <LessonCard
+          item={currentLesson}
+          onGenerateMnemonic={handleGenerateMnemonic}
+          isGenerating={isGenerating}
+          generatingType={generatingType}
+        />
 
         {/* Navigation */}
         <div className="flex justify-between mt-6">
