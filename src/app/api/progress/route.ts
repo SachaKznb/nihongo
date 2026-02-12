@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { SRS_STAGES, getSrsCategory } from "@/lib/srs";
+import { cacheGet, cacheSet, cacheKeys, generalRateLimit, checkRateLimit } from "@/lib/upstash";
 import type { UserProgress, SrsBreakdown, GamificationStats } from "@/types";
 
 export async function GET() {
@@ -13,6 +14,25 @@ export async function GET() {
     }
 
     const userId = session.user.id;
+
+    // Rate limiting
+    const rateLimit = await checkRateLimit(generalRateLimit, userId);
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Trop de requetes" }, { status: 429 });
+    }
+
+    // Try to get cached progress (30 second TTL)
+    const cacheKey = cacheKeys.dashboardData(userId);
+    const cached = await cacheGet<UserProgress>(cacheKey);
+    if (cached) {
+      return NextResponse.json(cached, {
+        headers: {
+          "Cache-Control": "private, max-age=30, stale-while-revalidate=60",
+          "X-Cache": "HIT",
+        },
+      });
+    }
+
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
@@ -175,9 +195,13 @@ export async function GET() {
     gamification,
   };
 
+    // Cache for 30 seconds
+    await cacheSet(cacheKey, progress, 30);
+
     return NextResponse.json(progress, {
       headers: {
         "Cache-Control": "private, max-age=30, stale-while-revalidate=60",
+        "X-Cache": "MISS",
       },
     });
   } catch (error) {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { SRS_STAGES } from "@/lib/srs";
+import { generalRateLimit, checkRateLimit } from "@/lib/upstash";
 import type { LessonItem } from "@/types";
 
 // GET /api/lessons - Returns available lessons (unlocked items not yet started)
@@ -17,6 +18,12 @@ export async function GET(request: NextRequest) {
     }
 
     const userId = session.user.id;
+
+    // Rate limiting
+    const rateLimit = await checkRateLimit(generalRateLimit, userId);
+    if (!rateLimit.success) {
+      return NextResponse.json({ error: "Trop de requetes" }, { status: 429 });
+    }
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (!user) {
