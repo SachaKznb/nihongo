@@ -20,6 +20,11 @@ export default async function MainLayout({
     redirect("/verify-email");
   }
 
+  // Block users who haven't completed onboarding
+  if (!session.user.onboardingCompleted) {
+    redirect("/onboarding");
+  }
+
   return (
     <div className="min-h-screen bg-stone-50">
       {/* Navigation - Sticky header */}

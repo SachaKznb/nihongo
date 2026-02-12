@@ -24,6 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             passwordHash: true,
             username: true,
             emailVerified: true,
+            onboardingCompleted: true,
             isAdmin: true,
             isSuspended: true,
           },
@@ -52,6 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           name: user.username,
           emailVerified: user.emailVerified,
+          onboardingCompleted: user.onboardingCompleted,
           isAdmin: user.isAdmin,
         };
       },
@@ -68,16 +70,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.emailVerified = user.emailVerified;
+        token.onboardingCompleted = user.onboardingCompleted;
         token.isAdmin = user.isAdmin;
       }
-      // Refresh token data on update trigger (e.g., after email verification)
+      // Refresh token data on update trigger (e.g., after email verification or onboarding)
       if (trigger === "update" && token.id) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { emailVerified: true, isAdmin: true },
+          select: { emailVerified: true, onboardingCompleted: true, isAdmin: true },
         });
         if (dbUser) {
           token.emailVerified = dbUser.emailVerified;
+          token.onboardingCompleted = dbUser.onboardingCompleted;
           token.isAdmin = dbUser.isAdmin;
         }
       }
@@ -87,6 +91,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         session.user.emailVerified = token.emailVerified as Date | null;
+        session.user.onboardingCompleted = token.onboardingCompleted as boolean;
         session.user.isAdmin = token.isAdmin as boolean;
       }
       return session;

@@ -6,6 +6,24 @@ import type { UserProgress } from "@/types";
 import { useProgress } from "@/lib/hooks";
 import WeaknessPatterns from "@/components/dashboard/WeaknessPatterns";
 import TanukiPet from "@/components/dashboard/TanukiPet";
+import { StreakCalendarMini } from "@/components/dashboard/StreakCalendarMini";
+import { RecentMistakes } from "@/components/dashboard/RecentMistakes";
+
+interface CalendarDay {
+  date: string;
+  studied: boolean;
+  reviews: number;
+}
+
+interface MistakeItem {
+  id: string;
+  character: string | null;
+  imageUrl: string | null;
+  type: "radical" | "kanji" | "vocabulary";
+  correctAnswer: string;
+  userAnswer: string;
+  createdAt: string;
+}
 
 // Motivational messages based on context
 const getMotivationalMessage = (streak: number, pendingReviews: number, todayReviews: number) => {
@@ -34,6 +52,22 @@ const getXpLevel = (xp: number) => {
 export default function DashboardPage() {
   const { data: progress, isLoading } = useProgress();
   const [showStreakWarning, setShowStreakWarning] = useState(false);
+  const [streakData, setStreakData] = useState<CalendarDay[]>([]);
+  const [recentMistakes, setRecentMistakes] = useState<MistakeItem[]>([]);
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  // Check for first visit after onboarding
+  useEffect(() => {
+    const hasSeenWelcome = localStorage.getItem("hasSeenWelcome");
+    if (!hasSeenWelcome) {
+      setShowWelcome(true);
+    }
+  }, []);
+
+  const dismissWelcome = () => {
+    localStorage.setItem("hasSeenWelcome", "true");
+    setShowWelcome(false);
+  };
 
   // Show streak warning if user has a streak and hasn't studied today
   useEffect(() => {
@@ -43,6 +77,33 @@ export default function DashboardPage() {
       setShowStreakWarning(true);
     }
   }, [progress]);
+
+  // Fetch streak data and recent mistakes
+  useEffect(() => {
+    async function fetchDashboardData() {
+      try {
+        // Fetch streak calendar data
+        const statsRes = await fetch("/api/stats/user");
+        if (statsRes.ok) {
+          const statsData = await statsRes.json();
+          if (statsData.streakCalendar) {
+            setStreakData(statsData.streakCalendar);
+          }
+        }
+
+        // Fetch recent mistakes
+        const mistakesRes = await fetch("/api/mistakes/recent");
+        if (mistakesRes.ok) {
+          const mistakesData = await mistakesRes.json();
+          setRecentMistakes(mistakesData.mistakes || []);
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    }
+
+    fetchDashboardData();
+  }, []);
 
   if (isLoading) {
     return (
@@ -107,6 +168,30 @@ export default function DashboardPage() {
             </div>
             <button
               onClick={() => setShowStreakWarning(false)}
+              className="p-1 hover:bg-white/20 rounded-lg transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Welcome Banner - First visit after onboarding */}
+      {showWelcome && (
+        <div className="relative overflow-hidden bg-gradient-to-r from-teal-500 to-emerald-500 rounded-2xl p-4 text-white shadow-lg animate-slide-up">
+          <div className="absolute inset-0 opacity-20 bg-white/5" style={{backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "20px 20px"}}></div>
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">🎊</span>
+              <div>
+                <p className="font-bold font-display text-lg">Bienvenue sur Nihongo !</p>
+                <p className="text-teal-100 text-sm">Tu as appris tes premiers radicaux. Continue tes leçons !</p>
+              </div>
+            </div>
+            <button
+              onClick={dismissWelcome}
               className="p-1 hover:bg-white/20 rounded-lg transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
@@ -210,7 +295,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Main Action Cards */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
         {/* Lessons Card */}
         <Link href="/lessons" prefetch={true} className="group">
           <div className="relative overflow-hidden bg-white rounded-3xl border-2 border-stone-200 p-6 hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-100/50 transition-all hover:-translate-y-1">
@@ -280,6 +365,40 @@ export default function DashboardPage() {
             </div>
           </div>
         </Link>
+
+        {/* Extra Study Card */}
+        <Link href="/extra-study" className="group">
+          <div className="relative overflow-hidden bg-white rounded-3xl border-2 border-stone-200 p-6 hover:border-teal-300 hover:shadow-2xl hover:shadow-teal-100/50 transition-all hover:-translate-y-1">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-teal-100 to-teal-50 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-125 transition-transform duration-500"></div>
+            <div className="absolute bottom-4 right-4 text-8xl font-japanese text-teal-100 group-hover:text-teal-200 transition-colors">練</div>
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-teal-400 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg shadow-teal-200/50">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-7 h-7 text-white">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+                  </svg>
+                </div>
+                <div className="text-right">
+                  <span className="text-2xl font-bold font-display text-stone-900">Libre</span>
+                </div>
+              </div>
+              <h3 className="text-xl font-bold font-display text-stone-900 mb-1">Étude libre</h3>
+              <p className="text-stone-500">Pratique sans limite</p>
+              <div className="mt-4 flex items-center gap-2 text-teal-600 font-medium group-hover:gap-3 transition-all">
+                <span>Pratiquer</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </Link>
+      </div>
+
+      {/* Streak Calendar & Recent Mistakes Row */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <StreakCalendarMini data={streakData} />
+        <RecentMistakes mistakes={recentMistakes} />
       </div>
 
       {/* Stats Grid */}

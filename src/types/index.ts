@@ -137,6 +137,7 @@ declare module "next-auth" {
       email: string;
       name: string;
       emailVerified: Date | null;
+      onboardingCompleted: boolean;
       isAdmin: boolean;
     };
   }
@@ -144,6 +145,7 @@ declare module "next-auth" {
   interface User {
     id: string;
     emailVerified: Date | null;
+    onboardingCompleted: boolean;
     isAdmin: boolean;
   }
 }
