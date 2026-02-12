@@ -61,6 +61,10 @@ model User {
   // One-click unsubscribe token
   unsubscribeToken           String?   @unique
 
+  // AI Feedback settings
+  aiFeedbackEnabled     Boolean   @default(true)
+  lastPatternAnalysis   DateTime?
+
   // Progress relations
   radicalProgress    UserRadicalProgress[]
   kanjiProgress      UserKanjiProgress[]
@@ -71,6 +75,10 @@ model User {
   emailVerificationTokens EmailVerificationToken[]
   emailChangeTokens       EmailChangeToken[]
   notificationLogs        NotificationLog[]
+
+  // AI Feedback relations
+  reviewMistakes     ReviewMistake[]
+  weaknessPatterns   UserWeaknessPattern[]
 
   // Admin audit relations
   adminActions AdminAuditLog[] @relation("AdminPerformer")
@@ -332,4 +340,55 @@ model EmailTemplate {
   isActive    Boolean  @default(true)
   updatedAt   DateTime @updatedAt
   updatedBy   String?  // Admin who last updated
+}
+
+// Store user's wrong answers for pattern analysis
+model ReviewMistake {
+  id             String   @id @default(cuid())
+  userId         String
+  itemType       String   // 'radical' | 'kanji' | 'vocabulary'
+  itemId         Int
+  reviewType     String   // 'meaning' | 'reading'
+  userAnswer     String   // What the user typed
+  correctAnswers String[] // Expected answers
+  feedbackShown  String?  @db.Text // AI feedback shown (for analytics)
+  createdAt      DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, itemType, itemId])
+}
+
+// Cache for common mistake feedback (avoid redundant AI calls)
+model MistakeFeedbackCache {
+  id                 String   @id @default(cuid())
+  itemType           String   // 'radical' | 'kanji' | 'vocabulary'
+  itemId             Int
+  reviewType         String   // 'meaning' | 'reading'
+  wrongAnswerPattern String   // Normalized wrong answer
+  feedback           String   @db.Text
+  usageCount         Int      @default(1)
+  createdAt          DateTime @default(now())
+
+  @@unique([itemType, itemId, reviewType, wrongAnswerPattern])
+  @@index([itemType, itemId])
+}
+
+// User's detected weakness patterns
+model UserWeaknessPattern {
+  id            String   @id @default(cuid())
+  userId        String
+  patternType   String   // 'visual_confusion' | 'reading_confusion' | 'translation_nuance'
+  description   String   @db.Text // AI-generated French description
+  affectedItems Json     // [{type, id, character}...]
+  mistakeCount  Int
+  severity      Float    // 0-1 for prioritization
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, severity])
+  @@index([userId, patternType])
 }

@@ -231,7 +231,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ correct, expectedAnswers });
+    return NextResponse.json({ correct, expectedAnswers, userAnswer: answer });
   } catch (error) {
     console.error("Review check error:", error);
     return NextResponse.json(

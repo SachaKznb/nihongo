@@ -70,6 +70,11 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
   const [resultMessage, setResultMessage] = useState("");
   const [isComplete, setIsComplete] = useState(false);
 
+  // AI Feedback state
+  const [aiFeedback, setAiFeedback] = useState<string | null>(null);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const feedbackCallCount = useRef(0); // Track calls per session (max 10)
+
   // Summary data
   const [summary, setSummary] = useState<ReviewSummary | null>(null);
 
@@ -215,6 +220,36 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
         setStats((s) => ({ ...s, correct: s.correct + 1 }));
       } else {
         setStats((s) => ({ ...s, incorrect: s.incorrect + 1 }));
+
+        // Fetch AI feedback for wrong answers (max 10 per session)
+        if (feedbackCallCount.current < 10) {
+          setFeedbackLoading(true);
+          feedbackCallCount.current += 1;
+
+          fetch("/api/reviews/feedback", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: currentQuestion.item.type,
+              id: currentQuestion.item.id,
+              reviewType: currentQuestion.reviewType,
+              userAnswer: result.userAnswer || answer,
+              correctAnswers: result.expectedAnswers,
+            }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.feedback) {
+                setAiFeedback(data.feedback);
+              }
+            })
+            .catch((err) => {
+              console.error("Failed to fetch feedback:", err);
+            })
+            .finally(() => {
+              setFeedbackLoading(false);
+            });
+        }
       }
 
       // Update item state
@@ -248,6 +283,8 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
     setLastCorrect(null);
     setLastExpectedAnswers([]);
     setResultMessage("");
+    setAiFeedback(null);
+    setFeedbackLoading(false);
     lastSrsUpdate.current = null;
 
     // Find next unanswered question
@@ -599,11 +636,31 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                       <h3 className="text-xl font-semibold text-amber-700">{resultMessage}</h3>
                     </div>
                     <div className="bg-white/60 rounded-xl p-4">
-                      <p className="text-stone-600 text-sm mb-1">La bonne réponse :</p>
+                      <p className="text-stone-600 text-sm mb-1">La bonne reponse :</p>
                       <p className="text-stone-900 font-bold text-lg">
                         {lastExpectedAnswers.join(", ")}
                       </p>
                     </div>
+
+                    {/* AI Feedback Section */}
+                    {(feedbackLoading || aiFeedback) && (
+                      <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-left">
+                        {feedbackLoading ? (
+                          <div className="flex items-center gap-2 text-indigo-600">
+                            <div className="animate-spin h-4 w-4 border-2 border-indigo-500 border-t-transparent rounded-full" />
+                            <span className="text-sm">Analyse en cours...</span>
+                          </div>
+                        ) : aiFeedback ? (
+                          <div>
+                            <p className="text-sm font-medium text-indigo-700 mb-1 flex items-center gap-1">
+                              <span>💡</span>
+                              Le truc a retenir :
+                            </p>
+                            <p className="text-indigo-900 text-sm leading-relaxed">{aiFeedback}</p>
+                          </div>
+                        ) : null}
+                      </div>
+                    )}
                   </div>
                 )}
 
