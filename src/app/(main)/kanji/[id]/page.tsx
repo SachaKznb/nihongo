@@ -149,6 +149,7 @@ export default async function KanjiDetailPage({ params }: Props) {
               Lectures
             </h4>
             <ReadingBadges
+              kanji={kanji.character}
               readingsOn={kanji.readingsOn}
               readingsKun={kanji.readingsKun}
               size="lg"
