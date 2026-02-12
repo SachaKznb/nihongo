@@ -102,6 +102,10 @@ export interface GamificationStats {
   todayLessons: number;
   levelProgress: number; // 0-100 percentage to next level
   activeLearners: number; // Social proof - simulated or real
+  // Tanuki pet data
+  tanukiSkin?: string;
+  tanukiName?: string | null;
+  lastStudyDate?: Date | null;
 }
 
 export interface UserProgress {

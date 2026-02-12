@@ -40,6 +40,16 @@ model User {
   // AI Mnemonic Credits
   mnemonicCredits   Int       @default(0)  // Paid credits for regeneration
 
+  // XP Rewards System
+  selectedTheme     String    @default("default")  // Current active theme
+  unlockedThemes    String[]  @default(["default"]) // Themes user has purchased
+  unlockedBadges    String[]  @default([])         // Badges user has earned
+
+  // Tanuki Pet System
+  tanukiName        String?                        // User's custom name for their Tanuki
+  tanukiSkin        String    @default("classic")  // Current skin (classic, ninja, sakura, etc.)
+  unlockedSkins     String[]  @default(["classic"]) // Skins user has purchased
+
   // Email Notification Preferences
   emailNotificationsEnabled  Boolean   @default(true)
   notifyReviewsWaiting       Boolean   @default(true)

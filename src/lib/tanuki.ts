@@ -1,0 +1,233 @@
+// Tanuki Pet System Configuration
+
+export interface TanukiStage {
+  id: number;
+  name: string;
+  description: string;
+  xpRequired: number;
+  emoji: string;
+  mood: string;
+  message: string;
+}
+
+export interface TanukiSkin {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
+}
+
+// Evolution stages based on total XP
+export const TANUKI_STAGES: TanukiStage[] = [
+  {
+    id: 1,
+    name: "Oeuf Mysterieux",
+    description: "Un oeuf qui brille doucement...",
+    xpRequired: 0,
+    emoji: "🥒",
+    mood: "dormant",
+    message: "Continue a etudier pour me faire eclore !",
+  },
+  {
+    id: 2,
+    name: "Bebe Tanuki",
+    description: "Un petit tanuki vient de naitre !",
+    xpRequired: 500,
+    emoji: "🦝",
+    mood: "sleepy",
+    message: "Miam, j'ai faim d'XP !",
+  },
+  {
+    id: 3,
+    name: "Tanuki Curieux",
+    description: "Il commence a explorer le monde",
+    xpRequired: 2000,
+    emoji: "🦝",
+    mood: "curious",
+    message: "Oh, qu'est-ce que c'est, ce kanji ?",
+  },
+  {
+    id: 4,
+    name: "Tanuki Etudiant",
+    description: "Il a trouve sa vocation : apprendre !",
+    xpRequired: 5000,
+    emoji: "🦝",
+    mood: "studious",
+    message: "Revisons ensemble !",
+  },
+  {
+    id: 5,
+    name: "Tanuki Sage",
+    description: "La sagesse se lit dans ses yeux",
+    xpRequired: 15000,
+    emoji: "🦝",
+    mood: "wise",
+    message: "La perseverance est la cle.",
+  },
+  {
+    id: 6,
+    name: "Tanuki Sensei",
+    description: "Un maitre respecte de tous",
+    xpRequired: 50000,
+    emoji: "🦝",
+    mood: "master",
+    message: "Tu es devenu mon egal, mon ami.",
+  },
+];
+
+// Available skins for purchase
+export const TANUKI_SKINS: TanukiSkin[] = [
+  {
+    id: "classic",
+    name: "Classique",
+    description: "Le tanuki traditionnel",
+    price: 0,
+    colors: {
+      primary: "#8B7355",
+      secondary: "#D4C4B0",
+      accent: "#2D2D2D",
+    },
+  },
+  {
+    id: "ninja",
+    name: "Ninja",
+    description: "Un tanuki des ombres",
+    price: 1500,
+    colors: {
+      primary: "#1a1a2e",
+      secondary: "#4a4a6a",
+      accent: "#e94560",
+    },
+  },
+  {
+    id: "sakura",
+    name: "Sakura",
+    description: "Pare de fleurs de cerisier",
+    price: 2000,
+    colors: {
+      primary: "#ffb7c5",
+      secondary: "#ffd1dc",
+      accent: "#ff69b4",
+    },
+  },
+  {
+    id: "golden",
+    name: "Dore",
+    description: "Un tanuki legendaire",
+    price: 3500,
+    colors: {
+      primary: "#ffd700",
+      secondary: "#fff8dc",
+      accent: "#ff8c00",
+    },
+  },
+  {
+    id: "spirit",
+    name: "Esprit",
+    description: "Un tanuki etheree",
+    price: 5000,
+    colors: {
+      primary: "#e0e7ff",
+      secondary: "#c7d2fe",
+      accent: "#818cf8",
+    },
+  },
+];
+
+// Helper functions
+export function getTanukiStage(totalXp: number): TanukiStage {
+  // Find the highest stage the user has reached
+  for (let i = TANUKI_STAGES.length - 1; i >= 0; i--) {
+    if (totalXp >= TANUKI_STAGES[i].xpRequired) {
+      return TANUKI_STAGES[i];
+    }
+  }
+  return TANUKI_STAGES[0];
+}
+
+export function getNextTanukiStage(totalXp: number): TanukiStage | null {
+  const currentStage = getTanukiStage(totalXp);
+  const nextIndex = TANUKI_STAGES.findIndex((s) => s.id === currentStage.id) + 1;
+  if (nextIndex < TANUKI_STAGES.length) {
+    return TANUKI_STAGES[nextIndex];
+  }
+  return null;
+}
+
+export function getProgressToNextStage(totalXp: number): number {
+  const currentStage = getTanukiStage(totalXp);
+  const nextStage = getNextTanukiStage(totalXp);
+
+  if (!nextStage) return 100; // Max level
+
+  const xpIntoCurrentStage = totalXp - currentStage.xpRequired;
+  const xpNeededForNext = nextStage.xpRequired - currentStage.xpRequired;
+
+  return Math.min(100, Math.round((xpIntoCurrentStage / xpNeededForNext) * 100));
+}
+
+export function getTanukiSkinById(id: string): TanukiSkin | undefined {
+  return TANUKI_SKINS.find((s) => s.id === id);
+}
+
+// Get mood message based on activity
+export function getTanukiMoodMessage(
+  stage: TanukiStage,
+  lastStudyDate: Date | null,
+  currentStreak: number,
+  pendingReviews: number
+): { mood: "happy" | "neutral" | "sleepy" | "excited"; message: string } {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // Check if studied today
+  const studiedToday = lastStudyDate && new Date(lastStudyDate) >= today;
+
+  // Stage 1 (egg) has special messages
+  if (stage.id === 1) {
+    if (pendingReviews > 0) {
+      return { mood: "excited", message: "L'oeuf fremit... il veut des revisions !" };
+    }
+    return { mood: "neutral", message: stage.message };
+  }
+
+  // High streak celebration
+  if (currentStreak >= 7 && studiedToday) {
+    return { mood: "excited", message: `${currentStreak} jours ! On est inarretables !` };
+  }
+
+  // Pending reviews
+  if (pendingReviews > 50) {
+    return { mood: "neutral", message: `${pendingReviews} revisions... on s'y met ?` };
+  }
+
+  if (pendingReviews > 0 && pendingReviews <= 10) {
+    return { mood: "happy", message: "Juste quelques revisions, allez !" };
+  }
+
+  // No activity recently
+  if (!studiedToday && lastStudyDate) {
+    const daysSinceStudy = Math.floor(
+      (now.getTime() - new Date(lastStudyDate).getTime()) / (1000 * 60 * 60 * 24)
+    );
+    if (daysSinceStudy >= 3) {
+      return { mood: "sleepy", message: "Zzz... tu m'as manque..." };
+    }
+    if (daysSinceStudy >= 1) {
+      return { mood: "neutral", message: "On etudie aujourd'hui ?" };
+    }
+  }
+
+  // Studied today, all caught up
+  if (studiedToday && pendingReviews === 0) {
+    return { mood: "happy", message: "Super travail aujourd'hui !" };
+  }
+
+  // Default
+  return { mood: "neutral", message: stage.message };
+}

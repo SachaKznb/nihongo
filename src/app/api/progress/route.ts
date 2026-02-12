@@ -154,6 +154,10 @@ export async function GET() {
     todayLessons: todayLessonsCount,
     levelProgress,
     activeLearners,
+    // Tanuki pet data
+    tanukiSkin: user.tanukiSkin,
+    tanukiName: user.tanukiName,
+    lastStudyDate: user.lastStudyDate,
   };
 
   const progress: UserProgress = {

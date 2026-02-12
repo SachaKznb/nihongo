@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { UserProgress } from "@/types";
 import { useProgress } from "@/lib/hooks";
 import WeaknessPatterns from "@/components/dashboard/WeaknessPatterns";
+import TanukiPet from "@/components/dashboard/TanukiPet";
 
 // Motivational messages based on context
 const getMotivationalMessage = (streak: number, pendingReviews: number, todayReviews: number) => {
@@ -208,6 +209,16 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Tanuki Pet */}
+      <TanukiPet
+        totalXp={gamification.totalXp}
+        skinId={gamification.tanukiSkin || "classic"}
+        tanukiName={gamification.tanukiName}
+        lastStudyDate={gamification.lastStudyDate ? new Date(gamification.lastStudyDate) : null}
+        currentStreak={gamification.currentStreak}
+        pendingReviews={progress.pendingReviews}
+      />
 
       {/* Main Action Cards */}
       <div className="grid md:grid-cols-2 gap-6">

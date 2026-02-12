@@ -71,6 +71,13 @@ export default async function MainLayout({
                 >
                   Vocabulaire
                 </Link>
+                <div className="w-px h-6 bg-stone-200 mx-2"></div>
+                <Link
+                  href="/rewards"
+                  className="px-4 py-2 text-sm text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors font-medium"
+                >
+                  Recompenses
+                </Link>
               </div>
             </div>
             <div className="flex items-center gap-2">
