@@ -5,33 +5,32 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface Level {
-  id: string;
-  number: number;
+  id: number;
 }
 
 interface Radical {
-  id: string;
+  id: number;
   character: string | null;
-  meaning: string;
-  image: string | null;
+  meaningFr: string;
+  imageUrl: string | null;
 }
 
 interface Vocab {
   vocabulary: {
-    id: string;
+    id: number;
     word: string;
-    meaning: string;
+    meaningsFr: string[];
   };
 }
 
 interface Kanji {
-  id: string;
+  id: number;
   character: string;
-  meaning: string;
-  meaningMnemonic: string | null;
-  onyomi: string[];
-  kunyomi: string[];
-  readingMnemonic: string | null;
+  meaningsFr: string[];
+  meaningMnemonicFr: string;
+  readingsOn: string[];
+  readingsKun: string[];
+  readingMnemonicFr: string;
   level: Level;
   radicals: { radical: Radical }[];
   vocabulary: Vocab[];
@@ -49,13 +48,13 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
   const [error, setError] = useState("");
 
   const [character, setCharacter] = useState("");
-  const [meaning, setMeaning] = useState("");
-  const [meaningMnemonic, setMeaningMnemonic] = useState("");
-  const [onyomi, setOnyomi] = useState("");
-  const [kunyomi, setKunyomi] = useState("");
-  const [readingMnemonic, setReadingMnemonic] = useState("");
-  const [levelId, setLevelId] = useState("");
-  const [radicalIds, setRadicalIds] = useState<string[]>([]);
+  const [meaningsFr, setMeaningsFr] = useState("");
+  const [meaningMnemonicFr, setMeaningMnemonicFr] = useState("");
+  const [readingsOn, setReadingsOn] = useState("");
+  const [readingsKun, setReadingsKun] = useState("");
+  const [readingMnemonicFr, setReadingMnemonicFr] = useState("");
+  const [levelId, setLevelId] = useState<number | "">("");
+  const [radicalIds, setRadicalIds] = useState<number[]>([]);
 
   useEffect(() => {
     Promise.all([fetchKanji(), fetchLevels(), fetchRadicals()]);
@@ -68,11 +67,11 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
         const data = await res.json();
         setKanji(data.kanji);
         setCharacter(data.kanji.character);
-        setMeaning(data.kanji.meaning);
-        setMeaningMnemonic(data.kanji.meaningMnemonic || "");
-        setOnyomi(data.kanji.onyomi.join(", "));
-        setKunyomi(data.kanji.kunyomi.join(", "));
-        setReadingMnemonic(data.kanji.readingMnemonic || "");
+        setMeaningsFr(data.kanji.meaningsFr.join(", "));
+        setMeaningMnemonicFr(data.kanji.meaningMnemonicFr || "");
+        setReadingsOn(data.kanji.readingsOn.join(", "));
+        setReadingsKun(data.kanji.readingsKun.join(", "));
+        setReadingMnemonicFr(data.kanji.readingMnemonicFr || "");
         setLevelId(data.kanji.level.id);
         setRadicalIds(data.kanji.radicals.map((r: { radical: Radical }) => r.radical.id));
       } else if (res.status === 404) {
@@ -120,12 +119,12 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           character,
-          meaning,
-          meaningMnemonic: meaningMnemonic || null,
-          onyomi: onyomi.split(",").map((s) => s.trim()).filter(Boolean),
-          kunyomi: kunyomi.split(",").map((s) => s.trim()).filter(Boolean),
-          readingMnemonic: readingMnemonic || null,
-          levelId,
+          meaningsFr: meaningsFr.split(",").map((s) => s.trim()).filter(Boolean),
+          meaningMnemonicFr: meaningMnemonicFr,
+          readingsOn: readingsOn.split(",").map((s) => s.trim()).filter(Boolean),
+          readingsKun: readingsKun.split(",").map((s) => s.trim()).filter(Boolean),
+          readingMnemonicFr: readingMnemonicFr,
+          levelId: Number(levelId),
           radicalIds,
         }),
       });
@@ -165,7 +164,7 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
     }
   };
 
-  const toggleRadical = (radicalId: string) => {
+  const toggleRadical = (radicalId: number) => {
     setRadicalIds((prev) =>
       prev.includes(radicalId)
         ? prev.filter((id) => id !== radicalId)
@@ -234,13 +233,14 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
               </label>
               <select
                 value={levelId}
-                onChange={(e) => setLevelId(e.target.value)}
+                onChange={(e) => setLevelId(Number(e.target.value))}
                 required
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               >
+                <option value="">Selectionner un niveau</option>
                 {levels.map((level) => (
                   <option key={level.id} value={level.id}>
-                    Niveau {level.number}
+                    Niveau {level.id}
                   </option>
                 ))}
               </select>
@@ -248,14 +248,15 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
 
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-stone-700 mb-1">
-                Signification
+                Significations (separees par virgule)
               </label>
               <input
                 type="text"
-                value={meaning}
-                onChange={(e) => setMeaning(e.target.value)}
+                value={meaningsFr}
+                onChange={(e) => setMeaningsFr(e.target.value)}
                 required
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+                placeholder="Un, Premier"
               />
             </div>
 
@@ -265,8 +266,8 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
               </label>
               <input
                 type="text"
-                value={onyomi}
-                onChange={(e) => setOnyomi(e.target.value)}
+                value={readingsOn}
+                onChange={(e) => setReadingsOn(e.target.value)}
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 placeholder="ニチ, ジツ"
               />
@@ -278,8 +279,8 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
               </label>
               <input
                 type="text"
-                value={kunyomi}
-                onChange={(e) => setKunyomi(e.target.value)}
+                value={readingsKun}
+                onChange={(e) => setReadingsKun(e.target.value)}
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
                 placeholder="ひ, か"
               />
@@ -296,8 +297,8 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
                 Mnemonique de signification
               </label>
               <textarea
-                value={meaningMnemonic}
-                onChange={(e) => setMeaningMnemonic(e.target.value)}
+                value={meaningMnemonicFr}
+                onChange={(e) => setMeaningMnemonicFr(e.target.value)}
                 rows={3}
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               />
@@ -308,8 +309,8 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
                 Mnemonique de lecture
               </label>
               <textarea
-                value={readingMnemonic}
-                onChange={(e) => setReadingMnemonic(e.target.value)}
+                value={readingMnemonicFr}
+                onChange={(e) => setReadingMnemonicFr(e.target.value)}
                 rows={3}
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               />
@@ -335,9 +336,9 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
                 }`}
               >
                 <span className="text-lg mr-1">
-                  {radical.character || (radical.image ? "🖼" : "?")}
+                  {radical.character || (radical.imageUrl ? "🖼" : "?")}
                 </span>
-                <span className="text-stone-600">{radical.meaning}</span>
+                <span className="text-stone-600">{radical.meaningFr}</span>
               </button>
             ))}
           </div>
@@ -357,7 +358,7 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
                   className="px-3 py-2 bg-stone-100 hover:bg-amber-100 rounded-lg"
                 >
                   <span className="font-medium">{vocabulary.word}</span>
-                  <span className="text-xs text-stone-500 ml-2">{vocabulary.meaning}</span>
+                  <span className="text-xs text-stone-500 ml-2">{vocabulary.meaningsFr[0]}</span>
                 </Link>
               ))}
             </div>
