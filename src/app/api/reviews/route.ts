@@ -80,10 +80,20 @@ export async function GET() {
     });
   }
 
-    // Shuffle reviews for variety
-    const shuffledReviews = reviews.sort(() => Math.random() - 0.5);
+    // Fisher-Yates shuffle for better randomization
+    for (let i = reviews.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [reviews[i], reviews[j]] = [reviews[j], reviews[i]];
+    }
 
-    return NextResponse.json({ reviews: shuffledReviews, total: reviews.length });
+    return NextResponse.json(
+      { reviews, total: reviews.length },
+      {
+        headers: {
+          "Cache-Control": "private, max-age=15, stale-while-revalidate=30",
+        },
+      }
+    );
   } catch (error) {
     console.error("Reviews GET error:", error);
     return NextResponse.json(

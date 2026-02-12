@@ -1,11 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { SRS_STAGES } from "@/lib/srs";
 import type { LessonItem } from "@/types";
 
 // GET /api/lessons - Returns available lessons (unlocked items not yet started)
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const page = parseInt(searchParams.get("page") || "0");
+  const limit = parseInt(searchParams.get("limit") || "0"); // 0 = use user's lessonsPerDay
   try {
     const session = await auth();
 
@@ -25,21 +28,27 @@ export async function GET() {
 
     const lessons: LessonItem[] = [];
 
+  const maxLessons = limit > 0 ? limit : user.lessonsPerDay;
+
   // Get radicals that are unlocked (stage 0) and not started
+  // Optimized: Only fetch kanji character and first meaning for preview
   const radicalProgress = await prisma.userRadicalProgress.findMany({
     where: { userId, srsStage: SRS_STAGES.LOCKED },
     include: {
       radical: {
         include: {
-          // Get kanji that use this radical (limit to 5 for preview)
           kanji: {
-            include: { kanji: true },
-            take: 5,
+            select: {
+              kanji: {
+                select: { character: true, meaningsFr: true },
+              },
+            },
+            take: 3, // Reduced from 5
           },
         },
       },
     },
-    take: user.lessonsPerDay,
+    take: maxLessons,
   });
 
   for (const rp of radicalProgress) {
@@ -59,22 +68,31 @@ export async function GET() {
   }
 
   // Get kanji that are unlocked (stage 0) and not started
+  // Optimized: Only fetch essential fields for radicals and vocabulary
   const kanjiProgress = await prisma.userKanjiProgress.findMany({
     where: { userId, srsStage: SRS_STAGES.LOCKED },
     include: {
       kanji: {
         include: {
-          // Component radicals
-          radicals: { include: { radical: true } },
-          // Vocabulary using this kanji (limit to 3)
+          radicals: {
+            select: {
+              radical: {
+                select: { character: true, meaningFr: true, imageUrl: true },
+              },
+            },
+          },
           vocabulary: {
-            include: { vocabulary: true },
-            take: 3,
+            select: {
+              vocabulary: {
+                select: { word: true, meaningsFr: true, readings: true },
+              },
+            },
+            take: 2, // Reduced from 3
           },
         },
       },
     },
-    take: Math.max(0, user.lessonsPerDay - lessons.length),
+    take: Math.max(0, maxLessons - lessons.length),
   });
 
   for (const kp of kanjiProgress) {
@@ -103,16 +121,13 @@ export async function GET() {
   }
 
   // Get vocabulary that are unlocked (stage 0) and not started
+  // Optimized: Kanji info not displayed in lessons, skip the join
   const vocabProgress = await prisma.userVocabularyProgress.findMany({
     where: { userId, srsStage: SRS_STAGES.LOCKED },
     include: {
-      vocabulary: {
-        include: {
-          kanji: { include: { kanji: true } },
-        },
-      },
+      vocabulary: true, // No need for kanji relation in lesson display
     },
-    take: Math.max(0, user.lessonsPerDay - lessons.length),
+    take: Math.max(0, maxLessons - lessons.length),
   });
 
   for (const vp of vocabProgress) {
@@ -130,7 +145,14 @@ export async function GET() {
     });
   }
 
-    return NextResponse.json({ lessons, total: lessons.length });
+    return NextResponse.json(
+      { lessons, total: lessons.length },
+      {
+        headers: {
+          "Cache-Control": "private, max-age=30, stale-while-revalidate=60",
+        },
+      }
+    );
   } catch (error) {
     console.error("Lessons GET error:", error);
     return NextResponse.json(

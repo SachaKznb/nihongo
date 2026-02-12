@@ -17,18 +17,18 @@ export default function AdminImportExportPage() {
         let csv = "";
         if (type === "radicals") {
           csv = "id,character,meaning,meaningMnemonic,image,levelNumber\n";
-          items.forEach((item: { id: string; character: string | null; meaning: string; meaningMnemonic: string | null; image: string | null; level: { number: number } }) => {
-            csv += `"${item.id}","${item.character || ""}","${item.meaning}","${(item.meaningMnemonic || "").replace(/"/g, '""')}","${item.image || ""}",${item.level.number}\n`;
+          items.forEach((item: { id: string; character: string | null; meaning: string; meaningMnemonic: string | null; image: string | null; level: { id: number } }) => {
+            csv += `"${item.id}","${item.character || ""}","${item.meaning}","${(item.meaningMnemonic || "").replace(/"/g, '""')}","${item.image || ""}",${item.level.id}\n`;
           });
         } else if (type === "kanji") {
           csv = "id,character,meaning,meaningMnemonic,onyomi,kunyomi,readingMnemonic,levelNumber\n";
-          items.forEach((item: { id: string; character: string; meaning: string; meaningMnemonic: string | null; onyomi: string[]; kunyomi: string[]; readingMnemonic: string | null; level: { number: number } }) => {
-            csv += `"${item.id}","${item.character}","${item.meaning}","${(item.meaningMnemonic || "").replace(/"/g, '""')}","${item.onyomi.join(",")}","${item.kunyomi.join(",")}","${(item.readingMnemonic || "").replace(/"/g, '""')}",${item.level.number}\n`;
+          items.forEach((item: { id: string; character: string; meaning: string; meaningMnemonic: string | null; onyomi: string[]; kunyomi: string[]; readingMnemonic: string | null; level: { id: number } }) => {
+            csv += `"${item.id}","${item.character}","${item.meaning}","${(item.meaningMnemonic || "").replace(/"/g, '""')}","${item.onyomi.join(",")}","${item.kunyomi.join(",")}","${(item.readingMnemonic || "").replace(/"/g, '""')}",${item.level.id}\n`;
           });
         } else if (type === "vocabulary") {
           csv = "id,word,reading,meaning,meaningMnemonic,readingMnemonic,partOfSpeech,levelNumber\n";
-          items.forEach((item: { id: string; word: string; reading: string; meaning: string; meaningMnemonic: string | null; readingMnemonic: string | null; partOfSpeech: string | null; level: { number: number } }) => {
-            csv += `"${item.id}","${item.word}","${item.reading}","${item.meaning}","${(item.meaningMnemonic || "").replace(/"/g, '""')}","${(item.readingMnemonic || "").replace(/"/g, '""')}","${item.partOfSpeech || ""}",${item.level.number}\n`;
+          items.forEach((item: { id: string; word: string; reading: string; meaning: string; meaningMnemonic: string | null; readingMnemonic: string | null; partOfSpeech: string | null; level: { id: number } }) => {
+            csv += `"${item.id}","${item.word}","${item.reading}","${item.meaning}","${(item.meaningMnemonic || "").replace(/"/g, '""')}","${(item.readingMnemonic || "").replace(/"/g, '""')}","${item.partOfSpeech || ""}",${item.level.id}\n`;
           });
         }
 

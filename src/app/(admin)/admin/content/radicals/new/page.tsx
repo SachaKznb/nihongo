@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface Level {
-  id: string;
-  number: number;
+  id: number;
+  name: string | null;
 }
 
 export default function AdminNewRadicalPage() {
@@ -123,7 +123,7 @@ export default function AdminNewRadicalPage() {
               >
                 {levels.map((level) => (
                   <option key={level.id} value={level.id}>
-                    Niveau {level.number}
+                    Niveau {level.id}
                   </option>
                 ))}
               </select>
