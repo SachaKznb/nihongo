@@ -27,12 +27,13 @@ const INCORRECT_MESSAGES = [
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { data: session, update: updateSession } = useSession();
+  const { data: session, status, update: updateSession } = useSession();
   const [phase, setPhase] = useState<OnboardingPhase>("intro");
   const [lessons, setLessons] = useState<LessonItem[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hasFetched, setHasFetched] = useState(false);
 
   // Quiz state
   const [quizItems, setQuizItems] = useState<LessonItem[]>([]);
@@ -48,16 +49,28 @@ export default function OnboardingPage() {
   const currentLesson = lessons[currentIndex];
   const currentQuizItem = quizItems[quizIndex];
 
-  // Redirect if already onboarded
+  // Redirect if not authenticated or already onboarded
   useEffect(() => {
+    if (status === "loading") return;
+
+    if (status === "unauthenticated") {
+      router.push("/login");
+      return;
+    }
+
     if (session?.user?.onboardingCompleted) {
       router.push("/dashboard");
     }
-  }, [session, router]);
+  }, [session, status, router]);
 
-  // Fetch onboarding lessons
+  // Fetch onboarding lessons (only once, after session is loaded)
   useEffect(() => {
+    if (status === "loading" || hasFetched) return;
+    if (status === "unauthenticated") return;
+    if (session?.user?.onboardingCompleted) return;
+
     async function fetchLessons() {
+      setHasFetched(true);
       try {
         const response = await fetch("/api/onboarding/lessons");
         if (!response.ok) {
@@ -78,7 +91,7 @@ export default function OnboardingPage() {
     }
 
     fetchLessons();
-  }, [router]);
+  }, [status, session, hasFetched, router]);
 
   // Focus input when quiz phase starts
   useEffect(() => {
@@ -197,12 +210,25 @@ export default function OnboardingPage() {
     }
   };
 
-  if (loading) {
+  // Show loading while session or lessons are loading
+  if (status === "loading" || loading) {
     return (
       <div className="max-w-lg w-full">
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
           <div className="animate-spin w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full mx-auto"></div>
           <p className="mt-4 text-stone-600">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if already onboarded (will redirect)
+  if (session?.user?.onboardingCompleted) {
+    return (
+      <div className="max-w-lg w-full">
+        <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full mx-auto"></div>
+          <p className="mt-4 text-stone-600">Redirection...</p>
         </div>
       </div>
     );
