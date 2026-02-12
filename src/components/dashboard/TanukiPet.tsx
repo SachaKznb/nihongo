@@ -62,6 +62,17 @@ export default function TanukiPet({
 
   return (
     <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 rounded-2xl border border-amber-200 p-4 sm:p-6 relative overflow-hidden">
+      {/* Section header with explanation */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">🦝</span>
+          <h3 className="text-sm font-semibold text-amber-800">Ton compagnon Tanuki</h3>
+        </div>
+        <p className="text-xs text-amber-600 hidden sm:block">
+          Il evolue avec ton XP et reagit a ta progression
+        </p>
+      </div>
+
       {/* Evolution overlay */}
       {showEvolution && (
         <div className="absolute inset-0 bg-gradient-to-br from-amber-300/80 to-yellow-300/80 flex items-center justify-center z-20 animate-pulse">

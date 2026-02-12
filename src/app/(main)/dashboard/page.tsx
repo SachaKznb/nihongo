@@ -156,23 +156,24 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* XP */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl p-4 text-white shadow-lg card-hover">
-          <div className="absolute -right-2 -top-2 text-5xl opacity-20">⚡</div>
+        {/* Current Level */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-indigo-400 to-violet-500 rounded-2xl p-4 text-white shadow-lg card-hover">
+          <div className="absolute -right-2 -top-2 text-5xl opacity-20">🏯</div>
           <div className="relative">
-            <p className="text-emerald-100 text-xs font-medium uppercase tracking-wide">XP Total</p>
+            <p className="text-indigo-100 text-xs font-medium uppercase tracking-wide">Niveau actuel</p>
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl font-bold font-display">{gamification.totalXp.toLocaleString()}</span>
+              <span className="text-4xl font-bold font-display">{progress.currentLevel}</span>
+              <span className="text-indigo-200 text-sm">/ 10</span>
             </div>
             <div className="mt-2">
-              <div className="flex justify-between text-xs text-emerald-200 mb-1">
-                <span>Niv. {xpInfo.level}</span>
-                <span>{Math.round(xpInfo.progress)}%</span>
+              <div className="flex justify-between text-xs text-indigo-200 mb-1">
+                <span>Progression</span>
+                <span>{gamification.levelProgress}%</span>
               </div>
               <div className="h-1.5 bg-white/30 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-white rounded-full transition-all duration-500"
-                  style={{ width: `${xpInfo.progress}%` }}
+                  style={{ width: `${gamification.levelProgress}%` }}
                 ></div>
               </div>
             </div>
