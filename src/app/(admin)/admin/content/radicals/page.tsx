@@ -4,16 +4,15 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
 interface Level {
-  id: string;
-  number: number;
+  id: number;
 }
 
 interface Radical {
-  id: string;
+  id: number;
   character: string | null;
-  meaning: string;
-  meaningMnemonic: string | null;
-  image: string | null;
+  meaningFr: string;
+  mnemonic: string;
+  imageUrl: string | null;
   level: Level;
 }
 
@@ -25,12 +24,12 @@ interface RadicalsResponse {
 }
 
 interface LevelsResponse {
-  levels: { id: string; number: number }[];
+  levels: { id: number; name: string | null }[];
 }
 
 export default function AdminRadicalsPage() {
   const [radicals, setRadicals] = useState<Radical[]>([]);
-  const [levels, setLevels] = useState<{ id: string; number: number }[]>([]);
+  const [levels, setLevels] = useState<{ id: number; name: string | null }[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [levelId, setLevelId] = useState("");
@@ -123,7 +122,7 @@ export default function AdminRadicalsPage() {
             <option value="">Tous les niveaux</option>
             {levels.map((level) => (
               <option key={level.id} value={level.id}>
-                Niveau {level.number}
+                Niveau {level.id}
               </option>
             ))}
           </select>
@@ -145,14 +144,19 @@ export default function AdminRadicalsPage() {
                 className="bg-stone-50 hover:bg-amber-50 border border-stone-200 hover:border-amber-300 rounded-lg p-4 text-center transition-colors"
               >
                 <div className="text-3xl mb-2">
-                  {radical.character || (radical.image ? "🖼" : "?")}
+                  {radical.character || (radical.imageUrl ? "🖼" : "?")}
                 </div>
                 <div className="text-sm font-medium text-stone-900 truncate">
-                  {radical.meaning}
+                  {radical.meaningFr}
                 </div>
                 <div className="text-xs text-stone-500 mt-1">
-                  Niveau {radical.level.number}
+                  Niveau {radical.level.id}
                 </div>
+                {radical.mnemonic && (
+                  <div className="text-xs text-stone-400 mt-1 truncate">
+                    {radical.mnemonic.substring(0, 30)}...
+                  </div>
+                )}
               </Link>
             ))}
           </div>

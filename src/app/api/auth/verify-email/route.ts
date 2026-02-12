@@ -46,8 +46,9 @@ export async function GET(request: NextRequest) {
       }),
     ]);
 
+    // Redirect to login with success message - forces new session with updated emailVerified
     return NextResponse.redirect(
-      new URL("/verify-email?success=true", request.url)
+      new URL("/login?verified=true", request.url)
     );
   } catch (error) {
     console.error("Email verification error:", error);

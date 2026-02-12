@@ -4,24 +4,23 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
 interface Level {
-  id: string;
-  number: number;
+  id: number;
 }
 
 interface Radical {
   radical: {
-    id: string;
+    id: number;
     character: string | null;
-    meaning: string;
+    meaningFr: string;
   };
 }
 
 interface Kanji {
-  id: string;
+  id: number;
   character: string;
-  meaning: string;
-  onyomi: string[];
-  kunyomi: string[];
+  meaningsFr: string[];
+  readingsOn: string[];
+  readingsKun: string[];
   level: Level;
   radicals: Radical[];
 }
@@ -35,7 +34,7 @@ interface KanjiResponse {
 
 export default function AdminKanjiPage() {
   const [kanji, setKanji] = useState<Kanji[]>([]);
-  const [levels, setLevels] = useState<{ id: string; number: number }[]>([]);
+  const [levels, setLevels] = useState<{ id: number; name: string | null }[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [levelId, setLevelId] = useState("");
@@ -128,7 +127,7 @@ export default function AdminKanjiPage() {
             <option value="">Tous les niveaux</option>
             {levels.map((level) => (
               <option key={level.id} value={level.id}>
-                Niveau {level.number}
+                Niveau {level.id}
               </option>
             ))}
           </select>
@@ -151,14 +150,14 @@ export default function AdminKanjiPage() {
               >
                 <div className="text-3xl mb-2">{k.character}</div>
                 <div className="text-sm font-medium text-stone-900 truncate">
-                  {k.meaning}
+                  {k.meaningsFr[0]}
                 </div>
                 <div className="text-xs text-stone-500 mt-1">
-                  Niveau {k.level.number}
+                  Niveau {k.level.id}
                 </div>
-                {k.onyomi.length > 0 && (
+                {k.readingsOn.length > 0 && (
                   <div className="text-xs text-stone-400 mt-1 truncate">
-                    {k.onyomi.join(", ")}
+                    {k.readingsOn.join(", ")}
                   </div>
                 )}
               </Link>

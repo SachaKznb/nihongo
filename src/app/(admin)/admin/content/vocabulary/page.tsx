@@ -4,16 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
 interface Level {
-  id: string;
-  number: number;
+  id: number;
 }
 
 interface Vocab {
-  id: string;
+  id: number;
   word: string;
-  reading: string;
-  meaning: string;
-  partOfSpeech: string | null;
+  readings: string[];
+  meaningsFr: string[];
   level: Level;
 }
 
@@ -26,7 +24,7 @@ interface VocabResponse {
 
 export default function AdminVocabularyPage() {
   const [vocabulary, setVocabulary] = useState<Vocab[]>([]);
-  const [levels, setLevels] = useState<{ id: string; number: number }[]>([]);
+  const [levels, setLevels] = useState<{ id: number; name: string | null }[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [levelId, setLevelId] = useState("");
@@ -119,7 +117,7 @@ export default function AdminVocabularyPage() {
             <option value="">Tous les niveaux</option>
             {levels.map((level) => (
               <option key={level.id} value={level.id}>
-                Niveau {level.number}
+                Niveau {level.id}
               </option>
             ))}
           </select>
@@ -160,10 +158,10 @@ export default function AdminVocabularyPage() {
                     <td className="px-6 py-4 text-lg font-medium text-stone-900">
                       {vocab.word}
                     </td>
-                    <td className="px-6 py-4 text-stone-600">{vocab.reading}</td>
-                    <td className="px-6 py-4 text-stone-600">{vocab.meaning}</td>
+                    <td className="px-6 py-4 text-stone-600">{vocab.readings.join(", ")}</td>
+                    <td className="px-6 py-4 text-stone-600">{vocab.meaningsFr.join(", ")}</td>
                     <td className="px-6 py-4 text-stone-500">
-                      {vocab.level.number}
+                      {vocab.level.id}
                     </td>
                     <td className="px-6 py-4">
                       <Link
