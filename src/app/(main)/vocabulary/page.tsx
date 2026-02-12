@@ -47,9 +47,10 @@ export default async function VocabularyPage() {
               const isLocked = stage === 0;
 
               return (
-                <div
+                <Link
                   key={vocab.id}
-                  className={`relative rounded-lg p-3 text-white cursor-pointer transition-transform hover:scale-105 ${
+                  href={`/vocabulary/${vocab.id}`}
+                  className={`relative rounded-lg p-3 text-white transition-transform hover:scale-105 ${
                     isLocked ? "bg-gray-400" : "bg-purple-500"
                   }`}
                   title={`${vocab.meaningsFr[0]} - ${SRS_STAGE_NAMES[stage]}`}
@@ -61,7 +62,7 @@ export default async function VocabularyPage() {
                       className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${SRS_STAGE_COLORS[stage]}`}
                     />
                   )}
-                </div>
+                </Link>
               );
             })}
           </div>

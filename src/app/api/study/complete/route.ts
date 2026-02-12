@@ -22,12 +22,13 @@ export async function POST(request: NextRequest) {
     // Award XP: 5 XP per item studied + 20 bonus for completing a session
     const xpEarned = itemCount * 5 + 20;
 
-    // Update user stats
+    // Update user stats and mark targeted study as done for today
     const user = await prisma.user.update({
       where: { id: userId },
       data: {
         totalXp: { increment: xpEarned },
         weeklyXp: { increment: xpEarned },
+        lastPatternAnalysis: new Date(),
       },
       select: {
         totalXp: true,

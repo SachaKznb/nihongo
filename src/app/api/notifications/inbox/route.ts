@@ -36,6 +36,7 @@ export async function GET() {
         currentLevel: true,
         currentStreak: true,
         lastStudyDate: true,
+        lastPatternAnalysis: true,
       },
     });
 
@@ -122,28 +123,37 @@ export async function GET() {
     }
 
     // 3. Check for weakness patterns (targeted study)
-    const patterns = await prisma.userWeaknessPattern.findMany({
-      where: { userId },
-      select: { id: true, patternType: true, mistakeCount: true },
-    });
+    // Only show if user hasn't done targeted study today
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
 
-    if (patterns.length > 0) {
-      const totalMistakes = patterns.reduce((sum, p) => sum + p.mistakeCount, 0);
-      notifications.push({
-        id: "targeted-study",
-        type: "targeted_study",
-        title: "Etude ciblee disponible",
-        message: patterns.length === 1
-          ? "1 point faible detecte a travailler"
-          : `${patterns.length} points faibles detectes a travailler`,
-        actionUrl: "/study",
-        actionLabel: "Etudier",
-        priority: totalMistakes > 20 ? "high" : "medium",
-        icon: "🎯",
-        color: "purple",
-        count: patterns.length,
-        createdAt: now,
+    const didTargetedStudyToday = user.lastPatternAnalysis &&
+      new Date(user.lastPatternAnalysis) >= todayStart;
+
+    if (!didTargetedStudyToday) {
+      const patterns = await prisma.userWeaknessPattern.findMany({
+        where: { userId },
+        select: { id: true, patternType: true, mistakeCount: true },
       });
+
+      if (patterns.length > 0) {
+        const totalMistakes = patterns.reduce((sum, p) => sum + p.mistakeCount, 0);
+        notifications.push({
+          id: "targeted-study",
+          type: "targeted_study",
+          title: "Etude ciblee disponible",
+          message: patterns.length === 1
+            ? "1 point faible detecte a travailler"
+            : `${patterns.length} points faibles detectes a travailler`,
+          actionUrl: "/study",
+          actionLabel: "Etudier",
+          priority: totalMistakes > 20 ? "high" : "medium",
+          icon: "🎯",
+          color: "purple",
+          count: patterns.length,
+          createdAt: now,
+        });
+      }
     }
 
     // 4. Check streak at risk

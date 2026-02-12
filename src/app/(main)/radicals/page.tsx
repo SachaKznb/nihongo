@@ -47,9 +47,10 @@ export default async function RadicalsPage() {
               const isLocked = stage === 0;
 
               return (
-                <div
+                <Link
                   key={radical.id}
-                  className={`relative aspect-square rounded-lg flex items-center justify-center text-white text-2xl font-japanese cursor-pointer transition-transform hover:scale-105 ${
+                  href={`/radicals/${radical.id}`}
+                  className={`relative aspect-square rounded-lg flex items-center justify-center text-white text-2xl font-japanese transition-transform hover:scale-105 ${
                     isLocked ? "bg-gray-400" : "bg-blue-500"
                   }`}
                   title={`${radical.meaningFr} - ${SRS_STAGE_NAMES[stage]}`}
@@ -62,7 +63,7 @@ export default async function RadicalsPage() {
                       className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${SRS_STAGE_COLORS[stage]}`}
                     />
                   )}
-                </div>
+                </Link>
               );
             })}
           </div>

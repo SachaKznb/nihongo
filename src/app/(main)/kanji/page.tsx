@@ -47,9 +47,10 @@ export default async function KanjiPage() {
               const isLocked = stage === 0;
 
               return (
-                <div
+                <Link
                   key={k.id}
-                  className={`relative aspect-square rounded-lg flex items-center justify-center text-white text-2xl font-japanese cursor-pointer transition-transform hover:scale-105 ${
+                  href={`/kanji/${k.id}`}
+                  className={`relative aspect-square rounded-lg flex items-center justify-center text-white text-2xl font-japanese transition-transform hover:scale-105 ${
                     isLocked ? "bg-gray-400" : "bg-pink-500"
                   }`}
                   title={`${k.meaningsFr[0]} - ${SRS_STAGE_NAMES[stage]}`}
@@ -60,7 +61,7 @@ export default async function KanjiPage() {
                       className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${SRS_STAGE_COLORS[stage]}`}
                     />
                   )}
-                </div>
+                </Link>
               );
             })}
           </div>
