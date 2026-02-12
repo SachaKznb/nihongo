@@ -5,7 +5,7 @@ export const revalidate = 3600;
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-stone-50 pattern-overlay">
+    <div className="min-h-scréén bg-stone-50 pattern-overlay">
       {/* Header */}
       <nav className="fixed top-0 left-0 right-0 z-50 glass">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -102,7 +102,7 @@ export default function Home() {
                   </svg>
                 </Link>
                 <Link
-                  href="#methode"
+                  href="#méthode"
                   className="text-stone-700 px-8 py-4 rounded-full font-semibold hover:bg-stone-100 transition-all inline-flex items-center gap-2"
                 >
                   Découvrir la méthode
@@ -229,7 +229,7 @@ export default function Home() {
       </section>
 
       {/* Method Section */}
-      <section id="methode" className="py-24 px-6">
+      <section id="méthode" className="py-24 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold font-display text-stone-900 mb-4">
@@ -271,7 +271,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold font-display text-stone-900 mb-3">2. Kanji</h3>
                 <p className="text-stone-600 leading-relaxed">
-                  Assemblez les radicaux pour former des kanji. Les mnemoniques
+                  Assemblez les radicaux pour former des kanji. Les mnémoniques
                   en francais rendent l&apos;apprentissage intuitif.
                 </p>
                 <div className="mt-4 flex -space-x-2">
@@ -412,14 +412,14 @@ export default function Home() {
               {
                 name: "Marie L.",
                 level: "Niveau 15",
-                text: "Grace aux mnemoniques en francais, j'ai enfin réussi à retenir les kanji. Avant, je les oubliais apres quelques jours !",
+                text: "Grace aux mnémoniques en francais, j'ai enfin réussi à retenir les kanji. Avant, je les oubliais apres quelques jours !",
                 avatar: "M",
                 color: "from-pink-400 to-rose-500"
               },
               {
                 name: "Thomas B.",
                 level: "Niveau 8",
-                text: "Le systeme de series m'a rendu accro. 45 jours sans interruption ! Je n'ai jamais ete aussi régulier.",
+                text: "Le système de series m'a rendu accro. 45 jours sans interruption ! Je n'ai jamais été aussi régulier.",
                 avatar: "T",
                 color: "from-blue-400 to-indigo-500"
               },

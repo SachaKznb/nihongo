@@ -389,7 +389,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
 
   if (questionQueue.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-scréén bg-gray-50 flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-gray-600">Chargement des révisions...</p>
         </div>
@@ -403,7 +403,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
     const stagesDown = summary.stageChanges.filter((s) => s.to < s.from);
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-stone-50 to-stone-100 flex items-center justify-center p-4">
+      <div className="min-h-scréén bg-gradient-to-b from-stone-50 to-stone-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-xl p-8 text-center max-w-lg w-full">
           <div className="text-7xl mb-6">
             {summary.accuracy >= 80 ? "🎉" : summary.accuracy >= 50 ? "👍" : "💪"}
@@ -534,7 +534,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
     : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-stone-100 p-4">
+    <div className="min-h-scréén bg-gradient-to-b from-stone-50 to-stone-100 p-4">
       <div className="max-w-2xl mx-auto">
         {/* Progress bar */}
         <div className="mb-6">
@@ -614,7 +614,7 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                 className={`p-6 rounded-2xl text-center ${
                   lastCorrect
                     ? "bg-gradient-to-b from-emerald-50 to-emerald-100 border border-emerald-200"
-                    : "bg-gradient-to-b from-amber-50 to-orange-50 border border-amber-200"
+                    : "bg-gradient-to-b from-red-50 to-red-100 border border-red-200"
                 }`}
               >
                 {lastCorrect ? (
@@ -632,8 +632,8 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                 ) : (
                   <div className="space-y-3">
                     <div className="flex items-center justify-center gap-2">
-                      <span className="text-2xl">💪</span>
-                      <h3 className="text-xl font-semibold text-amber-700">{resultMessage}</h3>
+                      <span className="text-2xl">❌</span>
+                      <h3 className="text-xl font-semibold text-red-700">{resultMessage}</h3>
                     </div>
                     <div className="bg-white/60 rounded-xl p-4">
                       <p className="text-stone-600 text-sm mb-1">La bonne réponse :</p>
@@ -641,6 +641,21 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                         {lastExpectedAnswers.join(", ")}
                       </p>
                     </div>
+
+                    {/* Mnemonic Section - Show the mnemonic to help remember */}
+                    {currentQuestion && (
+                      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-left">
+                        <p className="text-sm font-medium text-blue-700 mb-2 flex items-center gap-1">
+                          <span>💡</span>
+                          {currentQuestion.reviewType === "reading" ? "Astuce lecture :" : "Astuce sens :"}
+                        </p>
+                        <p className="text-blue-900 text-sm leading-relaxed">
+                          {currentQuestion.reviewType === "reading" && currentQuestion.item.readingMnemonic
+                            ? currentQuestion.item.readingMnemonic
+                            : currentQuestion.item.mnemonic || "Pas de mnémonique disponible."}
+                        </p>
+                      </div>
+                    )}
 
                     {/* AI Feedback Section */}
                     {(feedbackLoading || aiFeedback) && (
@@ -653,8 +668,8 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                         ) : aiFeedback ? (
                           <div>
                             <p className="text-sm font-medium text-indigo-700 mb-1 flex items-center gap-1">
-                              <span>💡</span>
-                              Le truc à retenir :
+                              <span>🤖</span>
+                              Conseil personnalisé :
                             </p>
                             <p className="text-indigo-900 text-sm leading-relaxed">{aiFeedback}</p>
                           </div>

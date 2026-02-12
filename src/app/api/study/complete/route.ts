@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const userId = session.user.id;

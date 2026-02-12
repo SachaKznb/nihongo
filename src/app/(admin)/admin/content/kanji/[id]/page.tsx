@@ -183,7 +183,7 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
   if (!kanji) {
     return (
       <div className="p-8">
-        <div className="text-stone-500">Kanji non trouve</div>
+        <div className="text-stone-500">Kanji non trouvé</div>
       </div>
     );
   }
@@ -237,7 +237,7 @@ export default function AdminKanjiEditPage({ params }: { params: Promise<{ id: s
                 required
                 className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               >
-                <option value="">Selectionner un niveau</option>
+                <option value="">Sélectionner un niveau</option>
                 {levels.map((level) => (
                   <option key={level.id} value={level.id}>
                     Niveau {level.id}

@@ -32,7 +32,7 @@ export function VerificationEmail({ verifyUrl }: VerificationEmailProps) {
         <Text style={note}>Ce lien expirera dans 24 heures.</Text>
 
         <Text style={noteSecondary}>
-          Si vous n'avez pas cree de compte sur Nihongo, vous pouvez ignorer cet
+          Si vous n'avez pas créé de compte sur Nihongo, vous pouvez ignorer cet
           email.
         </Text>
       </Section>

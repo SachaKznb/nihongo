@@ -148,7 +148,7 @@ export default function AdminUsersPage() {
               ) : users.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center text-stone-500">
-                    Aucun utilisateur trouve
+                    Aucun utilisateur trouvé
                   </td>
                 </tr>
               ) : (

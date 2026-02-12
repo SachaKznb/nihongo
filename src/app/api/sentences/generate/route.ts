@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // If regenerating, check and deduct credit
+    // If regenerating, check and deduct crédit
     if (forceRegenerate) {
       // Check if there's an existing cache (meaning this is a true regeneration)
       const existingCache = await prisma.userSentenceCache.findUnique({
@@ -99,11 +99,11 @@ export async function POST(request: NextRequest) {
       if (existingCache) {
         const hasCredits = await checkAndDeductCredit(userId);
         if (!hasCredits) {
-          const credits = await getUserCredits(userId);
+          const crédits = await getUserCredits(userId);
           return NextResponse.json(
             {
               error: "Crédits IA insuffisants pour régénérer les phrases",
-              creditsRemaining: credits,
+              créditsRemaining: crédits,
               requiresCredits: true,
             },
             { status: 402 }
@@ -136,13 +136,13 @@ export async function POST(request: NextRequest) {
     // Cache the generated sentences
     await cacheSentences(userId, vocabularyId, sentences, context);
 
-    const creditsRemaining = forceRegenerate ? await getUserCredits(userId) : undefined;
+    const créditsRemaining = forceRegenerate ? await getUserCredits(userId) : undefined;
 
     return NextResponse.json({
       sentences,
       fromCache: false,
       masteredKanjiCount: context.kanji.length,
-      creditsRemaining,
+      créditsRemaining,
     });
   } catch (error) {
     console.error("Sentence generation error:", error);

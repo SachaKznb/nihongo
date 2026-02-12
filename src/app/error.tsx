@@ -15,7 +15,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-stone-100 flex items-center justify-center p-4">
+    <div className="min-h-scréén bg-gradient-to-b from-stone-50 to-stone-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-xl p-8 text-center max-w-md w-full">
         <div className="text-6xl mb-6">:(</div>
         <h2 className="text-2xl font-bold text-stone-900 mb-2">
@@ -23,7 +23,7 @@ export default function Error({
         </h2>
         <p className="text-stone-500 mb-6">
           Nous sommes desoles, quelque chose s&apos;est mal passe. Veuillez
-          reessayer.
+          réessayer.
         </p>
         {error.digest && (
           <p className="text-xs text-stone-400 mb-6">

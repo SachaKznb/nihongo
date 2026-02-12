@@ -246,7 +246,7 @@ function DifficultyTable({
       </div>
       <div className="divide-y divide-stone-100">
         {items.length === 0 ? (
-          <p className="px-6 py-4 text-stone-500 text-sm">Pas assez de donnees</p>
+          <p className="px-6 py-4 text-stone-500 text-sm">Pas assez de données</p>
         ) : (
           items.map((item, index) => (
             <div key={item.id} className="px-6 py-3 flex items-center justify-between">
@@ -354,7 +354,7 @@ export default async function AdminAnalytics() {
           />
         </div>
         <p className="text-sm text-stone-500 mt-2">
-          % d&apos;utilisateurs inscrits il y a X jours qui ont ete actifs cette semaine
+          % d&apos;utilisateurs inscrits il y a X jours qui ont été actifs cette semaine
         </p>
       </section>
 

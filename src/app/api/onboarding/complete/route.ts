@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Update user stats and mark onboarding complete
+    // Update user stats and mark onboarding complété
     await prisma.user.update({
       where: { id: userId },
       data: {
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: "Onboarding complété avec succès!",
+      message: "Onboarding complete avec succès!",
       radicalsLearned: radicalIds.length,
       xpEarned: 50,
       unlocks,

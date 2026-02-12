@@ -44,7 +44,7 @@ export async function PUT(request: NextRequest) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "Ce nom d'utilisateur est deja pris" },
+        { error: "Ce nom d'utilisateur est déjà pris" },
         { status: 400 }
       );
     }

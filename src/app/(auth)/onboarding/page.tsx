@@ -8,7 +8,7 @@ import { LessonCard } from "@/components/lessons/LessonCard";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 
-type OnboardingPhase = "intro" | "lesson" | "quiz" | "complete";
+type OnboardingPhase = "intro" | "lesson" | "quiz" | "choice" | "demo" | "complété";
 
 const CORRECT_MESSAGES = [
   "Parfait !",
@@ -45,6 +45,13 @@ export default function OnboardingPage() {
   const [completedQuiz, setCompletedQuiz] = useState<Set<number>>(new Set());
   const [completing, setCompleting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Track batches completed (1 = first 5, 2 = second 5, 3 = third 5)
+  const [batchesCompleted, setBatchesCompleted] = useState(0);
+  const [allLearnedRadicals, setAllLearnedRadicals] = useState<LessonItem[]>([]);
+
+  // Demo state
+  const [demoStep, setDemoStep] = useState(0);
 
   const currentLesson = lessons[currentIndex];
   const currentQuizItem = quizItems[quizIndex];
@@ -167,18 +174,29 @@ export default function OnboardingPage() {
     if (quizIndex < quizItems.length - 1) {
       setQuizIndex(quizIndex + 1);
     } else if (completedQuiz.size >= lessons.length) {
-      // All items completed correctly
-      completeOnboarding();
+      // All items in this batch completed correctly
+      const newBatchCount = batchesCompleted + 1;
+      setBatchesCompleted(newBatchCount);
+      setAllLearnedRadicals([...allLearnedRadicals, ...lessons]);
+
+      if (newBatchCount >= 3) {
+        // All 3 batches done, complete onboarding
+        complétéOnboarding([...allLearnedRadicals, ...lessons]);
+      } else {
+        // Show choice scréén: more lessons or demo?
+        setPhase("choice");
+      }
     } else {
       // More items to review
       setQuizIndex(quizIndex + 1);
     }
   };
 
-  const completeOnboarding = async () => {
+  const complétéOnboarding = async (radicalsToSave?: LessonItem[]) => {
     setCompleting(true);
     try {
-      const radicalIds = lessons.map((l) => l.id);
+      const radicalsToComplete = radicalsToSave || [...allLearnedRadicals, ...lessons];
+      const radicalIds = radicalsToComplete.map((l) => l.id);
       const response = await fetch("/api/onboarding/complete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -192,7 +210,7 @@ export default function OnboardingPage() {
       // Update session to reflect onboardingCompleted
       await updateSession();
 
-      setPhase("complete");
+      setPhase("complété");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur");
     } finally {
@@ -209,6 +227,90 @@ export default function OnboardingPage() {
       }
     }
   };
+
+  // Fetch more radicals for additional batches
+  const fetchMoreLessons = async () => {
+    setLoading(true);
+    try {
+      const skip = (batchesCompleted) * 5;
+      const response = await fetch(`/api/onboarding/lessons?skip=${skip}`);
+      if (!response.ok) {
+        throw new Error("Erreur de chargement");
+      }
+      const data = await response.json();
+      if (data.lessons.length === 0) {
+        // No more radicals, complete onboarding
+        complétéOnboarding();
+        return;
+      }
+      setLessons(data.lessons);
+      setCurrentIndex(0);
+      setQuizItems([]);
+      setQuizIndex(0);
+      setCompletedQuiz(new Set());
+      setPhase("lesson");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erreur");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle starting the demo
+  const startDemo = () => {
+    setDemoStep(0);
+    setPhase("demo");
+  };
+
+  // Handle demo navigation
+  const nextDemoStep = () => {
+    if (demoStep < demoSteps.length - 1) {
+      setDemoStep(demoStep + 1);
+    } else {
+      // Demo complété, finish onboarding
+      complétéOnboarding();
+    }
+  };
+
+  const prevDemoStep = () => {
+    if (demoStep > 0) {
+      setDemoStep(demoStep - 1);
+    }
+  };
+
+  // Demo steps content
+  const demoSteps = [
+    {
+      title: "Le Tableau de Bord",
+      description: "Ton centre de contrôle ! Ici tu verras tes leçons disponibles, tes révisions à faire, et ta progression.",
+      icon: "📊",
+      highlight: "C'est ici que tout commence chaque jour.",
+    },
+    {
+      title: "Les Leçons",
+      description: "Chaque jour, de nouvelles leçons t'attendent. Tu y découvres de nouveaux radicaux, kanji et vocabulaire avec des mnémoniques pour les mémoriser.",
+      icon: "📚",
+      highlight: "On recommande 10-15 nouvelles leçons par jour maximum.",
+    },
+    {
+      title: "Les Révisions (SRS)",
+      description: "Le système de répétition espacée te fait réviser au moment optimal pour maximiser ta mémorisation. Plus tu réponds correctement, plus l'intervalle s'allonge !",
+      icon: "🔄",
+      highlight: "Fais tes révisions tous les jours pour progresser efficacement.",
+    },
+    {
+      title: "Radicaux → Kanji → Vocabulaire",
+      description: "Tu apprends d'abord les radicaux (les briques de base), puis les kanji qui les utilisent, puis le vocabulaire qui utilise ces kanji.",
+      icon: "🧱",
+      highlight: "Chaque niveau débloque du nouveau contenu !",
+    },
+    {
+      title: "Les Niveaux SRS",
+      description: "Apprenti → Guru → Maître → Shodan → Satori. Quand 90% des kanji d'un niveau atteignent Guru, tu passes au niveau suivant !",
+      icon: "📈",
+      highlight: "Il faut environ 3-4 jours pour passer un élément de Apprenti à Guru.",
+    },
+  ];
 
   // Show loading while session or lessons are loading
   if (status === "loading" || loading) {
@@ -360,7 +462,7 @@ export default function OnboardingPage() {
               showResult
                 ? isCorrect
                   ? "bg-gradient-to-b from-emerald-50 to-emerald-100"
-                  : "bg-gradient-to-b from-amber-50 to-orange-50"
+                  : "bg-gradient-to-b from-red-50 to-red-100"
                 : "bg-stone-50"
             }`}
           >
@@ -425,12 +527,12 @@ export default function OnboardingPage() {
                 ) : (
                   <div className="space-y-4">
                     <div className="flex items-center justify-center gap-2">
-                      <span className="text-2xl">💪</span>
-                      <h3 className="text-xl font-semibold text-amber-700">
+                      <span className="text-2xl">❌</span>
+                      <h3 className="text-xl font-semibold text-red-700">
                         {resultMessage}
                       </h3>
                     </div>
-                    <div className="bg-amber-50 rounded-xl p-4">
+                    <div className="bg-white/60 rounded-xl p-4">
                       <p className="text-stone-600 text-sm mb-1">
                         La bonne réponse :
                       </p>
@@ -438,6 +540,18 @@ export default function OnboardingPage() {
                         {currentQuizItem.meaningsFr.join(", ")}
                       </p>
                     </div>
+                    {/* Show mnemonic to help remember */}
+                    {currentQuizItem.mnemonic && (
+                      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-left">
+                        <p className="text-sm font-medium text-blue-700 mb-1 flex items-center gap-1">
+                          <span>💡</span>
+                          Rappel :
+                        </p>
+                        <p className="text-blue-900 text-sm leading-relaxed">
+                          {currentQuizItem.mnemonic}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -456,8 +570,129 @@ export default function OnboardingPage() {
     );
   }
 
+  // CHOICE PHASE - After completing a batch, offer more lessons or demo
+  if (phase === "choice") {
+    const totalLearned = allLearnedRadicals.length;
+    const remainingBatches = 3 - batchesCompleted;
+
+    return (
+      <div className="max-w-lg w-full">
+        <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="mb-6">
+            <span className="text-5xl">🎯</span>
+          </div>
+          <h1 className="text-2xl font-bold text-stone-800 mb-2">
+            Bravo ! {totalLearned} radicaux appris !
+          </h1>
+          <p className="text-stone-600 mb-6">
+            Tu peux continuer avec plus de radicaux ou découvrir comment fonctionne l&apos;app.
+          </p>
+
+          <div className="space-y-4">
+            {remainingBatches > 0 && (
+              <Button
+                onClick={fetchMoreLessons}
+                disabled={loading}
+                className="w-full py-4"
+              >
+                {loading ? (
+                  "Chargement..."
+                ) : (
+                  <>
+                    📚 Apprendre 5 radicaux de plus
+                    <span className="text-sm opacity-75 ml-2">
+                      ({remainingBatches * 5} restants)
+                    </span>
+                  </>
+                )}
+              </Button>
+            )}
+
+            <Button
+              variant="secondary"
+              onClick={startDemo}
+              className="w-full py-4"
+            >
+              🎓 Découvrir l&apos;application
+            </Button>
+
+            <Button
+              variant="ghost"
+              onClick={() => complétéOnboarding()}
+              disabled={completing}
+              className="w-full text-stone-500"
+            >
+              {completing ? "Finalisation..." : "Passer et accéder au tableau de bord →"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // DEMO PHASE - Product tour
+  if (phase === "demo") {
+    const currentStep = demoSteps[demoStep];
+
+    return (
+      <div className="max-w-lg w-full">
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          {/* Progress dots */}
+          <div className="flex justify-center gap-2 mb-6">
+            {demoSteps.map((_, i) => (
+              <div
+                key={i}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  i === demoStep ? "bg-teal-500" : "bg-stone-200"
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="text-center mb-6">
+            <span className="text-5xl mb-4 block">{currentStep.icon}</span>
+            <h2 className="text-xl font-bold text-stone-800 mb-3">
+              {currentStep.title}
+            </h2>
+            <p className="text-stone-600 mb-4">
+              {currentStep.description}
+            </p>
+            <div className="bg-teal-50 rounded-xl p-3 text-teal-700 text-sm font-medium">
+              💡 {currentStep.highlight}
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            {demoStep > 0 && (
+              <Button
+                variant="secondary"
+                onClick={prevDemoStep}
+                className="flex-1"
+              >
+                Précédent
+              </Button>
+            )}
+            <Button
+              onClick={nextDemoStep}
+              disabled={completing}
+              className="flex-1"
+            >
+              {completing
+                ? "Finalisation..."
+                : demoStep === demoSteps.length - 1
+                ? "Terminer et commencer !"
+                : "Suivant"}
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // COMPLETE PHASE
-  if (phase === "complete") {
+  if (phase === "complété") {
+    const totalLearned = allLearnedRadicals.length || lessons.length;
+
     return (
       <div className="max-w-lg w-full">
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center relative overflow-hidden">
@@ -487,7 +722,7 @@ export default function OnboardingPage() {
               Félicitations !
             </h1>
             <p className="text-stone-600 mb-6">
-              Tu as appris tes <strong>{lessons.length} premiers radicaux</strong> !
+              Tu as appris tes <strong>{totalLearned} premiers radicaux</strong> !
             </p>
 
             <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-xl p-4 mb-6">
@@ -506,7 +741,10 @@ export default function OnboardingPage() {
             </p>
 
             <Button
-              onClick={() => router.push("/dashboard")}
+              onClick={() => {
+                // Use hard redirect to ensure server sees updated session
+                window.location.href = "/dashboard";
+              }}
               className="w-full text-lg py-3"
             >
               Accéder au tableau de bord

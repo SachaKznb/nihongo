@@ -155,7 +155,7 @@ export default async function VocabularyDetailPage({ params }: Props) {
                     </div>
                   </div>
                   {meaningAccuracy !== null && (
-                    <p className="text-sm font-medium text-stone-600 mt-2">{meaningAccuracy}% precision</p>
+                    <p className="text-sm font-medium text-stone-600 mt-2">{meaningAccuracy}% précision</p>
                   )}
                 </div>
                 <div className="text-center p-3 bg-white rounded-xl">
@@ -171,7 +171,7 @@ export default async function VocabularyDetailPage({ params }: Props) {
                     </div>
                   </div>
                   {readingAccuracy !== null && (
-                    <p className="text-sm font-medium text-stone-600 mt-2">{readingAccuracy}% precision</p>
+                    <p className="text-sm font-medium text-stone-600 mt-2">{readingAccuracy}% précision</p>
                   )}
                 </div>
               </div>

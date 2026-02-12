@@ -21,7 +21,7 @@ export async function GET() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const userId = session.user.id;
@@ -77,8 +77,8 @@ export async function GET() {
         type: "reviews_waiting",
         title: "Revisions en attente",
         message: totalReviews === 1
-          ? "1 element est pret a reviser"
-          : `${totalReviews} elements sont prets a reviser`,
+          ? "1 élément est pret a reviser"
+          : `${totalReviews} éléments sont prets a reviser`,
         actionUrl: "/reviews",
         actionLabel: "Reviser",
         priority: totalReviews > 50 ? "high" : totalReviews > 20 ? "medium" : "low",
@@ -108,10 +108,10 @@ export async function GET() {
       notifications.push({
         id: "lessons-available",
         type: "new_items",
-        title: "Nouvelles lecons",
+        title: "Nouvelles leçons",
         message: totalLessons === 1
-          ? "1 nouvel element a apprendre"
-          : `${totalLessons} nouveaux elements a apprendre`,
+          ? "1 nouvel élément a apprendre"
+          : `${totalLessons} nouveaux éléments a apprendre`,
         actionUrl: "/lessons",
         actionLabel: "Apprendre",
         priority: "medium",
@@ -141,7 +141,7 @@ export async function GET() {
         notifications.push({
           id: "targeted-study",
           type: "targeted_study",
-          title: "Etude ciblee disponible",
+          title: "Étude ciblee disponible",
           message: patterns.length === 1
             ? "1 point faible detecte a travailler"
             : `${patterns.length} points faibles detectes a travailler`,
@@ -192,7 +192,7 @@ export async function GET() {
   } catch (error) {
     console.error("Failed to get notifications:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la recuperation des notifications" },
+      { error: "Erreur lors de la récupération des notifications" },
       { status: 500 }
     );
   }

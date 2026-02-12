@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   const rateLimit = await checkRateLimit(authRateLimit, `register:${ip}`);
   if (!rateLimit.success) {
     return NextResponse.json(
-      { error: "Trop de tentatives. Veuillez patienter avant de reessayer." },
+      { error: "Trop de tentatives. Veuillez patienter avant de réessayer." },
       { status: 429 }
     );
   }
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({
-      message: "Compte cree avec succes. Verifiez votre email pour activer votre compte.",
+      message: "Compte créé avec succes. Verifiez votre email pour activer votre compte.",
       user: { id: user.id, email: user.email, username: user.username },
       requiresVerification: true,
     });

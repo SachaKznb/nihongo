@@ -58,6 +58,8 @@ export interface ReviewItem {
   readings?: string[];
   currentStage: number;
   imageUrl?: string | null;
+  mnemonic?: string;
+  readingMnemonic?: string;
 }
 
 export interface SrsBreakdown {

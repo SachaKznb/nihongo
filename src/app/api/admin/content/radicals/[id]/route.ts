@@ -42,7 +42,7 @@ export async function GET(
 
     if (!radical) {
       return NextResponse.json(
-        { error: "Radical non trouve" },
+        { error: "Radical non trouvé" },
         { status: 404 }
       );
     }
@@ -83,7 +83,7 @@ export async function PUT(
 
     if (!existingRadical) {
       return NextResponse.json(
-        { error: "Radical non trouve" },
+        { error: "Radical non trouvé" },
         { status: 404 }
       );
     }
@@ -98,7 +98,7 @@ export async function PUT(
 
       if (!level) {
         return NextResponse.json(
-          { error: "Niveau non trouve" },
+          { error: "Niveau non trouvé" },
           { status: 400 }
         );
       }
@@ -156,7 +156,7 @@ export async function DELETE(
 
     if (!existingRadical) {
       return NextResponse.json(
-        { error: "Radical non trouve" },
+        { error: "Radical non trouvé" },
         { status: 404 }
       );
     }

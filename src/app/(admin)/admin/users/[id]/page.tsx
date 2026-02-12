@@ -188,7 +188,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
   if (!data) {
     return (
       <div className="p-8">
-        <div className="text-stone-500">Utilisateur non trouve</div>
+        <div className="text-stone-500">Utilisateur non trouvé</div>
       </div>
     );
   }
@@ -280,7 +280,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
               <dd className="text-stone-900">{formatDate(user.createdAt)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-stone-500">Derniere activite</dt>
+              <dt className="text-stone-500">Dernière activite</dt>
               <dd className="text-stone-900">{formatDate(user.lastStudyDate)}</dd>
             </div>
           </dl>
@@ -499,7 +499,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
               className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
             />
             <p className="text-xs text-stone-500 mt-2">
-              Attention: Cela ne debloquera pas automatiquement le contenu du nouveau niveau.
+              Attention: Cela ne débloquéra pas automatiquement le contenu du nouveau niveau.
             </p>
             <div className="flex justify-end gap-2 mt-4">
               <button

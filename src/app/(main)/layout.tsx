@@ -26,7 +26,7 @@ export default async function MainLayout({
   }
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-scréén bg-stone-50">
       {/* Navigation - Sticky header */}
       <nav className="bg-white border-b border-stone-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

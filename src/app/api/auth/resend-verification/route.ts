@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({
-      message: "Si un compte non verifie existe avec cette adresse, un email a ete envoye.",
+      message: "Si un compte non verifie existe avec cette adresse, un email a été envoye.",
     });
   } catch (error) {
     console.error("Resend verification error:", error);

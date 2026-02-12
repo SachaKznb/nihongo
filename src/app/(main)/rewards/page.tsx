@@ -35,7 +35,7 @@ export default function RewardsPage() {
   const [loading, setLoading] = useState(true);
   const [purchasing, setPurchasing] = useState<string | null>(null);
   const [converting, setConverting] = useState(false);
-  const [creditsToConvert, setCreditsToConvert] = useState(1);
+  const [créditsToConvert, setCreditsToConvert] = useState(1);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [tanukiName, setTanukiName] = useState("");
   const [isRenamingTanuki, setIsRenamingTanuki] = useState(false);
@@ -180,7 +180,7 @@ export default function RewardsPage() {
       const res = await fetch("/api/rewards/convert-xp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ credits: creditsToConvert }),
+        body: JSON.stringify({ crédits: créditsToConvert }),
       });
       const result = await res.json();
       if (res.ok) {
@@ -264,9 +264,9 @@ export default function RewardsPage() {
         <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
             <button
-              onClick={() => setCreditsToConvert(Math.max(1, creditsToConvert - 1))}
+              onClick={() => setCreditsToConvert(Math.max(1, créditsToConvert - 1))}
               className="w-10 h-10 rounded-lg bg-white border border-indigo-200 text-indigo-600 font-bold hover:bg-indigo-50"
-              disabled={creditsToConvert <= 1}
+              disabled={créditsToConvert <= 1}
             >
               -
             </button>
@@ -274,20 +274,20 @@ export default function RewardsPage() {
               type="number"
               min={1}
               max={maxCredits}
-              value={creditsToConvert}
+              value={créditsToConvert}
               onChange={(e) => setCreditsToConvert(Math.max(1, Math.min(maxCredits, parseInt(e.target.value) || 1)))}
               className="w-20 text-center text-lg font-bold rounded-lg border border-indigo-200 p-2"
             />
             <button
-              onClick={() => setCreditsToConvert(Math.min(maxCredits, creditsToConvert + 1))}
+              onClick={() => setCreditsToConvert(Math.min(maxCredits, créditsToConvert + 1))}
               className="w-10 h-10 rounded-lg bg-white border border-indigo-200 text-indigo-600 font-bold hover:bg-indigo-50"
-              disabled={creditsToConvert >= maxCredits}
+              disabled={créditsToConvert >= maxCredits}
             >
               +
             </button>
           </div>
           <span className="text-indigo-600 text-center sm:text-left w-full sm:w-auto">
-            = <strong>{creditsToConvert * XP_PER_CREDIT}</strong> XP
+            = <strong>{créditsToConvert * XP_PER_CREDIT}</strong> XP
           </span>
           <button
             onClick={convertXpToCredits}

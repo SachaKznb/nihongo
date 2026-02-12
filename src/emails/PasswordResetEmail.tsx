@@ -21,7 +21,7 @@ export function PasswordResetEmail({ resetUrl }: PasswordResetEmailProps) {
 
         <Text style={paragraph}>
           Vous avez demande la reinitialisation de votre mot de passe. Cliquez
-          sur le bouton ci-dessous pour creer un nouveau mot de passe.
+          sur le bouton ci-dessous pour créér un nouveau mot de passe.
         </Text>
 
         <Section style={buttonSection}>

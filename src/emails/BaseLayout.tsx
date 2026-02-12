@@ -35,7 +35,7 @@ export function BaseLayout({ preview, children }: BaseLayoutProps) {
           {/* Footer */}
           <Hr style={hr} />
           <Text style={footer}>
-            Nihongo - Apprenez le japonais avec des mnemoniques en francais
+            Nihongo - Apprenez le japonais avec des mnémoniques en francais
           </Text>
         </Container>
       </Body>

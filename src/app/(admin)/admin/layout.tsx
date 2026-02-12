@@ -10,9 +10,9 @@ export default async function AdminLayout({
   await requireAdmin();
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-scréén bg-stone-50">
       <AdminSidebar />
-      <main className="ml-64 min-h-screen">{children}</main>
+      <main className="ml-64 min-h-scréén">{children}</main>
     </div>
   );
 }

@@ -10,7 +10,7 @@ export async function GET() {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
     const userId = session.user.id;
@@ -46,6 +46,7 @@ export async function GET() {
       meaningsFr: [rp.radical.meaningFr],
       currentStage: rp.srsStage,
       imageUrl: rp.radical.imageUrl,
+      mnemonic: rp.radical.mnemonic,
     });
   }
 
@@ -67,6 +68,8 @@ export async function GET() {
       meaningsFr: kp.kanji.meaningsFr,
       readings: [...kp.kanji.readingsOn, ...kp.kanji.readingsKun],
       currentStage: kp.srsStage,
+      mnemonic: kp.kanji.meaningMnemonicFr,
+      readingMnemonic: kp.kanji.readingMnemonicFr || undefined,
     });
   }
 
@@ -88,6 +91,7 @@ export async function GET() {
       meaningsFr: vp.vocabulary.meaningsFr,
       readings: vp.vocabulary.readings,
       currentStage: vp.srsStage,
+      mnemonic: vp.vocabulary.mnemonicFr,
     });
   }
 
@@ -108,7 +112,7 @@ export async function GET() {
   } catch (error) {
     console.error("Reviews GET error:", error);
     return NextResponse.json(
-      { error: "Erreur lors du chargement des revisions" },
+      { error: "Erreur lors du chargement des révisions" },
       { status: 500 }
     );
   }

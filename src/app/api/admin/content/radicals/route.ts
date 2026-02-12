@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
 
     if (!level) {
       return NextResponse.json(
-        { error: "Niveau non trouve" },
+        { error: "Niveau non trouvé" },
         { status: 400 }
       );
     }

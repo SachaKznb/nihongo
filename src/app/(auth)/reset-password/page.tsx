@@ -74,7 +74,7 @@ function ResetPasswordForm() {
       }, 2000);
     } catch {
       setStatus("error");
-      setMessage("Une erreur est survenue. Veuillez reessayer.");
+      setMessage("Une erreur est survenue. Veuillez réessayer.");
     }
   };
 

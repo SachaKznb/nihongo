@@ -33,6 +33,8 @@ export async function GET(request: NextRequest) {
       imageUrl: string | null;
       meaningsFr: string[];
       readings?: string[];
+      mnemonic?: string;
+      readingMnemonic?: string;
     }
 
     const items: StudyItem[] = [];
@@ -60,6 +62,7 @@ export async function GET(request: NextRequest) {
               character: true,
               meaningFr: true,
               imageUrl: true,
+              mnemonic: true,
             },
           },
         },
@@ -73,6 +76,7 @@ export async function GET(request: NextRequest) {
           character: rp.radical.character,
           imageUrl: rp.radical.imageUrl,
           meaningsFr: [rp.radical.meaningFr],
+          mnemonic: rp.radical.mnemonic,
         });
       }
     }
@@ -93,6 +97,8 @@ export async function GET(request: NextRequest) {
               meaningsFr: true,
               readingsOn: true,
               readingsKun: true,
+              meaningMnemonicFr: true,
+              readingMnemonicFr: true,
             },
           },
         },
@@ -107,6 +113,8 @@ export async function GET(request: NextRequest) {
           imageUrl: null,
           meaningsFr: kp.kanji.meaningsFr,
           readings: [...kp.kanji.readingsOn, ...kp.kanji.readingsKun],
+          mnemonic: kp.kanji.meaningMnemonicFr,
+          readingMnemonic: kp.kanji.readingMnemonicFr || undefined,
         });
       }
     }
@@ -126,6 +134,7 @@ export async function GET(request: NextRequest) {
               word: true,
               meaningsFr: true,
               readings: true,
+              mnemonicFr: true,
             },
           },
         },
@@ -140,6 +149,7 @@ export async function GET(request: NextRequest) {
           imageUrl: null,
           meaningsFr: vp.vocabulary.meaningsFr,
           readings: vp.vocabulary.readings,
+          mnemonic: vp.vocabulary.mnemonicFr,
         });
       }
     }

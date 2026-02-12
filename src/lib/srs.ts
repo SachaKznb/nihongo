@@ -8,7 +8,7 @@ export const SRS_STAGES = {
   GURU_2: 6, // 2 weeks
   MASTER: 7, // 1 month
   ENLIGHTENED: 8, // 4 months
-  BURNED: 9, // complete
+  BURNED: 9, // complété
 } as const;
 
 export type SrsStage = (typeof SRS_STAGES)[keyof typeof SRS_STAGES];

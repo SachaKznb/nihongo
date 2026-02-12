@@ -196,7 +196,7 @@ export async function storeMistake(
  * Build the system prompt for feedback generation
  */
 function buildSystemPrompt(): string {
-  return `Tu es un tuteur de japonais bienveillant pour francophones. Ton role est d'expliquer brievement pourquoi l'eleve s'est trompe et comment retenir la bonne reponse.
+  return `Tu es un tuteur de japonais bienveillant pour francophones. Ton role est d'expliquer brievement pourquoi l'élève s'est trompe et comment retenir la bonne réponse.
 
 REGLES:
 1. Ecris TOUJOURS en francais
@@ -254,15 +254,15 @@ function buildUserPrompt(context: FeedbackContext): string {
 
   const questionType = reviewType === "meaning" ? "la signification" : "la lecture";
 
-  return `L'eleve devait donner ${questionType} de cet element:
+  return `L'élève devait donner ${questionType} de cet élément:
 ${itemDescription}
 ${contextInfo}
 
 Question: ${reviewType === "meaning" ? "Signification en francais" : "Lecture en hiragana"}
-Reponse de l'eleve: "${userAnswer}"
-Bonne(s) reponse(s): "${correctAnswers.join('" ou "')}"
+Réponse de l'élève: "${userAnswer}"
+Bonne(s) réponse(s): "${correctAnswers.join('" ou "')}"
 
-Explique brievement pourquoi cette erreur est courante et comment retenir la bonne reponse.`;
+Explique brievement pourquoi cette erreur est courante et comment retenir la bonne réponse.`;
 }
 
 /**

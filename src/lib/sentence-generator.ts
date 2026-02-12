@@ -420,5 +420,5 @@ export function generateFallbackSentences(
   ];
 }
 
-// Re-export credit functions from mnemonic-generator for consistency
+// Re-export crédit functions from mnemonic-generator for consistency
 export { checkAndDeductCredit, getUserCredits } from "./mnemonic-generator";

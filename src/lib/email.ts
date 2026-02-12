@@ -173,7 +173,7 @@ export async function sendAdminPasswordReset(
     const { error } = await resend.emails.send({
       from: "Nihongo <noreply@trynihongo.fr>",
       to: email,
-      subject: "Votre mot de passe a ete reinitialise - Nihongo",
+      subject: "Votre mot de passe a été réinitialisé - Nihongo",
       html: `
         <!DOCTYPE html>
         <html>
@@ -189,11 +189,11 @@ export async function sendAdminPasswordReset(
               </div>
 
               <h2 style="color: #1c1917; font-size: 20px; margin-bottom: 16px;">
-                Mot de passe reinitialise
+                Mot de passe réinitialisé
               </h2>
 
               <p style="color: #57534e; line-height: 1.6; margin-bottom: 24px;">
-                Bonjour ${username}, un administrateur a reinitialise votre mot de passe. Voici vos nouvelles informations de connexion :
+                Bonjour ${username}, un administrateur a réinitialisé votre mot de passe. Voici vos nouvelles informations de connexion :
               </p>
 
               <div style="background: #f5f5f4; border-radius: 12px; padding: 20px; margin: 24px 0;">
@@ -322,7 +322,7 @@ export async function sendLevelUpEmail(
     const { error } = await resend.emails.send({
       from: "Nihongo <noreply@trynihongo.fr>",
       to: email,
-      subject: `Felicitations ! Tu passes au niveau ${newLevel} ! - Nihongo`,
+      subject: `Félicitations ! Tu passes au niveau ${newLevel} ! - Nihongo`,
       html,
     });
 
@@ -357,7 +357,7 @@ export async function sendReengagementEmail(
     if (daysInactive <= 3) {
       subject = "Tu nous manques ! - Nihongo";
     } else if (daysInactive <= 7) {
-      subject = "Ta memoire a besoin de toi - Nihongo";
+      subject = "Ta mémoire a besoin de toi - Nihongo";
     } else {
       subject = "Reprenons ensemble - Nihongo";
     }
@@ -405,7 +405,7 @@ export async function sendWeeklySummaryEmail(
     const { error } = await resend.emails.send({
       from: "Nihongo <noreply@trynihongo.fr>",
       to: email,
-      subject: "Ton resume de la semaine - Nihongo",
+      subject: "Ton résumé de la semaine - Nihongo",
       html,
     });
 

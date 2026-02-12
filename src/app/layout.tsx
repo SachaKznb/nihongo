@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Nihongo - Apprenez le Japonais",
-  description: "Systeme de repetition espacee pour les francophones qui apprennent le japonais",
+  description: "Système de répétition espacée pour les francophones qui apprennent le japonais",
 };
 
 export default function RootLayout({

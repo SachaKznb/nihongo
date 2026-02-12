@@ -129,7 +129,7 @@ export default function AdminVocabularyPage() {
         {loading ? (
           <div className="p-12 text-center text-stone-500">Chargement...</div>
         ) : vocabulary.length === 0 ? (
-          <div className="p-12 text-center text-stone-500">Aucun mot trouve</div>
+          <div className="p-12 text-center text-stone-500">Aucun mot trouvé</div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-4">
             {vocabulary.map((vocab) => (

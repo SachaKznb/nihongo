@@ -12,9 +12,11 @@ interface StudyItem {
   imageUrl: string | null;
   meaningsFr: string[];
   readings?: string[];
+  mnemonic?: string;
+  readingMnemonic?: string;
 }
 
-type Phase = "select" | "practice" | "complete";
+type Phase = "select" | "practice" | "complété";
 
 const CORRECT_MESSAGES = ["Parfait !", "Excellent !", "Bravo !", "Superbe !"];
 const INCORRECT_MESSAGES = ["Pas tout à fait...", "Presque !", "Continue !"];
@@ -132,7 +134,7 @@ export default function ExtraStudyPage() {
           totalCount: totalAnswered,
         }),
       });
-      setPhase("complete");
+      setPhase("complété");
     } catch (error) {
       console.error("Error completing session:", error);
     } finally {
@@ -288,7 +290,7 @@ export default function ExtraStudyPage() {
               showResult
                 ? isCorrect
                   ? "bg-gradient-to-b from-emerald-50 to-emerald-100"
-                  : "bg-gradient-to-b from-amber-50 to-orange-50"
+                  : "bg-gradient-to-b from-red-50 to-red-100"
                 : "bg-stone-50"
             }`}
           >
@@ -347,12 +349,12 @@ export default function ExtraStudyPage() {
                 ) : (
                   <div className="space-y-4">
                     <div className="flex items-center justify-center gap-2">
-                      <span className="text-2xl">💪</span>
-                      <h3 className="text-xl font-semibold text-amber-700">
+                      <span className="text-2xl">❌</span>
+                      <h3 className="text-xl font-semibold text-red-700">
                         {resultMessage}
                       </h3>
                     </div>
-                    <div className="bg-amber-50 rounded-xl p-4">
+                    <div className="bg-white/60 rounded-xl p-4">
                       <p className="text-stone-600 text-sm mb-1">
                         La bonne réponse :
                       </p>
@@ -360,6 +362,18 @@ export default function ExtraStudyPage() {
                         {currentItem.meaningsFr.join(", ")}
                       </p>
                     </div>
+                    {/* Show mnemonic to help remember */}
+                    {currentItem.mnemonic && (
+                      <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-left">
+                        <p className="text-sm font-medium text-blue-700 mb-1 flex items-center gap-1">
+                          <span>💡</span>
+                          Rappel :
+                        </p>
+                        <p className="text-blue-900 text-sm leading-relaxed">
+                          {currentItem.mnemonic}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -383,7 +397,7 @@ export default function ExtraStudyPage() {
   }
 
   // COMPLETE PHASE
-  if (phase === "complete") {
+  if (phase === "complété") {
     const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
     const xpEarned = correctCount * 2;
 

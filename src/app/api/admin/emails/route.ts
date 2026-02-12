@@ -20,7 +20,7 @@ export async function GET() {
   } catch (err) {
     console.error("Error fetching email templates:", err);
     return NextResponse.json(
-      { error: "Erreur lors de la recuperation des templates" },
+      { error: "Erreur lors de la récupération des templates" },
       { status: 500 }
     );
   }

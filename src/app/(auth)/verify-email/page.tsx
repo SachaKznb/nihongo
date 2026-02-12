@@ -91,9 +91,9 @@ function VerifyEmailContent() {
   // Error messages mapping
   const errorMessages: Record<string, string> = {
     missing_token: "Lien invalide. Veuillez demander un nouvel email de verification.",
-    invalid_token: "Ce lien n'est plus valide ou a deja ete utilise.",
+    invalid_token: "Ce lien n'est plus valide ou a déjà été utilise.",
     expired_token: "Ce lien a expire. Veuillez demander un nouvel email de verification.",
-    server_error: "Une erreur est survenue. Veuillez reessayer.",
+    server_error: "Une erreur est survenue. Veuillez réessayer.",
   };
 
   return (

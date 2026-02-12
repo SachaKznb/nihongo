@@ -43,7 +43,7 @@ export async function GET(
 
     if (!user) {
       return NextResponse.json(
-        { error: "Utilisateur non trouve" },
+        { error: "Utilisateur non trouvé" },
         { status: 404 }
       );
     }
@@ -101,7 +101,7 @@ export async function PUT(
 
     if (!existingUser) {
       return NextResponse.json(
-        { error: "Utilisateur non trouve" },
+        { error: "Utilisateur non trouvé" },
         { status: 404 }
       );
     }

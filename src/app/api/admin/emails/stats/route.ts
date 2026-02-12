@@ -90,7 +90,7 @@ export async function GET() {
   } catch (err) {
     console.error("Error fetching email stats:", err);
     return NextResponse.json(
-      { error: "Erreur lors de la recuperation des statistiques" },
+      { error: "Erreur lors de la récupération des statistiques" },
       { status: 500 }
     );
   }

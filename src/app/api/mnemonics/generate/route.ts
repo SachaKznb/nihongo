@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const userId = session.user.id;
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
   if (!rateLimit.success) {
     return NextResponse.json(
       {
-        error: "Trop de requetes. Veuillez patienter avant de reessayer.",
+        error: "Trop de requetes. Veuillez patienter avant de réessayer.",
         retryAfter: rateLimit.reset,
       },
       { status: 429 }
@@ -78,15 +78,15 @@ export async function POST(request: NextRequest) {
       hasExistingCustom = !!progress?.customMnemonic;
     }
 
-    // If user has existing and wants to regenerate, check credits
+    // If user has existing and wants to regenerate, check crédits
     if (hasExistingCustom && forceRegenerate) {
       const hasCredits = await checkAndDeductCredit(userId);
       if (!hasCredits) {
-        const credits = await getUserCredits(userId);
+        const crédits = await getUserCredits(userId);
         return NextResponse.json(
           {
-            error: "Credits IA insuffisants pour regenerer ce mnemonique",
-            creditsRemaining: credits,
+            error: "Credits IA insuffisants pour régénérer ce mnémonique",
+            créditsRemaining: crédits,
             requiresCredits: true,
           },
           { status: 402 }
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       // Generate fresh mnemonic (paid)
       const { item, learnedContext } = await fetchItemWithContext(userId, type, id);
       if (!item) {
-        return NextResponse.json({ error: "Item non trouve" }, { status: 404 });
+        return NextResponse.json({ error: "Item non trouvé" }, { status: 404 });
       }
 
       const mnemonic = await generateMnemonic({
@@ -109,11 +109,11 @@ export async function POST(request: NextRequest) {
       // Save to user only (not shared cache for regenerations)
       await saveMnemonic(userId, type, id, mnemonic, mnemonicType);
 
-      const creditsRemaining = await getUserCredits(userId);
+      const créditsRemaining = await getUserCredits(userId);
       return NextResponse.json({
         mnemonic,
         fromCache: false,
-        creditsRemaining,
+        créditsRemaining,
       });
     }
 
@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
     const { item, learnedContext } = await fetchItemWithContext(userId, type, id);
 
     if (!item) {
-      return NextResponse.json({ error: "Item non trouve" }, { status: 404 });
+      return NextResponse.json({ error: "Item non trouvé" }, { status: 404 });
     }
 
     const mnemonic = await generateMnemonic({
@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { error: "Erreur lors de la generation du mnemonique" },
+      { error: "Erreur lors de la generation du mnémonique" },
       { status: 500 }
     );
   }

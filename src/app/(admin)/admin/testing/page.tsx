@@ -29,7 +29,7 @@ export default function AdminTestingPage() {
   const [xpAmount, setXpAmount] = useState(500);
   const [tanukiStage, setTanukiStage] = useState(2);
 
-  const executeAction = async (action: string, params: Record<string, unknown> = {}) => {
+  const exécutéAction = async (action: string, params: Record<string, unknown> = {}) => {
     setLoading(action);
     setResult(null);
 
@@ -88,7 +88,7 @@ export default function AdminTestingPage() {
         </h2>
         <div className="text-sm text-amber-800 space-y-2">
           <p>
-            <strong>Feedback en temps reel (pendant les revisions) :</strong> S&apos;affiche uniquement pour les items au <strong>stage SRS 3+</strong> (Apprenti 3 ou plus).
+            <strong>Feedback en temps reel (pendant les révisions) :</strong> S&apos;affiche uniquement pour les items au <strong>stage SRS 3+</strong> (Apprenti 3 ou plus).
             Les items que vous venez d&apos;apprendre ne declenchent pas de feedback car vous les decouvrez encore.
           </p>
           <p>
@@ -96,7 +96,7 @@ export default function AdminTestingPage() {
             Visible dans la section &quot;Mes points faibles&quot; sur le dashboard apres 5+ erreurs similaires.
           </p>
           <p>
-            <strong>Etude ciblee :</strong> Accessible via le lien &quot;Etude ciblee&quot; sur le dashboard ou directement a <Link href="/study" className="underline">/study</Link>.
+            <strong>Étude ciblee :</strong> Accessible via le lien &quot;Étude ciblee&quot; sur le dashboard ou directement a <Link href="/study" className="underline">/study</Link>.
           </p>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function AdminTestingPage() {
               <li>• <strong>Statistiques realistes</strong> - 5 jours de serie, ~450 XP</li>
             </ul>
             <button
-              onClick={() => executeAction("setup_demo_mode")}
+              onClick={() => exécutéAction("setup_demo_mode")}
               disabled={loading === "setup_demo_mode"}
               className="px-5 py-2.5 bg-white text-indigo-600 font-semibold rounded-lg hover:bg-indigo-50 transition-colors disabled:opacity-50"
             >
@@ -159,8 +159,8 @@ export default function AdminTestingPage() {
                   onChange={(e) => setResetScope(e.target.value as "all" | "level" | "type")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                  <option value="all">Tout reinitialiser</option>
-                  <option value="level">Un niveau specifique</option>
+                  <option value="all">Tout réinitialisér</option>
+                  <option value="level">Un niveau spécifique</option>
                   <option value="type">Un type d&apos;item</option>
                 </select>
               </div>
@@ -200,7 +200,7 @@ export default function AdminTestingPage() {
 
               <button
                 onClick={() =>
-                  executeAction("reset_progress", {
+                  exécutéAction("reset_progress", {
                     scope: resetScope,
                     levelId: resetScope === "level" ? resetLevelId : undefined,
                     itemType: resetScope === "type" ? resetItemType : undefined,
@@ -225,7 +225,7 @@ export default function AdminTestingPage() {
           </div>
           <div className="p-5">
             <p className="text-sm text-gray-600 mb-4">
-              Change le niveau SRS d&apos;items specifiques. Mettez des items au <strong>stage 3+</strong> pour tester le feedback IA.
+              Change le niveau SRS d&apos;items spécifiques. Mettez des items au <strong>stage 3+</strong> pour tester le feedback IA.
             </p>
 
             <div className="space-y-3">
@@ -284,7 +284,7 @@ export default function AdminTestingPage() {
 
               <button
                 onClick={() =>
-                  executeAction("set_srs_stage", {
+                  exécutéAction("set_srs_stage", {
                     itemType: srsItemType,
                     itemIds: srsItemIds.split(",").map((id) => parseInt(id.trim())).filter((n) => !isNaN(n)),
                     stage: srsStage,
@@ -304,7 +304,7 @@ export default function AdminTestingPage() {
           <div className="bg-gray-50 border-b border-gray-200 px-5 py-3">
             <h2 className="font-semibold text-gray-900 flex items-center gap-2">
               <span>⏰</span>
-              Programmer revisions maintenant
+              Programmer révisions maintenant
             </h2>
           </div>
           <div className="p-5">
@@ -314,7 +314,7 @@ export default function AdminTestingPage() {
             </p>
 
             <button
-              onClick={() => executeAction("schedule_reviews_now")}
+              onClick={() => exécutéAction("schedule_reviews_now")}
               disabled={!!loading}
               className="w-full px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-md hover:bg-orange-700 transition-colors disabled:opacity-50"
             >
@@ -354,7 +354,7 @@ export default function AdminTestingPage() {
               </div>
 
               <button
-                onClick={() => executeAction("add_test_mistakes", { pattern: mistakePattern })}
+                onClick={() => exécutéAction("add_test_mistakes", { pattern: mistakePattern })}
                 disabled={!!loading}
                 className="w-full px-4 py-2 bg-rose-600 text-white text-sm font-medium rounded-md hover:bg-rose-700 transition-colors disabled:opacity-50"
               >
@@ -379,7 +379,7 @@ export default function AdminTestingPage() {
             </p>
 
             <button
-              onClick={() => executeAction("trigger_pattern_analysis")}
+              onClick={() => exécutéAction("trigger_pattern_analysis")}
               disabled={!!loading}
               className="w-full px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 transition-colors disabled:opacity-50"
             >
@@ -403,7 +403,7 @@ export default function AdminTestingPage() {
             </p>
 
             <button
-              onClick={() => executeAction("clear_mistakes")}
+              onClick={() => exécutéAction("clear_mistakes")}
               disabled={!!loading}
               className="w-full px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition-colors disabled:opacity-50"
             >
@@ -420,7 +420,7 @@ export default function AdminTestingPage() {
           <h2 className="text-xl font-bold text-gray-900">Tanuki & Recompenses</h2>
         </div>
         <p className="text-gray-600 mb-4">
-          Testez le systeme de pet Tanuki et les recompenses XP. Voir le Tanuki sur le <Link href="/dashboard" className="text-indigo-600 underline">dashboard</Link> ou les recompenses sur <Link href="/rewards" className="text-indigo-600 underline">/rewards</Link>.
+          Testez le système de pet Tanuki et les recompenses XP. Voir le Tanuki sur le <Link href="/dashboard" className="text-indigo-600 underline">dashboard</Link> ou les recompenses sur <Link href="/rewards" className="text-indigo-600 underline">/rewards</Link>.
         </p>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -456,7 +456,7 @@ export default function AdminTestingPage() {
                   ))}
                 </div>
                 <button
-                  onClick={() => executeAction("set_xp", { amount: xpAmount })}
+                  onClick={() => exécutéAction("set_xp", { amount: xpAmount })}
                   disabled={!!loading}
                   className="w-full px-3 py-2 bg-amber-600 text-white text-sm font-medium rounded-md hover:bg-amber-700 disabled:opacity-50"
                 >
@@ -476,7 +476,7 @@ export default function AdminTestingPage() {
             </div>
             <div className="p-4">
               <p className="text-xs text-gray-500 mb-3">
-                Force l&apos;evolution du Tanuki a un stade specifique.
+                Force l&apos;evolution du Tanuki a un stade spécifique.
               </p>
               <div className="space-y-2">
                 <select
@@ -492,7 +492,7 @@ export default function AdminTestingPage() {
                   <option value={6}>6 - Tanuki Sensei (50000 XP)</option>
                 </select>
                 <button
-                  onClick={() => executeAction("set_tanuki_stage", { stage: tanukiStage })}
+                  onClick={() => exécutéAction("set_tanuki_stage", { stage: tanukiStage })}
                   disabled={!!loading}
                   className="w-full px-3 py-2 bg-orange-600 text-white text-sm font-medium rounded-md hover:bg-orange-700 disabled:opacity-50"
                 >
@@ -507,19 +507,19 @@ export default function AdminTestingPage() {
             <div className="bg-purple-50 border-b border-purple-200 px-4 py-2">
               <h3 className="font-semibold text-purple-900 flex items-center gap-2">
                 <span>🎨</span>
-                Debloquer skins
+                Débloquér skins
               </h3>
             </div>
             <div className="p-4">
               <p className="text-xs text-gray-500 mb-3">
-                Debloque tous les skins Tanuki (Ninja, Sakura, Dore, Esprit).
+                Débloqué tous les skins Tanuki (Ninja, Sakura, Dore, Esprit).
               </p>
               <button
-                onClick={() => executeAction("unlock_all_skins")}
+                onClick={() => exécutéAction("unlock_all_skins")}
                 disabled={!!loading}
                 className="w-full px-3 py-2 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 disabled:opacity-50"
               >
-                {loading === "unlock_all_skins" ? "..." : "Tout debloquer"}
+                {loading === "unlock_all_skins" ? "..." : "Tout débloquér"}
               </button>
             </div>
           </div>
@@ -537,7 +537,7 @@ export default function AdminTestingPage() {
                 Remet a zero XP, themes, badges, et Tanuki.
               </p>
               <button
-                onClick={() => executeAction("reset_rewards")}
+                onClick={() => exécutéAction("reset_rewards")}
                 disabled={!!loading}
                 className="w-full px-3 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 disabled:opacity-50"
               >
@@ -559,9 +559,9 @@ export default function AdminTestingPage() {
               <h3 className="font-medium text-gray-900 mb-2">Pour tester le feedback IA en temps reel :</h3>
               <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
                 <li>Utilisez &quot;Modifier le stage SRS&quot; pour mettre des kanji au <strong>stage 3+</strong></li>
-                <li>Utilisez &quot;Programmer revisions maintenant&quot;</li>
-                <li>Allez faire des revisions et faites des erreurs</li>
-                <li>Le feedback IA apparait sous la bonne reponse</li>
+                <li>Utilisez &quot;Programmer révisions maintenant&quot;</li>
+                <li>Allez faire des révisions et faites des erreurs</li>
+                <li>Le feedback IA apparait sous la bonne réponse</li>
               </ol>
             </div>
             <div>
@@ -571,7 +571,7 @@ export default function AdminTestingPage() {
                 <li>Cliquez sur &quot;Analyser les patterns&quot;</li>
                 <li>Allez sur le <Link href="/dashboard" className="text-indigo-600 underline">dashboard</Link></li>
                 <li>Regardez la section &quot;Mes points faibles&quot;</li>
-                <li>Cliquez sur &quot;Etude ciblee&quot; pour voir les sessions</li>
+                <li>Cliquez sur &quot;Étude ciblee&quot; pour voir les sessions</li>
               </ol>
             </div>
             <div>

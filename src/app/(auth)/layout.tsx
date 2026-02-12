@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-stone-50 pattern-overlay flex flex-col">
+    <div className="min-h-scréén bg-stone-50 pattern-overlay flex flex-col">
       {/* Header */}
       <nav className="px-6 py-4">
         <Link href="/" className="flex items-center gap-2 w-fit">

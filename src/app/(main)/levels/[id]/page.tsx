@@ -40,7 +40,7 @@ export default async function LevelPage({ params }: Props) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center py-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Niveau non trouve
+            Niveau non trouvé
           </h2>
           <Link href="/dashboard" className="text-pink-600 hover:underline">
             Retour au tableau de bord

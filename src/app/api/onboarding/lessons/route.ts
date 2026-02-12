@@ -1,11 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { SRS_STAGES } from "@/lib/srs";
 import type { LessonItem } from "@/types";
 
-// GET /api/onboarding/lessons - Returns first 5 radicals for onboarding
-export async function GET() {
+// GET /api/onboarding/lessons - Returns 5 radicals for onboarding
+// Query params: skip (number) - number of radicals to skip (for additional batches)
+export async function GET(request: NextRequest) {
   try {
     const session = await auth();
 
@@ -14,6 +15,8 @@ export async function GET() {
     }
 
     const userId = session.user.id;
+    const { searchParams } = new URL(request.url);
+    const skip = parseInt(searchParams.get("skip") || "0");
 
     // Check if user has already completed onboarding
     const user = await prisma.user.findUnique({
@@ -28,7 +31,7 @@ export async function GET() {
       );
     }
 
-    // Get first 5 locked radicals (level 1)
+    // Get 5 locked radicals (with optional skip for additional batches)
     const radicalProgress = await prisma.userRadicalProgress.findMany({
       where: { userId, srsStage: SRS_STAGES.LOCKED },
       include: {
@@ -45,6 +48,7 @@ export async function GET() {
           },
         },
       },
+      skip,
       take: 5,
       orderBy: { radical: { id: "asc" } },
     });

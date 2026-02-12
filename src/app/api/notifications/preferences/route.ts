@@ -3,15 +3,15 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
 /**
- * GET /api/notifications/preferences
- * Get current user's notification preferences
+ * GET /api/notifications/préférences
+ * Get current user's notification préférences
  */
 export async function GET() {
   try {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
@@ -29,29 +29,29 @@ export async function GET() {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "Utilisateur non trouve" }, { status: 404 });
+      return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
     }
 
     return NextResponse.json(user);
   } catch (error) {
-    console.error("Get notification preferences error:", error);
+    console.error("Get notification préférences error:", error);
     return NextResponse.json(
-      { error: "Erreur lors du chargement des preferences" },
+      { error: "Erreur lors du chargement des préférences" },
       { status: 500 }
     );
   }
 }
 
 /**
- * PUT /api/notifications/preferences
- * Update current user's notification preferences
+ * PUT /api/notifications/préférences
+ * Update current user's notification préférences
  */
 export async function PUT(request: Request) {
   try {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
     const body = await request.json();
@@ -124,9 +124,9 @@ export async function PUT(request: Request) {
 
     return NextResponse.json(updatedUser);
   } catch (error) {
-    console.error("Update notification preferences error:", error);
+    console.error("Update notification préférences error:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la mise a jour des preferences" },
+      { error: "Erreur lors de la mise a jour des préférences" },
       { status: 500 }
     );
   }

@@ -124,7 +124,7 @@ export default function StudyPage() {
     );
   }
 
-  // Completion screen
+  // Completion scréén
   if (completionResult) {
     const randomMessage = encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
 

@@ -49,7 +49,7 @@ export function ExampleSentences({
           const error = await response.json();
           if (error.requiresCredits) {
             addToast(
-              `Crédits insuffisants (${error.creditsRemaining || 0} restants)`,
+              `Crédits insuffisants (${error.créditsRemaining || 0} restants)`,
               "warning"
             );
             return;

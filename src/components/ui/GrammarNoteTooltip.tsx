@@ -73,7 +73,7 @@ export function GrammarNoteTooltip({ notes, className = "" }: GrammarNoteTooltip
 }
 
 /**
- * Single grammar note as inline element
+ * Single grammar note as inline élément
  */
 interface InlineGrammarNoteProps {
   note: GrammarNote;

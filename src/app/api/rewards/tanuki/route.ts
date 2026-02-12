@@ -8,7 +8,7 @@ export async function GET() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({
@@ -22,7 +22,7 @@ export async function GET() {
   });
 
   if (!user) {
-    return NextResponse.json({ error: "Utilisateur non trouve" }, { status: 404 });
+    return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
   }
 
   const unlockedSkinsInfo = user.unlockedSkins.map((id) => getTanukiSkinById(id)).filter(Boolean);
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const userId = session.user.id;
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       });
 
       if (!user?.unlockedSkins.includes(skinId)) {
-        return NextResponse.json({ error: "Skin non debloque" }, { status: 400 });
+        return NextResponse.json({ error: "Skin non débloqué" }, { status: 400 });
       }
 
       await prisma.user.update({
@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
       // Purchase a new skin
       const skin = getTanukiSkinById(skinId);
       if (!skin) {
-        return NextResponse.json({ error: "Skin non trouve" }, { status: 404 });
+        return NextResponse.json({ error: "Skin non trouvé" }, { status: 404 });
       }
 
       const user = await prisma.user.findUnique({
@@ -103,11 +103,11 @@ export async function POST(request: NextRequest) {
       });
 
       if (!user) {
-        return NextResponse.json({ error: "Utilisateur non trouve" }, { status: 404 });
+        return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
       }
 
       if (user.unlockedSkins.includes(skinId)) {
-        return NextResponse.json({ error: "Skin deja debloque" }, { status: 400 });
+        return NextResponse.json({ error: "Skin déjà débloqué" }, { status: 400 });
       }
 
       if (user.totalXp < skin.price) {
@@ -128,7 +128,7 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({
         success: true,
-        message: `Skin "${skin.name}" debloque et active !`,
+        message: `Skin "${skin.name}" débloqué et active !`,
       });
     }
 

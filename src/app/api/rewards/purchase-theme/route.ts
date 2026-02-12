@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const userId = session.user.id;
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     const theme = getThemeById(themeId);
     if (!theme) {
-      return NextResponse.json({ error: "Theme non trouve" }, { status: 404 });
+      return NextResponse.json({ error: "Theme non trouvé" }, { status: 404 });
     }
 
     // Get user's current XP and unlocked themes
@@ -31,12 +31,12 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "Utilisateur non trouve" }, { status: 404 });
+      return NextResponse.json({ error: "Utilisateur non trouvé" }, { status: 404 });
     }
 
     // Check if already unlocked
     if (user.unlockedThemes.includes(themeId)) {
-      return NextResponse.json({ error: "Theme deja debloque" }, { status: 400 });
+      return NextResponse.json({ error: "Theme déjà débloqué" }, { status: 400 });
     }
 
     // Check if user has enough XP

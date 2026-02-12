@@ -209,7 +209,7 @@ export const BADGES: Badge[] = [
   },
 ];
 
-// XP to credits conversion rate
+// XP to crédits conversion rate
 export const XP_PER_CREDIT = 200;
 
 // Helper functions

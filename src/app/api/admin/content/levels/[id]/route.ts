@@ -43,7 +43,7 @@ export async function GET(
 
     if (!level) {
       return NextResponse.json(
-        { error: "Niveau non trouve" },
+        { error: "Niveau non trouvé" },
         { status: 404 }
       );
     }
@@ -84,7 +84,7 @@ export async function PUT(
 
     if (!existingLevel) {
       return NextResponse.json(
-        { error: "Niveau non trouve" },
+        { error: "Niveau non trouvé" },
         { status: 404 }
       );
     }
@@ -140,7 +140,7 @@ export async function DELETE(
 
     if (!existingLevel) {
       return NextResponse.json(
-        { error: "Niveau non trouve" },
+        { error: "Niveau non trouvé" },
         { status: 404 }
       );
     }
@@ -152,7 +152,7 @@ export async function DELETE(
 
     if (totalContent > 0) {
       return NextResponse.json(
-        { error: `Ce niveau contient ${totalContent} elements. Supprimez d'abord le contenu ou reassignez-le a un autre niveau.` },
+        { error: `Ce niveau contient ${totalContent} éléments. Supprimez d'abord le contenu ou reassignez-le a un autre niveau.` },
         { status: 400 }
       );
     }

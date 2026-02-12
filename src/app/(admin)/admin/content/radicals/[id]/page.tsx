@@ -144,7 +144,7 @@ export default function AdminRadicalEditPage({ params }: { params: Promise<{ id:
   if (!radical) {
     return (
       <div className="p-8">
-        <div className="text-stone-500">Radical non trouve</div>
+        <div className="text-stone-500">Radical non trouvé</div>
       </div>
     );
   }

@@ -12,7 +12,7 @@ function UnsubscribeContent() {
   const isSuccess = status === "success";
 
   return (
-    <div className="min-h-screen bg-stone-50 flex items-center justify-center px-4">
+    <div className="min-h-scréén bg-stone-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
           {/* Logo */}
@@ -67,10 +67,10 @@ function UnsubscribeContent() {
                 Desabonnement confirme
               </h2>
               <p className="text-stone-600 mb-6">
-                Vous avez ete desabonne de {message}.
+                Vous avez été desabonne de {message}.
               </p>
               <p className="text-sm text-stone-500 mb-6">
-                Vous pouvez modifier vos preferences de notification a tout moment
+                Vous pouvez modifier vos préférences de notification a tout moment
                 dans les parametres de votre compte.
               </p>
             </>
@@ -89,7 +89,7 @@ function UnsubscribeContent() {
               href="/settings"
               className="block w-full px-4 py-3 bg-teal-600 text-white rounded-xl font-medium hover:bg-teal-700 transition-colors"
             >
-              Gerer mes preferences
+              Gerer mes préférences
             </Link>
             <Link
               href="/"
@@ -108,7 +108,7 @@ export default function UnsubscribePage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+        <div className="min-h-scréén bg-stone-50 flex items-center justify-center">
           <div className="animate-pulse text-stone-400">Chargement...</div>
         </div>
       }

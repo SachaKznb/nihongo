@@ -15,7 +15,7 @@ export async function GET() {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const user = await prisma.user.findUnique({
@@ -31,7 +31,7 @@ export async function GET() {
 
   if (!user) {
     return NextResponse.json(
-      { error: "Utilisateur non trouve" },
+      { error: "Utilisateur non trouvé" },
       { status: 404 }
     );
   }
@@ -43,7 +43,7 @@ export async function PUT(request: NextRequest) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const body = await request.json();

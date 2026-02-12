@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       return redirectWithMessage("error", "Token invalide ou expire");
     }
 
-    // Determine which preferences to update
+    // Determine which préférences to update
     const updates: Record<string, boolean> = {};
 
     switch (type) {
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
         updates.emailNotificationsEnabled = false;
     }
 
-    // Update user preferences
+    // Update user préférences
     await prisma.user.update({
       where: { id: user.id },
       data: updates,
@@ -73,11 +73,11 @@ export async function GET(request: NextRequest) {
     // Redirect to unsubscribe confirmation page
     const typeNames: Record<string, string> = {
       all: "toutes les notifications",
-      reviews_waiting: "les rappels de revisions",
+      reviews_waiting: "les rappels de révisions",
       streak_at_risk: "les alertes de serie",
       level_up: "les notifications de niveau",
       reengagement: "les rappels de reengagement",
-      weekly_summary: "le resume hebdomadaire",
+      weekly_summary: "le résumé hebdomadaire",
     };
 
     const typeName = typeNames[type] || typeNames.all;

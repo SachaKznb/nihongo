@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const userId = session.user.id;
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       ]);
 
       if (!radical) {
-        return NextResponse.json({ error: "Radical non trouve" }, { status: 404 });
+        return NextResponse.json({ error: "Radical non trouvé" }, { status: 404 });
       }
 
       srsStage = progress?.srsStage ?? 0;
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       ]);
 
       if (!kanji) {
-        return NextResponse.json({ error: "Kanji non trouve" }, { status: 404 });
+        return NextResponse.json({ error: "Kanji non trouvé" }, { status: 404 });
       }
 
       srsStage = progress?.srsStage ?? 0;
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
       ]);
 
       if (!vocabulary) {
-        return NextResponse.json({ error: "Vocabulaire non trouve" }, { status: 404 });
+        return NextResponse.json({ error: "Vocabulaire non trouvé" }, { status: 404 });
       }
 
       srsStage = progress?.srsStage ?? 0;

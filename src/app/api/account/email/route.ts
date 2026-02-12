@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Utilisateur non trouve" },
+        { error: "Utilisateur non trouvé" },
         { status: 404 }
       );
     }
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     // Check if same email
     if (user.email === normalizedEmail) {
       return NextResponse.json(
-        { error: "C'est deja votre adresse email actuelle" },
+        { error: "C'est déjà votre adresse email actuelle" },
         { status: 400 }
       );
     }
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "Cette adresse email est deja utilisee" },
+        { error: "Cette adresse email est déjà utilisee" },
         { status: 400 }
       );
     }
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({
-      message: "Un email de verification a ete envoye a votre nouvelle adresse.",
+      message: "Un email de verification a été envoye a votre nouvelle adresse.",
     });
   } catch (error) {
     console.error("Email change error:", error);

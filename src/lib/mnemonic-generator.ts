@@ -66,7 +66,7 @@ export async function generateMnemonic(context: MnemonicContext): Promise<string
 }
 
 function buildSystemPrompt(): string {
-  return `Tu es un expert en apprentissage du japonais pour les francophones. Tu crees des mnemoniques memorables pour aider a retenir les kanji, radicaux et vocabulaire.
+  return `Tu es un expert en apprentissage du japonais pour les francophones. Tu créés des mnémoniques memorables pour aider a retenir les kanji, radicaux et vocabulaire.
 
 REGLES IMPORTANTES:
 1. Ecris TOUJOURS en francais
@@ -74,11 +74,11 @@ REGLES IMPORTANTES:
 3. Maximum 2-4 phrases, sois CONCIS
 4. Utilise des references a la culture francaise quand c'est pertinent (films, celebrites, nourriture, lieux)
 5. Cherche des COGNATES ou sons similaires entre le francais et le japonais
-6. Si l'utilisateur connait deja des radicaux/kanji composants, REUTILISE-LES dans l'histoire
-7. Pour les lectures (readings), cree des associations phonetiques avec des mots francais
-8. Evite les explications - va droit au mnemonique
+6. Si l'utilisateur connaît déjà des radicaux/kanji composants, REUTILISE-LES dans l'histoire
+7. Pour les lectures (readings), créé des associations phonetiques avec des mots francais
+8. Evite les explications - va droit au mnémonique
 
-FORMAT: Retourne UNIQUEMENT le mnemonique, sans introduction ni explication.`;
+FORMAT: Retourne UNIQUEMENT le mnémonique, sans introduction ni explication.`;
 }
 
 function buildUserPrompt(context: MnemonicContext): string {
@@ -88,7 +88,7 @@ function buildUserPrompt(context: MnemonicContext): string {
 
   if (type === "radical") {
     const radical = item as RadicalDetails;
-    prompt = `Cree un mnemonique pour ce RADICAL japonais:
+    prompt = `Cree un mnémonique pour ce RADICAL japonais:
 - Caractere: ${radical.character || "[image]"}
 - Signification: ${radical.meaningFr}
 ${radical.meaningHintFr ? `- Indice: ${radical.meaningHintFr}` : ""}`;
@@ -99,12 +99,12 @@ ${radical.meaningHintFr ? `- Indice: ${radical.meaningHintFr}` : ""}`;
       const components = kanji.radicals
         .map(r => `${r.radical.character || "?"} (${r.radical.meaningFr})`)
         .join(", ");
-      prompt = `Cree un mnemonique pour la SIGNIFICATION de ce kanji:
+      prompt = `Cree un mnémonique pour la SIGNIFICATION de ce kanji:
 - Kanji: ${kanji.character}
 - Signification(s): ${kanji.meaningsFr.join(", ")}
 - Composants (radicaux): ${components || "aucun"}`;
     } else {
-      prompt = `Cree un mnemonique pour la LECTURE de ce kanji:
+      prompt = `Cree un mnémonique pour la LECTURE de ce kanji:
 - Kanji: ${kanji.character}
 - Signification: ${kanji.meaningsFr[0]}
 - Lectures On'yomi: ${kanji.readingsOn?.join(", ") || "aucune"}
@@ -117,7 +117,7 @@ ${radical.meaningHintFr ? `- Indice: ${radical.meaningHintFr}` : ""}`;
     const kanjiComponents = vocab.kanji
       .map(k => `${k.kanji.character} (${k.kanji.meaningsFr[0]})`)
       .join(", ");
-    prompt = `Cree un mnemonique pour ce MOT DE VOCABULAIRE:
+    prompt = `Cree un mnémonique pour ce MOT DE VOCABULAIRE:
 - Mot: ${vocab.word}
 - Signification(s): ${vocab.meaningsFr.join(", ")}
 - Lecture: ${vocab.readings.join(", ")}
@@ -126,7 +126,7 @@ ${radical.meaningHintFr ? `- Indice: ${radical.meaningHintFr}` : ""}`;
 
   // Add learned context
   if (learnedContext.radicals.length > 0 || learnedContext.kanji.length > 0) {
-    prompt += `\n\nL'utilisateur connait deja ces elements (Guru+), tu peux les referencer:`;
+    prompt += `\n\nL'utilisateur connaît déjà ces éléments (Guru+), tu peux les référencer:`;
 
     if (learnedContext.radicals.length > 0) {
       const radicalList = learnedContext.radicals

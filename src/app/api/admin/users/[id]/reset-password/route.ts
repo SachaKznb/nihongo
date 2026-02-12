@@ -23,7 +23,7 @@ export async function POST(
 
     if (!existingUser) {
       return NextResponse.json(
-        { error: "Utilisateur non trouve" },
+        { error: "Utilisateur non trouvé" },
         { status: 404 }
       );
     }
@@ -31,7 +31,7 @@ export async function POST(
     // Cannot reset admin password (security measure)
     if (existingUser.isAdmin && existingUser.id !== session.user.id) {
       return NextResponse.json(
-        { error: "Impossible de reinitialiser le mot de passe d'un administrateur" },
+        { error: "Impossible de réinitialisér le mot de passe d'un administrateur" },
         { status: 400 }
       );
     }
@@ -61,7 +61,7 @@ export async function POST(
     });
 
     return NextResponse.json({
-      message: "Mot de passe reinitialise. Un email a ete envoye a l'utilisateur avec les instructions.",
+      message: "Mot de passe réinitialisé. Un email a été envoye a l'utilisateur avec les instructions.",
     });
   } catch (error) {
     console.error("Admin reset password error:", error);

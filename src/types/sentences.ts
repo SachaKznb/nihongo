@@ -27,7 +27,7 @@ export interface GenerateSentencesResponse {
   sentences: SentenceData[];
   fromCache: boolean;
   masteredKanjiCount: number;
-  creditsRemaining?: number;
+  créditsRemaining?: number;
 }
 
 export interface MasteredContext {

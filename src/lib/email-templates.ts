@@ -154,17 +154,17 @@ export async function getReviewsWaitingContent(username: string, reviewCount: nu
     xp: reviewCount * 5,
   };
 
-  const headline = custom ? replaceVariables(custom.headline, vars) : "Tes revisions t'attendent !";
+  const headline = custom ? replaceVariables(custom.headline, vars) : "Tes révisions t'attendent !";
   const defaultBody = `Bonjour ${username},
 
-Tu as <strong style="color: #0d9488;">${reviewCount} revision${reviewCount > 1 ? "s" : ""}</strong> en attente. C'est le moment ideal pour renforcer ce que tu as appris.
+Tu as <strong style="color: #0d9488;">${reviewCount} révision${reviewCount > 1 ? "s" : ""}</strong> en attente. C'est le moment idéal pour renforcer ce que tu as appris.
 
-Le systeme de repetition espacee fonctionne mieux quand tu fais tes revisions au bon moment. Ton cerveau est pret a consolider ces kanji et vocabulaire, et quelques minutes suffisent pour ancrer ces connaissances sur le long terme.
+Le système de répétition espacée fonctionne mieux quand tu fais tes révisions au bon moment. Ton cerveau est prêt à consolider ces kanji et vocabulaire, et quelques minutes suffisent pour ancrer ces connaissances sur le long terme.
 
-Plus tu revises regulierement, plus la memorisation devient facile. Les premiers niveaux demandent un peu d'effort, mais tu verras vite que les kanji commencent a rester naturellement.`;
+Plus tu revises régulièrement, plus la mémorisation devient facile. Les premiers niveaux demandent un peu d'effort, mais tu verras vite que les kanji commencent à rester naturellement.`;
 
   const bodyText = custom ? replaceVariables(custom.bodyText, vars) : defaultBody;
-  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Faire mes revisions";
+  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Faire mes révisions";
   const footerText = custom?.footerText ? replaceVariables(custom.footerText, vars) : `${reviewCount * 5} XP t'attendent`;
 
   return `
@@ -178,7 +178,7 @@ Plus tu revises regulierement, plus la memorisation devient facile. Les premiers
 
     <div style="background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%); border-radius: 12px; padding: 20px; text-align: center; margin: 24px 0;">
       <div style="font-size: 36px; font-weight: bold; color: white;">${reviewCount}</div>
-      <div style="font-size: 14px; color: rgba(255,255,255,0.9);">revision${reviewCount > 1 ? "s" : ""} en attente</div>
+      <div style="font-size: 14px; color: rgba(255,255,255,0.9);">révision${reviewCount > 1 ? "s" : ""} en attente</div>
     </div>
 
     ${getButton(buttonText, `${BASE_URL}/reviews`, "#f97316")}
@@ -196,21 +196,21 @@ export async function getStreakAtRiskContent(username: string, currentStreak: nu
   const custom = await getCustomTemplate("streak_at_risk");
   const vars = { username, streak: currentStreak };
 
-  const headline = custom ? replaceVariables(custom.headline, vars) : `Ta serie de ${currentStreak} jours est en danger`;
+  const headline = custom ? replaceVariables(custom.headline, vars) : `Ta série de ${currentStreak} jours est en danger`;
 
   const defaultBody = `Bonjour ${username},
 
-Tu as construit une serie de ${currentStreak} jours consecutifs d'apprentissage. C'est un vrai accomplissement, et ca serait dommage de la perdre maintenant.
+Tu as construit une série de ${currentStreak} jours consécutifs d'apprentissage. C'est un vrai accomplissement, et ça serait dommage de la perdre maintenant.
 
-Une seule revision suffit pour maintenir ta serie. Ca prend moins de deux minutes, et tu gardes tout l'elan que tu as accumule.
+Une seule révision suffit pour maintenir ta série. Ca prend moins de deux minutes, et tu gardes tout l'élan que tu as accumulé.
 
-La regularite est la cle pour apprendre le japonais. Chaque jour compte, meme les jours ou tu n'as pas beaucoup de temps. Fais une revision rapide et ta serie continue.`;
+La régularité est la clé pour apprendre le japonais. Chaque jour compte, meme les jours ou tu n'as pas beaucoup de temps. Fais une révision rapide et ta série continue.`;
 
   const bodyText = custom ? replaceVariables(custom.bodyText, vars) : defaultBody;
-  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Sauver ma serie";
+  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Sauver ma série";
   const footerText = custom?.footerText
     ? replaceVariables(custom.footerText, vars)
-    : "Ta serie sera remise a zero demain matin si tu ne fais pas au moins une revision aujourd'hui.";
+    : "Ta série sera remise à zéro demain matin si tu ne fais pas au moins une révision aujourd'hui.";
 
   return `
     <h2 style="color: #1c1917; font-size: 20px; margin-bottom: 16px;">
@@ -224,7 +224,7 @@ La regularite est la cle pour apprendre le japonais. Chaque jour compte, meme le
     <div style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0;">
       <div style="font-size: 48px; margin-bottom: 8px;">&#128293;</div>
       <div style="font-size: 36px; font-weight: bold; color: white;">${currentStreak}</div>
-      <div style="font-size: 14px; color: rgba(255,255,255,0.9);">jours consecutifs</div>
+      <div style="font-size: 14px; color: rgba(255,255,255,0.9);">jours consécutifs</div>
     </div>
 
     ${getButton(buttonText, `${BASE_URL}/reviews`, "#ea580c")}
@@ -242,18 +242,18 @@ export async function getLevelUpContent(username: string, newLevel: number): Pro
   const custom = await getCustomTemplate("level_up");
   const vars = { username, level: newLevel };
 
-  const headline = custom ? replaceVariables(custom.headline, vars) : `Niveau ${newLevel} debloque`;
+  const headline = custom ? replaceVariables(custom.headline, vars) : `Niveau ${newLevel} débloqué`;
 
-  const defaultBody = `Felicitations ${username},
+  const defaultBody = `Félicitations ${username},
 
-Tu viens de passer au niveau ${newLevel}. Tu as prouve que tu maitrises les kanji du niveau precedent, et c'est une vraie progression.
+Tu viens de passer au niveau ${newLevel}. Tu as prouvé que tu maîtrises les kanji du niveau précédent, et c'est une vraie progression.
 
-De nouveaux radicaux, kanji et vocabulaire sont maintenant disponibles dans tes lecons. Ces nouveaux elements s'appuient sur ce que tu connais deja, donc tu vas voir des connexions avec ce que tu as appris.
+De nouveaux radicaux, kanji et vocabulaire sont maintenant disponibles dans tes leçons. Ces nouveaux éléments s'appuient sur ce que tu connais déjà, donc tu vas voir des connexions avec ce que tu as appris.
 
-Continue a ton rythme. L'important n'est pas d'aller vite, mais d'aller regulierement. Chaque niveau te rapproche de la lecture fluide du japonais.`;
+Continue à ton rythme. L'important n'est pas d'aller vite, mais d'aller régulièrement. Chaque niveau te rapproche de la lecture fluide du japonais.`;
 
   const bodyText = custom ? replaceVariables(custom.bodyText, vars) : defaultBody;
-  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Voir les nouvelles lecons";
+  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Voir les nouvelles leçons";
 
   return `
     <h2 style="color: #1c1917; font-size: 20px; margin-bottom: 16px;">
@@ -293,37 +293,37 @@ export async function getReengagementContent(
     defaultHeadline = "Tes kanji t'attendent";
     defaultMessage = `Bonjour ${username},
 
-Ca fait ${daysInactive} jours que tu n'as pas fait de revisions. Tes kanji et vocabulaire sont encore frais dans ta memoire, mais ils commencent a s'estomper.
+Ça fait ${daysInactive} jours que tu n'as pas fait de révisions. Tes kanji et vocabulaire sont encore frais dans ta mémoire, mais ils commencent a s'estomper.
 
-Le systeme de repetition espacee fonctionne mieux avec une pratique reguliere. Quelques minutes maintenant te permettront de garder tout ce que tu as appris.
+Le système de répétition espacée fonctionne mieux avec une pratique régulière. Quelques minutes maintenant te permettront de garder tout ce que tu as appris.
 
-${pendingReviews > 0 ? `Tu as ${pendingReviews} revisions en attente. C'est le bon moment pour les faire.` : "Reviens faire quelques revisions pour maintenir tes acquis."}`;
+${pendingReviews > 0 ? `Tu as ${pendingReviews} révisions en attente. C'est le bon moment pour les faire.` : "Reviens faire quelques révisions pour maintenir tes acquis."}`;
     emoji = "&#128075;"; // waving hand
   } else if (daysInactive <= 14) {
     defaultHeadline = "Ta progression t'attend";
     defaultMessage = `Bonjour ${username},
 
-Ca fait ${daysInactive} jours. Les kanji que tu as appris commencent a s'effacer de ta memoire, mais tout n'est pas perdu.
+Ça fait ${daysInactive} jours. Les kanji que tu as appris commencent a s'effacer de ta mémoire, mais tout n'est pas perdu.
 
 Reprendre maintenant te permettra de recuperer une grande partie de ce que tu as appris. Le cerveau oublie progressivement, mais il se souvient aussi vite quand on revise.
 
-${pendingReviews > 0 ? `${pendingReviews} revisions t'attendent. Commence par quelques-unes, sans pression.` : "Fais quelques revisions pour reactiver ta memoire."}`;
+${pendingReviews > 0 ? `${pendingReviews} révisions t'attendent. Commence par quelques-unes, sans pression.` : "Fais quelques révisions pour réactiver ta mémoire."}`;
     emoji = "&#129504;"; // brain
   } else {
     defaultHeadline = "Reprendre le japonais";
     defaultMessage = `Bonjour ${username},
 
-Ca fait un moment qu'on ne t'a pas vu. Apprendre une langue demande de la regularite, et parfois on fait une pause plus longue que prevu.
+Ça fait un moment qu'on ne t'a pas vu. Apprendre une langue demande de la régularité, et parfois on fait une pause plus longue que prevu.
 
-La bonne nouvelle, c'est que tu peux reprendre a ton rythme. Les premiers jours de reprise seront peut-etre un peu plus difficiles, mais ta memoire va vite se reactiver.
+La bonne nouvelle, c'est que tu peux reprendre a ton rythme. Les premiers jours de reprise seront peut-etre un peu plus difficiles, mais ta mémoire va vite se réactiver.
 
-${pendingReviews > 0 ? `Tu as ${pendingReviews} revisions en attente. Pas besoin de tout faire d'un coup. Commence doucement.` : "Reviens quand tu es pret, tes kanji t'attendent."}`;
+${pendingReviews > 0 ? `Tu as ${pendingReviews} révisions en attente. Pas besoin de tout faire d'un coup. Commence doucement.` : "Reviens quand tu es pret, tes kanji t'attendent."}`;
     emoji = "&#127793;"; // seedling
   }
 
   const headline = custom ? replaceVariables(custom.headline, vars) : defaultHeadline;
   const bodyText = custom ? replaceVariables(custom.bodyText, vars) : defaultMessage;
-  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Reprendre mes revisions";
+  const buttonText = custom ? replaceVariables(custom.buttonText, vars) : "Reprendre mes révisions";
   const footerText = custom?.footerText
     ? replaceVariables(custom.footerText, vars)
     : "Meme 5 minutes par jour font une vraie difference sur le long terme.";
@@ -339,7 +339,7 @@ ${pendingReviews > 0 ? `Tu as ${pendingReviews} revisions en attente. Pas besoin
 
     <div style="background: #f5f5f4; border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0;">
       <div style="font-size: 48px; margin-bottom: 12px;">${emoji}</div>
-      ${pendingReviews > 0 ? `<div style="font-size: 16px; color: #57534e;"><strong>${pendingReviews}</strong> revisions en attente</div>` : ""}
+      ${pendingReviews > 0 ? `<div style="font-size: 16px; color: #57534e;"><strong>${pendingReviews}</strong> révisions en attente</div>` : ""}
     </div>
 
     ${getButton(buttonText, `${BASE_URL}/dashboard`, "#0d9488")}
@@ -382,25 +382,25 @@ export async function getWeeklySummaryContent(
 
   let progressComment = "";
   if (stats.accuracy >= 90) {
-    progressComment = "Ta precision est excellente cette semaine. Les kanji rentrent bien.";
+    progressComment = "Ta précision est excellente cette semaine. Les kanji rentrent bien.";
   } else if (stats.accuracy >= 75) {
     progressComment = "Bonne semaine de travail. Quelques erreurs, mais c'est comme ca qu'on apprend.";
   } else if (stats.reviewsCompleted > 0) {
-    progressComment = "Tu as fait des revisions cette semaine, c'est l'essentiel. La precision viendra avec la pratique.";
+    progressComment = "Tu as fait des révisions cette semaine, c'est l'essentiel. La précision viendra avec la pratique.";
   }
 
   let streakComment = "";
   if (stats.currentStreak >= 30) {
-    streakComment = `${stats.currentStreak} jours de serie, c'est impressionnant. Cette regularite fait vraiment la difference.`;
+    streakComment = `${stats.currentStreak} jours de série, c'est impressionnant. Cette régularité fait vraiment la difference.`;
   } else if (stats.currentStreak >= 7) {
-    streakComment = `${stats.currentStreak} jours consecutifs. Tu as pris un bon rythme.`;
+    streakComment = `${stats.currentStreak} jours consécutifs. Tu as pris un bon rythme.`;
   } else if (stats.currentStreak > 0) {
     streakComment = `Serie de ${stats.currentStreak} jour${stats.currentStreak > 1 ? "s" : ""}. Continue a construire cette habitude.`;
   }
 
   const defaultBody = `Bonjour ${username},
 
-Voici ton resume de la semaine. ${stats.reviewsCompleted > 0 ? `Tu as complete ${stats.reviewsCompleted} revision${stats.reviewsCompleted > 1 ? "s" : ""}` : ""}${stats.lessonsCompleted > 0 ? ` et appris ${stats.lessonsCompleted} nouvelle${stats.lessonsCompleted > 1 ? "s" : ""} lecon${stats.lessonsCompleted > 1 ? "s" : ""}` : ""}.
+Voici ton résumé de la semaine. ${stats.reviewsCompleted > 0 ? `Tu as complete ${stats.reviewsCompleted} révision${stats.reviewsCompleted > 1 ? "s" : ""}` : ""}${stats.lessonsCompleted > 0 ? ` et appris ${stats.lessonsCompleted} nouvelle${stats.lessonsCompleted > 1 ? "s" : ""} leçon${stats.lessonsCompleted > 1 ? "s" : ""}` : ""}.
 
 ${progressComment}
 
@@ -425,15 +425,15 @@ ${streakComment}`;
       <div style="display: flex; justify-content: space-around; text-align: center; color: white;">
         <div>
           <div style="font-size: 28px; font-weight: bold;">${stats.reviewsCompleted}</div>
-          <div style="font-size: 12px; opacity: 0.9;">revisions</div>
+          <div style="font-size: 12px; opacity: 0.9;">révisions</div>
         </div>
         <div>
           <div style="font-size: 28px; font-weight: bold;">${stats.lessonsCompleted}</div>
-          <div style="font-size: 12px; opacity: 0.9;">lecons</div>
+          <div style="font-size: 12px; opacity: 0.9;">leçons</div>
         </div>
         <div>
           <div style="font-size: 28px; font-weight: bold;">${stats.accuracy}%</div>
-          <div style="font-size: 12px; opacity: 0.9;">precision</div>
+          <div style="font-size: 12px; opacity: 0.9;">précision</div>
         </div>
       </div>
     </div>
@@ -448,7 +448,7 @@ ${streakComment}`;
         <span style="color: #f59e0b; font-weight: bold;">${stats.currentStreak} jours &#128293;</span>
       </div>
       <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
-        <span style="color: #57534e;">Nouveaux elements</span>
+        <span style="color: #57534e;">Nouveaux éléments</span>
         <span style="color: #1c1917; font-weight: bold;">${totalItemsLearned}</span>
       </div>
     </div>

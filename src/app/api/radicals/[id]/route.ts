@@ -10,7 +10,7 @@ export async function GET(
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const { id } = await params;
@@ -32,7 +32,7 @@ export async function GET(
     });
 
     if (!radical) {
-      return NextResponse.json({ error: "Radical non trouve" }, { status: 404 });
+      return NextResponse.json({ error: "Radical non trouvé" }, { status: 404 });
     }
 
     const progress = radical.userProgress[0];
@@ -49,7 +49,7 @@ export async function GET(
   } catch (error) {
     console.error("Failed to fetch radical:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la recuperation" },
+      { error: "Erreur lors de la récupération" },
       { status: 500 }
     );
   }

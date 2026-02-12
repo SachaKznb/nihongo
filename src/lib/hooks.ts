@@ -6,7 +6,7 @@ const fetcher = async (url: string) => {
   const res = await fetch(url);
 
   if (!res.ok) {
-    const error = new Error("Erreur lors du chargement des donnees");
+    const error = new Error("Erreur lors du chargement des données");
     // Attach extra info to the error object
     throw error;
   }

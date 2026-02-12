@@ -10,7 +10,7 @@ export async function GET(
   const session = await auth();
 
   if (!session?.user?.id) {
-    return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const { id } = await params;
@@ -41,7 +41,7 @@ export async function GET(
     });
 
     if (!kanji) {
-      return NextResponse.json({ error: "Kanji non trouve" }, { status: 404 });
+      return NextResponse.json({ error: "Kanji non trouvé" }, { status: 404 });
     }
 
     const progress = kanji.userProgress[0];
@@ -63,7 +63,7 @@ export async function GET(
   } catch (error) {
     console.error("Failed to fetch kanji:", error);
     return NextResponse.json(
-      { error: "Erreur lors de la recuperation" },
+      { error: "Erreur lors de la récupération" },
       { status: 500 }
     );
   }

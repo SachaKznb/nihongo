@@ -64,7 +64,7 @@ export default function SettingsPage() {
   const [account, setAccount] = useState<AccountInfo | null>(null);
   const [accountLoading, setAccountLoading] = useState(true);
 
-  // Notification preferences state
+  // Notification préférences state
   const [notifications, setNotifications] = useState<NotificationPreferences>({
     emailNotificationsEnabled: true,
     notifyReviewsWaiting: true,
@@ -166,11 +166,11 @@ export default function SettingsPage() {
     fetchAccount();
   }, []);
 
-  // Fetch notification preferences
+  // Fetch notification préférences
   useEffect(() => {
     async function fetchNotifications() {
       try {
-        const response = await fetch("/api/notifications/preferences");
+        const response = await fetch("/api/notifications/préférences");
         if (response.ok) {
           const data = await response.json();
           setNotifications(data);
@@ -213,7 +213,7 @@ export default function SettingsPage() {
     setNotificationsMessage("");
 
     try {
-      const response = await fetch("/api/notifications/preferences", {
+      const response = await fetch("/api/notifications/préférences", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(notifications),

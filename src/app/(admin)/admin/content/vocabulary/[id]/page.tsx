@@ -174,7 +174,7 @@ export default function AdminVocabEditPage({ params }: { params: Promise<{ id: s
   if (!vocab) {
     return (
       <div className="p-8">
-        <div className="text-stone-500">Mot non trouve</div>
+        <div className="text-stone-500">Mot non trouvé</div>
       </div>
     );
   }

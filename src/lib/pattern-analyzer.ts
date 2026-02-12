@@ -323,7 +323,7 @@ async function generatePatternDescription(
       }
     }
 
-    promptContent = `L'eleve confond ces paires de kanji visuellement similaires:
+    promptContent = `L'élève confond ces paires de kanji visuellement similaires:
 ${confusionPairs.length > 0 ? confusionPairs.slice(0, 3).join("\n") : relevantMistakes.slice(0, 4).map(m => `${m.character} (${m.correctAnswers[0]})`).join(", ")}
 
 Pour chaque paire, donne UNE difference visuelle CONCRETE et SPECIFIQUE (ex: "大 a un trait horizontal en plus que 犬" ou "水 a des gouttes sur les cotes, 氷 a un point en haut").`;
@@ -334,10 +334,10 @@ Pour chaque paire, donne UNE difference visuelle CONCRETE et SPECIFIQUE (ex: "�
       return `${m.character}: a ecrit "${wrongReadings}" au lieu de "${m.correctAnswers.slice(0, 2).join("/")}"`;
     });
 
-    promptContent = `L'eleve se trompe sur les lectures de ces kanji:
+    promptContent = `L'élève se trompe sur les lectures de ces kanji:
 ${readingDetails.join("\n")}
 
-Identifie le pattern specifique (confond on'yomi/kun'yomi? melange des lectures similaires?) et donne UN conseil CONCRET pour ces kanji precis.`;
+Identifie le pattern spécifique (confond on'yomi/kun'yomi? melange des lectures similaires?) et donne UN conseil CONCRET pour ces kanji précis.`;
 
   } else if (pattern.patternType === "translation_nuance") {
     const translationDetails = relevantMistakes.slice(0, 4).map((m) => {
@@ -345,24 +345,24 @@ Identifie le pattern specifique (confond on'yomi/kun'yomi? melange des lectures 
       return `${m.character}: a repondu "${wrongAnswers}" au lieu de "${m.correctAnswers[0]}"`;
     });
 
-    promptContent = `L'eleve confond ces nuances de sens:
+    promptContent = `L'élève confond ces nuances de sens:
 ${translationDetails.join("\n")}
 
-Explique la difference de sens PRECISE entre ce que l'eleve a repondu et la bonne reponse. Par exemple, si il confond "grand" et "gros", explique quand utiliser chaque terme en japonais.`;
+Explique la difference de sens PRECISE entre ce que l'élève a repondu et la bonne réponse. Par exemple, si il confond "grand" et "gros", explique quand utiliser chaque terme en japonais.`;
   }
 
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-20250514",
     max_tokens: 200,
-    system: `Tu es un tuteur de japonais expert. Tu donnes des conseils ULTRA-SPECIFIQUES bases sur les erreurs exactes de l'eleve.
+    system: `Tu es un tuteur de japonais expert. Tu donnes des conseils ULTRA-SPECIFIQUES bases sur les erreurs exactes de l'élève.
 
 REGLES STRICTES:
-1. NE DIS JAMAIS "cree des mnemoniques" ou "utilise des associations" - l'app a deja des mnemoniques
-2. Donne des differences CONCRETES et VISUELLES specifiques aux kanji mentionnes
+1. NE DIS JAMAIS "créé des mnémoniques" ou "utilise des associations" - l'app a déjà des mnémoniques
+2. Donne des differences CONCRETES et VISUELLES spécifiques aux kanji mentionnes
 3. Maximum 2-3 phrases, va droit au but
 4. Commence directement par le conseil, pas de "Je vois que..." ou "Tu sembles..."
-5. Utilise les caracteres japonais dans ta reponse pour illustrer
-6. Sois precis: "le trait du haut" > "les elements"`,
+5. Utilise les caracteres japonais dans ta réponse pour illustrer
+6. Sois précis: "le trait du haut" > "les éléments"`,
     messages: [
       {
         role: "user",

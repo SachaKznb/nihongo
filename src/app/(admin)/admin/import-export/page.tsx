@@ -128,7 +128,7 @@ export default function AdminImportExportPage() {
             <div>
               <p className="font-medium text-amber-800">Fonctionnalite a venir</p>
               <p className="text-sm text-amber-700 mt-1">
-                L&apos;import CSV permettra de creer ou mettre a jour du contenu en masse
+                L&apos;import CSV permettra de créér ou mettre a jour du contenu en masse
                 a partir d&apos;un fichier.
               </p>
             </div>

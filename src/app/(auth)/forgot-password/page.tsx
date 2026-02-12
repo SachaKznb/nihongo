@@ -32,7 +32,7 @@ export default function ForgotPasswordPage() {
       setMessage(data.message);
     } catch {
       setStatus("error");
-      setMessage("Une erreur est survenue. Veuillez reessayer.");
+      setMessage("Une erreur est survenue. Veuillez réessayer.");
     }
   };
 

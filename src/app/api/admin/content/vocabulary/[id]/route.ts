@@ -44,7 +44,7 @@ export async function GET(
 
     if (!vocabulary) {
       return NextResponse.json(
-        { error: "Vocabulaire non trouve" },
+        { error: "Vocabulaire non trouvé" },
         { status: 404 }
       );
     }
@@ -85,7 +85,7 @@ export async function PUT(
 
     if (!existingVocabulary) {
       return NextResponse.json(
-        { error: "Vocabulaire non trouve" },
+        { error: "Vocabulaire non trouvé" },
         { status: 404 }
       );
     }
@@ -100,7 +100,7 @@ export async function PUT(
 
       if (!level) {
         return NextResponse.json(
-          { error: "Niveau non trouve" },
+          { error: "Niveau non trouvé" },
           { status: 400 }
         );
       }
@@ -187,7 +187,7 @@ export async function DELETE(
 
     if (!existingVocabulary) {
       return NextResponse.json(
-        { error: "Vocabulaire non trouve" },
+        { error: "Vocabulaire non trouvé" },
         { status: 404 }
       );
     }

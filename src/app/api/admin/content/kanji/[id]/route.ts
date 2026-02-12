@@ -51,7 +51,7 @@ export async function GET(
 
     if (!kanji) {
       return NextResponse.json(
-        { error: "Kanji non trouve" },
+        { error: "Kanji non trouvé" },
         { status: 404 }
       );
     }
@@ -92,7 +92,7 @@ export async function PUT(
 
     if (!existingKanji) {
       return NextResponse.json(
-        { error: "Kanji non trouve" },
+        { error: "Kanji non trouvé" },
         { status: 404 }
       );
     }
@@ -120,7 +120,7 @@ export async function PUT(
 
       if (!level) {
         return NextResponse.json(
-          { error: "Niveau non trouve" },
+          { error: "Niveau non trouvé" },
           { status: 400 }
         );
       }
@@ -208,7 +208,7 @@ export async function DELETE(
 
     if (!existingKanji) {
       return NextResponse.json(
-        { error: "Kanji non trouve" },
+        { error: "Kanji non trouvé" },
         { status: 404 }
       );
     }

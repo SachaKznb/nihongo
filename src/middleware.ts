@@ -78,7 +78,7 @@ export function middleware(request: NextRequest) {
       // Rate limit exceeded
       return new NextResponse(
         JSON.stringify({
-          error: "Trop de requetes. Veuillez reessayer dans quelques minutes.",
+          error: "Trop de requetes. Veuillez réessayer dans quelques minutes.",
         }),
         {
           status: 429,

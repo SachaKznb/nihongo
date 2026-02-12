@@ -7,14 +7,14 @@ const DEFAULT_TEMPLATES: Record<string, EmailTemplate> = {
   reviews_waiting: {
     type: "reviews_waiting",
     subject: "{{count}} revision{{s}} t'attend{{ent}} - Nihongo",
-    headline: "Tes revisions t'attendent !",
+    headline: "Tes révisions t'attendent !",
     bodyText:
-      "Bonjour {{username}},\n\nTu as {{count}} revision{{s}} en attente. C'est le moment ideal pour renforcer ce que tu as appris.\n\nLe systeme de repetition espacee fonctionne mieux quand tu fais tes revisions au bon moment. Ton cerveau est pret a consolider ces kanji et vocabulaire, et quelques minutes suffisent pour ancrer ces connaissances sur le long terme.\n\nPlus tu revises regulierement, plus la memorisation devient facile. Les premiers niveaux demandent un peu d'effort, mais tu verras vite que les kanji commencent a rester naturellement.",
-    buttonText: "Faire mes revisions",
+      "Bonjour {{username}},\n\nTu as {{count}} revision{{s}} en attente. C'est le moment ideal pour renforcer ce que tu as appris.\n\nLe système de repetition espacee fonctionne mieux quand tu fais tes révisions au bon moment. Ton cerveau est pret a consolider ces kanji et vocabulaire, et quelques minutes suffisent pour ancrer ces connaissances sur le long terme.\n\nPlus tu revises regulierement, plus la memorisation devient facile. Les premiers niveaux demandent un peu d'effort, mais tu verras vite que les kanji commencent à rester naturellement.",
+    buttonText: "Faire mes révisions",
     footerText: "{{xp}} XP t'attendent",
     isActive: true,
     schedule: "Tous les jours a 9h UTC",
-    trigger: "Utilisateurs avec des revisions en attente et notifications activees",
+    trigger: "Utilisateurs avec des révisions en attente et notifications activees",
   },
   streak_at_risk: {
     type: "streak_at_risk",
@@ -30,11 +30,11 @@ const DEFAULT_TEMPLATES: Record<string, EmailTemplate> = {
   },
   level_up: {
     type: "level_up",
-    subject: "Niveau {{level}} debloque - Nihongo",
-    headline: "Niveau {{level}} debloque",
+    subject: "Niveau {{level}} débloqué - Nihongo",
+    headline: "Niveau {{level}} débloqué",
     bodyText:
-      "Felicitations {{username}},\n\nTu viens de passer au niveau {{level}}. Tu as prouve que tu maitrises les kanji du niveau precedent, et c'est une vraie progression.\n\nDe nouveaux radicaux, kanji et vocabulaire sont maintenant disponibles dans tes lecons. Ces nouveaux elements s'appuient sur ce que tu connais deja, donc tu vas voir des connexions avec ce que tu as appris.\n\nContinue a ton rythme. L'important n'est pas d'aller vite, mais d'aller regulierement. Chaque niveau te rapproche de la lecture fluide du japonais.",
-    buttonText: "Voir les nouvelles lecons",
+      "Félicitations {{username}},\n\nTu viens de passer au niveau {{level}}. Tu as prouve que tu maitrises les kanji du niveau precedent, et c'est une vraie progression.\n\nDe nouveaux radicaux, kanji et vocabulaire sont maintenant disponibles dans tes leçons. Ces nouveaux éléments s'appuient sur ce que tu connais deja, donc tu vas voir des connexions avec ce que tu as appris.\n\nContinue à ton rythme. L'important n'est pas d'aller vite, mais d'aller regulierement. Chaque niveau te rapproche de la lecture fluide du japonais.",
+    buttonText: "Voir les nouvelles leçons",
     footerText: null,
     isActive: true,
     schedule: "Instantane",
@@ -45,8 +45,8 @@ const DEFAULT_TEMPLATES: Record<string, EmailTemplate> = {
     subject: "Tes kanji t'attendent - Nihongo",
     headline: "Tes kanji t'attendent",
     bodyText:
-      "Bonjour {{username}},\n\nCa fait {{days}} jours que tu n'as pas fait de revisions. Tes kanji et vocabulaire sont encore frais dans ta memoire, mais ils commencent a s'estomper.\n\nLe systeme de repetition espacee fonctionne mieux avec une pratique reguliere. Quelques minutes maintenant te permettront de garder tout ce que tu as appris.\n\nTu as {{reviews}} revisions en attente. C'est le bon moment pour les faire.",
-    buttonText: "Reprendre mes revisions",
+      "Bonjour {{username}},\n\nCa fait {{days}} jours que tu n'as pas fait de révisions. Tes kanji et vocabulaire sont encore frais dans ta mémoire, mais ils commencent a s'estomper.\n\nLe système de repetition espacee fonctionne mieux avec une pratique reguliere. Quelques minutes maintenant te permettront de garder tout ce que tu as appris.\n\nTu as {{reviews}} révisions en attente. C'est le bon moment pour les faire.",
+    buttonText: "Reprendre mes révisions",
     footerText: "Meme 5 minutes par jour font une vraie difference sur le long terme.",
     isActive: true,
     schedule: "Tous les jours a 10h UTC",
@@ -57,7 +57,7 @@ const DEFAULT_TEMPLATES: Record<string, EmailTemplate> = {
     subject: "Ta semaine en japonais - Nihongo",
     headline: "Ta semaine en japonais",
     bodyText:
-      "Bonjour {{username}},\n\nVoici ton resume de la semaine. Tu as complete {{reviews}} revisions et appris {{lessons}} nouvelles lecons.\n\nTa precision est de {{accuracy}}%. Continue comme ca.",
+      "Bonjour {{username}},\n\nVoici ton résumé de la semaine. Tu as complete {{reviews}} révisions et appris {{lessons}} nouvelles leçons.\n\nTa précision est de {{accuracy}}%. Continue comme ca.",
     buttonText: "Continuer",
     footerText: "A la semaine prochaine pour un nouveau bilan.",
     isActive: true,
@@ -69,7 +69,7 @@ const DEFAULT_TEMPLATES: Record<string, EmailTemplate> = {
     subject: "Reinitialisation de votre mot de passe - Nihongo",
     headline: "Reinitialisation de votre mot de passe",
     bodyText:
-      "Vous avez demande la reinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour creer un nouveau mot de passe.",
+      "Vous avez demande la reinitialisation de votre mot de passe. Cliquez sur le bouton ci-dessous pour créér un nouveau mot de passe.",
     buttonText: "Reinitialiser mon mot de passe",
     footerText: "Ce lien expirera dans 1 heure. Si vous n'avez pas demande cette reinitialisation, vous pouvez ignorer cet email.",
     isActive: true,
@@ -83,7 +83,7 @@ const DEFAULT_TEMPLATES: Record<string, EmailTemplate> = {
     bodyText:
       "Merci de vous etre inscrit. Pour commencer votre apprentissage du japonais, veuillez confirmer votre adresse email en cliquant sur le bouton ci-dessous.",
     buttonText: "Verifier mon email",
-    footerText: "Ce lien expirera dans 24 heures. Si vous n'avez pas cree de compte sur Nihongo, vous pouvez ignorer cet email.",
+    footerText: "Ce lien expirera dans 24 heures. Si vous n'avez pas créé de compte sur Nihongo, vous pouvez ignorer cet email.",
     isActive: true,
     schedule: "Instantane",
     trigger: "Inscription d'un nouvel utilisateur",
@@ -102,10 +102,10 @@ const DEFAULT_TEMPLATES: Record<string, EmailTemplate> = {
   },
   admin_password_reset: {
     type: "admin_password_reset",
-    subject: "Votre mot de passe a ete reinitialise - Nihongo",
-    headline: "Mot de passe reinitialise",
+    subject: "Votre mot de passe a été réinitialisé - Nihongo",
+    headline: "Mot de passe réinitialisé",
     bodyText:
-      "Bonjour {{username}}, un administrateur a reinitialise votre mot de passe. Voici vos nouvelles informations de connexion.",
+      "Bonjour {{username}}, un administrateur a réinitialisé votre mot de passe. Voici vos nouvelles informations de connexion.",
     buttonText: "",
     footerText: "Important : Veuillez changer ce mot de passe des votre prochaine connexion dans les parametres de votre compte.",
     isActive: true,

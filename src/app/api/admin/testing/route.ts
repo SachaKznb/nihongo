@@ -6,7 +6,7 @@ import { prisma } from "@/lib/db";
 export async function POST(request: NextRequest) {
   const { error, session } = await requireAdminApi();
   if (error || !session) {
-    return error || NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    return error || NextResponse.json({ error: "Non autorisé" }, { status: 401 });
   }
 
   const adminId = session.user.id;
@@ -74,7 +74,7 @@ async function resetProgress(
       data: { currentLevel: 1, lastPatternAnalysis: null },
     });
 
-    return NextResponse.json({ success: true, message: "Toute la progression a ete reinitialise" });
+    return NextResponse.json({ success: true, message: "Toute la progression a été réinitialisé" });
   }
 
   if (scope === "level" && levelId) {
@@ -97,7 +97,7 @@ async function resetProgress(
       }),
     ]);
 
-    return NextResponse.json({ success: true, message: `Niveau ${levelId} reinitialise` });
+    return NextResponse.json({ success: true, message: `Niveau ${levelId} réinitialisé` });
   }
 
   if (scope === "type" && itemType) {
@@ -109,7 +109,7 @@ async function resetProgress(
       await prisma.userVocabularyProgress.deleteMany({ where: { userId } });
     }
 
-    return NextResponse.json({ success: true, message: `${itemType} reinitialise` });
+    return NextResponse.json({ success: true, message: `${itemType} réinitialisé` });
   }
 
   return NextResponse.json({ error: "Parametres invalides" }, { status: 400 });
@@ -179,7 +179,7 @@ async function setSrsStage(
 
   return NextResponse.json({
     success: true,
-    message: `${itemIds.length} element(s) mis au stage ${stage}`,
+    message: `${itemIds.length} élément(s) mis au stage ${stage}`,
   });
 }
 
@@ -466,7 +466,7 @@ async function setupDemoMode(userId: string) {
 
   return NextResponse.json({
     success: true,
-    message: "Mode demo configure: niveau 2, revisions en attente, lecons disponibles, erreurs pour patterns",
+    message: "Mode demo configure: niveau 2, révisions en attente, leçons disponibles, erreurs pour patterns",
   });
 }
 
@@ -557,7 +557,7 @@ async function unlockAllSkins(userId: string) {
 
   return NextResponse.json({
     success: true,
-    message: `${allSkinIds.length} skins Tanuki debloques`,
+    message: `${allSkinIds.length} skins Tanuki débloqués`,
   });
 }
 
@@ -580,6 +580,6 @@ async function resetRewards(userId: string) {
 
   return NextResponse.json({
     success: true,
-    message: "Recompenses reinitialises (XP, themes, badges, Tanuki)",
+    message: "Recompenses réinitialisés (XP, themes, badges, Tanuki)",
   });
 }

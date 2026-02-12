@@ -134,7 +134,7 @@ export default function AdminRadicalsPage() {
         {loading ? (
           <div className="p-12 text-center text-stone-500">Chargement...</div>
         ) : radicals.length === 0 ? (
-          <div className="p-12 text-center text-stone-500">Aucun radical trouve</div>
+          <div className="p-12 text-center text-stone-500">Aucun radical trouvé</div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-4">
             {radicals.map((radical) => (

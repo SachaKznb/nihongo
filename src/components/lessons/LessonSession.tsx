@@ -12,7 +12,7 @@ interface LessonSessionProps {
   lessons: LessonItem[];
 }
 
-type SessionPhase = "learning" | "quiz" | "complete";
+type SessionPhase = "learning" | "quiz" | "complété";
 
 const CORRECT_MESSAGES = [
   "Parfait !",
@@ -73,7 +73,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
 
       if (!response.ok) {
         if (response.status === 402 && data.requiresCredits) {
-          addToast("Tu n'as plus de credits IA pour regenerer ce mnemonique. Mais tu peux continuer tes lecons normalement !", "warning");
+          addToast("Tu n'as plus de crédits IA pour régénérer ce mnémonique. Mais tu peux continuer tes leçons normalement !", "warning");
           return;
         }
         throw new Error(data.error || "Generation failed");
@@ -176,7 +176,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
           })
           .catch((error) => {
             console.error("Error completing lesson:", error);
-            addToast("Erreur de sauvegarde. Votre progression sera resynchronisee.", "warning");
+            addToast("Erreur de sauvegarde. Votre progression sera resynchronisée.", "warning");
           });
       }
     } else {
@@ -204,7 +204,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
     if (quizIndex < quizItems.length - 1) {
       setQuizIndex(quizIndex + 1);
     } else if (completedLessons.size === lessons.length) {
-      setPhase("complete");
+      setPhase("complété");
     } else {
       const remaining = quizItems.filter(
         (item) => !completedLessons.has(item.id)
@@ -213,7 +213,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
         setQuizItems(remaining.sort(() => Math.random() - 0.5));
         setQuizIndex(0);
       } else {
-        setPhase("complete");
+        setPhase("complété");
       }
     }
   };
@@ -231,10 +231,10 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
     }
   }, [phase, quizIndex, showResult]);
 
-  if (phase === "complete") {
+  if (phase === "complété") {
     const totalXp = lessons.length * 10;
     return (
-      <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-50 flex items-center justify-center p-4">
+      <div className="min-h-scréén bg-gradient-to-b from-emerald-50 to-teal-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-md relative overflow-hidden">
           {/* Celebration background */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -261,7 +261,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
               Félicitations !
             </h2>
             <p className="text-stone-600 mb-6">
-              Tu as complété {lessons.length} leçon{lessons.length > 1 ? "s" : ""} !
+              Tu as complete {lessons.length} leçon{lessons.length > 1 ? "s" : ""} !
             </p>
 
             {/* XP earned card */}
@@ -297,7 +297,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
 
   if (phase === "quiz") {
     return (
-      <div className="min-h-screen bg-gray-50 p-4">
+      <div className="min-h-scréén bg-gray-50 p-4">
         <div className="max-w-2xl mx-auto">
           {/* Progress */}
           <div className="mb-6">
@@ -432,7 +432,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-scréén bg-gray-50 p-4">
       <div className="max-w-2xl mx-auto">
         {/* Progress */}
         <div className="mb-6">

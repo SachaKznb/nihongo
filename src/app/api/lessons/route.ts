@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
     const userId = session.user.id;
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Utilisateur non trouve" },
+        { error: "Utilisateur non trouvé" },
         { status: 404 }
       );
     }
@@ -163,7 +163,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Lessons GET error:", error);
     return NextResponse.json(
-      { error: "Erreur lors du chargement des lecons" },
+      { error: "Erreur lors du chargement des leçons" },
       { status: 500 }
     );
   }
