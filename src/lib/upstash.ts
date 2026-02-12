@@ -3,14 +3,28 @@ import { Ratelimit } from "@upstash/ratelimit";
 
 // Initialize Redis client (returns null if not configured)
 function createRedisClient(): Redis | null {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  let url = process.env.UPSTASH_REDIS_REST_URL;
+  let token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
   if (!url || !token) {
     return null;
   }
 
-  return new Redis({ url, token });
+  // Clean up URL and token in case they have extra quotes
+  url = url.replace(/^["']|["']$/g, '').trim();
+  token = token.replace(/^["']|["']$/g, '').trim();
+
+  if (!url.startsWith('https://')) {
+    console.warn('Upstash: Invalid URL format, skipping Redis initialization');
+    return null;
+  }
+
+  try {
+    return new Redis({ url, token });
+  } catch (error) {
+    console.error('Upstash: Failed to initialize Redis client:', error);
+    return null;
+  }
 }
 
 export const redis = createRedisClient();
