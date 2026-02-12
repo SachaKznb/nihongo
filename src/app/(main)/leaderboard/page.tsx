@@ -28,7 +28,7 @@ const TABS: { type: LeaderboardType; label: string; emoji: string; valueLabel: s
   { type: "weekly", label: "Cette semaine", emoji: "📅", valueLabel: "XP" },
   { type: "monthly", label: "Ce mois", emoji: "📆", valueLabel: "XP" },
   { type: "alltime", label: "Tout temps", emoji: "🏆", valueLabel: "XP" },
-  { type: "streak", label: "Series", emoji: "🔥", valueLabel: "jours" },
+  { type: "streak", label: "Séries", emoji: "🔥", valueLabel: "jours" },
   { type: "level", label: "Niveaux", emoji: "🎯", valueLabel: "niveau" },
 ];
 
@@ -85,7 +85,7 @@ export default function LeaderboardPage() {
               Classement
             </h1>
             <p className="text-sm text-stone-500">
-              Compete avec les autres apprenants
+              Compétez avec les autres apprenants
             </p>
           </div>
         </div>
@@ -132,7 +132,7 @@ export default function LeaderboardPage() {
       {/* Period Info */}
       {data?.period && (
         <div className="text-sm text-stone-500 text-center">
-          Periode: {new Date(data.period.start).toLocaleDateString("fr-FR")} -{" "}
+          Période: {new Date(data.period.start).toLocaleDateString("fr-FR")} -{" "}
           {new Date(data.period.end).toLocaleDateString("fr-FR")}
         </div>
       )}
@@ -177,9 +177,9 @@ export default function LeaderboardPage() {
               <p className="text-sm text-amber-600 mt-1">
                 Activez l&apos;option dans{" "}
                 <Link href="/settings" className="underline hover:text-amber-800">
-                  les parametres
+                  les paramètres
                 </Link>{" "}
-                pour apparaitre dans le classement.
+                pour apparaître dans le classement.
               </p>
             </div>
           </div>
@@ -206,7 +206,7 @@ export default function LeaderboardPage() {
           <div className="p-8 text-center">
             <span className="text-4xl mb-4 block">🏜️</span>
             <p className="text-stone-500">Personne dans le classement pour le moment</p>
-            <p className="text-sm text-stone-400 mt-2">Soyez le premier a apparaitre!</p>
+            <p className="text-sm text-stone-400 mt-2">Soyez le premier à apparaître !</p>
           </div>
         ) : (
           <div className="divide-y divide-stone-100">
@@ -265,9 +265,9 @@ export default function LeaderboardPage() {
 
       {/* Privacy Note */}
       <p className="text-center text-xs text-stone-400">
-        Seuls les utilisateurs ayant active l&apos;option de classement apparaissent ici.
+        Seuls les utilisateurs ayant activé l&apos;option de classement apparaissent ici.
         <br />
-        Vos donnees ne sont jamais partagees sans votre consentement.
+        Vos données ne sont jamais partagées sans votre consentement.
       </p>
     </div>
   );

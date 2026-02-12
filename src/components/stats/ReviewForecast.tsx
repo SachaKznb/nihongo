@@ -23,7 +23,7 @@ export function ReviewForecast({ data }: ReviewForecastProps) {
   if (data.length === 0) {
     return (
       <div className="w-full h-[200px] flex items-center justify-center text-gray-400">
-        Aucune revision programmee
+        Aucune révision programmée
       </div>
     );
   }
@@ -82,7 +82,7 @@ export function ReviewForecast({ data }: ReviewForecastProps) {
                 borderRadius: "8px",
                 color: "#F9FAFB",
               }}
-              formatter={(value) => [value, "Revisions"]}
+              formatter={(value) => [value, "Révisions"]}
               labelStyle={{ color: "#9CA3AF" }}
             />
             <Area

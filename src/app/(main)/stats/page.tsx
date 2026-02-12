@@ -170,7 +170,7 @@ export default function StatsPage() {
 
         {/* Accuracy */}
         <div className="bg-gradient-to-br from-emerald-400 to-teal-500 rounded-2xl p-4 text-white shadow-lg">
-          <p className="text-emerald-100 text-xs font-medium uppercase tracking-wide">Precision</p>
+          <p className="text-emerald-100 text-xs font-medium uppercase tracking-wide">Précision</p>
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-bold font-display">
               {stats.overview.overallAccuracy}%
@@ -183,20 +183,20 @@ export default function StatsPage() {
 
         {/* Reviews */}
         <div className="bg-gradient-to-br from-orange-400 to-rose-500 rounded-2xl p-4 text-white shadow-lg">
-          <p className="text-orange-100 text-xs font-medium uppercase tracking-wide">Revisions</p>
+          <p className="text-orange-100 text-xs font-medium uppercase tracking-wide">Révisions</p>
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-bold font-display">
               {stats.overview.totalReviews.toLocaleString()}
             </span>
           </div>
           <p className="text-orange-200 text-xs mt-1">
-            {stats.overview.totalLessons} lecons
+            {stats.overview.totalLessons} leçons
           </p>
         </div>
 
         {/* Streak */}
         <div className="bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl p-4 text-white shadow-lg">
-          <p className="text-amber-100 text-xs font-medium uppercase tracking-wide">Serie</p>
+          <p className="text-amber-100 text-xs font-medium uppercase tracking-wide">Série</p>
           <div className="flex items-baseline gap-1">
             <span className="text-3xl font-bold font-display">
               {stats.overview.currentStreak}
@@ -215,7 +215,7 @@ export default function StatsPage() {
         <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl font-japanese text-emerald-500">精</span>
-            <h3 className="font-bold font-display text-stone-900">Precision (30 jours)</h3>
+            <h3 className="font-bold font-display text-stone-900">Précision (30 jours)</h3>
           </div>
           <AccuracyChart data={stats.dailyStats} />
         </div>
@@ -224,7 +224,7 @@ export default function StatsPage() {
         <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl font-japanese text-purple-500">復</span>
-            <h3 className="font-bold font-display text-stone-900">Activite quotidienne</h3>
+            <h3 className="font-bold font-display text-stone-900">Activité quotidienne</h3>
           </div>
           <ReviewsChart data={stats.dailyStats} />
         </div>
@@ -236,7 +236,7 @@ export default function StatsPage() {
         <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl font-japanese text-indigo-500">段</span>
-            <h3 className="font-bold font-display text-stone-900">Repartition SRS</h3>
+            <h3 className="font-bold font-display text-stone-900">Répartition SRS</h3>
           </div>
           <SRSDistribution data={stats.srsDistribution} />
         </div>
@@ -245,7 +245,7 @@ export default function StatsPage() {
         <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl font-japanese text-teal-500">予</span>
-            <h3 className="font-bold font-display text-stone-900">Previsions</h3>
+            <h3 className="font-bold font-display text-stone-900">Prévisions</h3>
           </div>
           <ReviewForecast data={stats.reviewForecast} />
         </div>
@@ -269,7 +269,7 @@ export default function StatsPage() {
         <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <span className="text-2xl font-japanese text-green-500">暦</span>
-            <h3 className="font-bold font-display text-stone-900">Calendrier d&apos;activite</h3>
+            <h3 className="font-bold font-display text-stone-900">Calendrier d&apos;activité</h3>
           </div>
           <StreakCalendar data={stats.streakCalendar} />
         </div>
@@ -279,7 +279,7 @@ export default function StatsPage() {
       <div className="bg-white rounded-3xl border border-stone-200 p-6 shadow-sm">
         <div className="flex items-center gap-2 mb-6">
           <span className="text-2xl font-japanese text-rose-500">項</span>
-          <h3 className="font-bold font-display text-stone-900">Details par type</h3>
+          <h3 className="font-bold font-display text-stone-900">Détails par type</h3>
         </div>
         <div className="grid md:grid-cols-3 gap-6">
           {/* Radicals */}

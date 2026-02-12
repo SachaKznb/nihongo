@@ -106,7 +106,7 @@ export default function SettingsPage() {
     if (emailSuccess === "true") {
       setActionMessage({
         type: "success",
-        text: "Votre adresse email a ete mise a jour avec succes",
+        text: "Votre adresse email a été mise à jour avec succès",
         field: "email",
       });
       setActiveTab("account");
@@ -114,8 +114,8 @@ export default function SettingsPage() {
       const errorMessages: Record<string, string> = {
         missing_token: "Lien invalide",
         invalid_token: "Ce lien n'est plus valide",
-        expired_token: "Ce lien a expire",
-        email_taken: "Cette adresse email est deja utilisee",
+        expired_token: "Ce lien a expiré",
+        email_taken: "Cette adresse email est déjà utilisée",
         server_error: "Une erreur est survenue",
       };
       setActionMessage({
@@ -197,7 +197,7 @@ export default function SettingsPage() {
       });
 
       if (response.ok) {
-        setMessage("Parametres enregistres avec succes");
+        setMessage("Paramètres enregistrés avec succès");
       } else {
         setMessage("Erreur lors de l'enregistrement");
       }
@@ -222,7 +222,7 @@ export default function SettingsPage() {
       if (response.ok) {
         const data = await response.json();
         setNotifications(data);
-        setNotificationsMessage("Preferences enregistrees avec succes");
+        setNotificationsMessage("Préférences enregistrées avec succès");
       } else {
         setNotificationsMessage("Erreur lors de l'enregistrement");
       }
@@ -392,8 +392,8 @@ export default function SettingsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Parametres</h1>
-        <p className="text-gray-600">Gerez votre compte et vos preferences</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Paramètres</h1>
+        <p className="text-gray-600">Gérez votre compte et vos préférences</p>
       </div>
 
       {/* Tabs */}
@@ -440,7 +440,7 @@ export default function SettingsPage() {
             <CardContent className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Lecons par jour
+                  Leçons par jour
                 </label>
                 <Input
                   type="number"
@@ -455,13 +455,13 @@ export default function SettingsPage() {
                   }
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Nombre maximum de nouvelles lecons par session
+                  Nombre maximum de nouvelles leçons par session
                 </p>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Taille des lots de revision
+                  Taille des lots de révision
                 </label>
                 <Input
                   type="number"
@@ -476,7 +476,7 @@ export default function SettingsPage() {
                   }
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Nombre d&apos;elements par session de revision
+                  Nombre d&apos;éléments par session de révision
                 </p>
               </div>
             </CardContent>
@@ -522,9 +522,9 @@ export default function SettingsPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900">Phrases personnalisees</p>
+                  <p className="font-medium text-gray-900">Phrases personnalisées</p>
                   <p className="text-sm text-gray-500">
-                    Generer des phrases utilisant uniquement les kanji que vous maitrisez
+                    Générer des phrases utilisant uniquement les kanji que vous maîtrisez
                   </p>
                 </div>
                 <button
@@ -550,12 +550,12 @@ export default function SettingsPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Confidentialite</CardTitle>
+              <CardTitle>Confidentialité</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900">Apparaitre dans le classement</p>
+                  <p className="font-medium text-gray-900">Apparaître dans le classement</p>
                   <p className="text-sm text-gray-500">
                     Les autres joueurs verront votre pseudo, niveau et progression
                   </p>
@@ -584,7 +584,7 @@ export default function SettingsPage() {
           {message && (
             <p
               className={`text-center ${
-                message.includes("succes") ? "text-green-600" : "text-red-600"
+                message.includes("succès") ? "text-green-600" : "text-red-600"
               }`}
             >
               {message}
@@ -694,10 +694,10 @@ export default function SettingsPage() {
                 onClick={handleUpdateEmail}
                 disabled={actionLoading === "email" || !newEmail || !emailPassword}
               >
-                {actionLoading === "email" ? "Envoi..." : "Envoyer le lien de verification"}
+                {actionLoading === "email" ? "Envoi..." : "Envoyer le lien de vérification"}
               </Button>
               <p className="text-xs text-stone-500">
-                Un email de verification sera envoye a la nouvelle adresse
+                Un email de vérification sera envoyé à la nouvelle adresse
               </p>
             </CardContent>
           </Card>
@@ -727,7 +727,7 @@ export default function SettingsPage() {
                 placeholder="Confirmer le nouveau mot de passe"
               />
               <p className="text-xs text-stone-500">
-                8 caracteres min. avec majuscule, minuscule et chiffre
+                8 caractères min. avec majuscule, minuscule et chiffre
               </p>
               {actionMessage?.field === "password" && (
                 <p
@@ -860,9 +860,9 @@ export default function SettingsPage() {
                   {/* Streak At Risk */}
                   <div className="flex items-center justify-between py-2 border-b border-stone-100">
                     <div>
-                      <p className="font-medium text-gray-900">Alerte de serie</p>
+                      <p className="font-medium text-gray-900">Alerte de série</p>
                       <p className="text-sm text-gray-500">
-                        Notification si votre serie risque d&apos;etre perdue
+                        Notification si votre série risque d&apos;être perdue
                       </p>
                     </div>
                     <button
@@ -889,7 +889,7 @@ export default function SettingsPage() {
                     <div>
                       <p className="font-medium text-gray-900">Passage de niveau</p>
                       <p className="text-sm text-gray-500">
-                        Celebration quand vous atteignez un nouveau niveau
+                        Célébration quand vous atteignez un nouveau niveau
                       </p>
                     </div>
                     <button
@@ -914,9 +914,9 @@ export default function SettingsPage() {
                   {/* Re-engagement */}
                   <div className="flex items-center justify-between py-2 border-b border-stone-100">
                     <div>
-                      <p className="font-medium text-gray-900">Rappels de reengagement</p>
+                      <p className="font-medium text-gray-900">Rappels de réengagement</p>
                       <p className="text-sm text-gray-500">
-                        Rappels si vous n&apos;avez pas etudie depuis plusieurs jours
+                        Rappels si vous n&apos;avez pas étudié depuis plusieurs jours
                       </p>
                     </div>
                     <button
@@ -941,9 +941,9 @@ export default function SettingsPage() {
                   {/* Weekly Summary */}
                   <div className="flex items-center justify-between py-2">
                     <div>
-                      <p className="font-medium text-gray-900">Resume hebdomadaire</p>
+                      <p className="font-medium text-gray-900">Résumé hebdomadaire</p>
                       <p className="text-sm text-gray-500">
-                        Resume de vos progres chaque dimanche
+                        Résumé de vos progrès chaque dimanche
                       </p>
                     </div>
                     <button
@@ -970,12 +970,12 @@ export default function SettingsPage() {
               {/* Timing Preferences */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Preferences horaires</CardTitle>
+                  <CardTitle>Préférences horaires</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Heure preferee pour les notifications
+                      Heure préférée pour les notifications
                     </label>
                     <select
                       value={notifications.preferredNotificationHour}
@@ -1014,7 +1014,7 @@ export default function SettingsPage() {
                       <option value="Europe/Berlin">Berlin (Europe/Berlin)</option>
                       <option value="America/New_York">New York (America/New_York)</option>
                       <option value="America/Los_Angeles">Los Angeles (America/Los_Angeles)</option>
-                      <option value="America/Montreal">Montreal (America/Montreal)</option>
+                      <option value="America/Montreal">Montréal (America/Montreal)</option>
                       <option value="Asia/Tokyo">Tokyo (Asia/Tokyo)</option>
                       <option value="Asia/Seoul">Seoul (Asia/Seoul)</option>
                       <option value="Australia/Sydney">Sydney (Australia/Sydney)</option>
@@ -1028,7 +1028,7 @@ export default function SettingsPage() {
           {notificationsMessage && (
             <p
               className={`text-center ${
-                notificationsMessage.includes("succes") ? "text-green-600" : "text-red-600"
+                notificationsMessage.includes("succès") ? "text-green-600" : "text-red-600"
               }`}
             >
               {notificationsMessage}
@@ -1059,7 +1059,7 @@ export default function SettingsPage() {
       >
         <div className="space-y-4">
           <p className="text-sm text-stone-600">
-            Cette action est irreversible. Toutes vos donnees seront definitivement supprimees.
+            Cette action est irréversible. Toutes vos données seront définitivement supprimées.
           </p>
           <Input
             type="password"
@@ -1100,7 +1100,7 @@ export default function SettingsPage() {
                 deleteConfirmation !== "SUPPRIMER"
               }
             >
-              {actionLoading === "delete" ? "Suppression..." : "Supprimer definitivement"}
+              {actionLoading === "delete" ? "Suppression..." : "Supprimer définitivement"}
             </Button>
           </div>
         </div>

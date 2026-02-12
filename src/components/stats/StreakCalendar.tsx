@@ -80,7 +80,7 @@ export function StreakCalendar({ data }: StreakCalendarProps) {
                     ? `${new Date(day.date).toLocaleDateString("fr-FR", {
                         day: "numeric",
                         month: "long",
-                      })}: ${day.reviews} revisions`
+                      })}: ${day.reviews} révisions`
                     : ""
                 }
               />

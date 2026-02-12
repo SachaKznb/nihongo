@@ -14,7 +14,7 @@ export function LevelProgress({ data, currentLevel }: LevelProgressProps) {
   if (data.length === 0) {
     return (
       <div className="text-gray-400 text-sm">
-        Aucune progression de niveau enregistree
+        Aucune progression de niveau enregistrée
       </div>
     );
   }

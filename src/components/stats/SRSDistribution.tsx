@@ -30,7 +30,7 @@ const COLORS = {
 const LABELS = {
   apprentice: "Apprenti",
   guru: "Guru",
-  master: "Maitre",
+  master: "Maître",
   enlightened: "Shodan",
   burned: "Satori",
 };
@@ -49,7 +49,7 @@ export function SRSDistribution({ data }: SRSDistributionProps) {
   if (total === 0) {
     return (
       <div className="w-full h-[300px] flex items-center justify-center text-gray-400">
-        Aucun element appris pour le moment
+        Aucun élément appris pour le moment
       </div>
     );
   }

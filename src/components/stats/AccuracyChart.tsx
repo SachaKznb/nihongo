@@ -59,7 +59,7 @@ export function AccuracyChart({ data }: AccuracyChartProps) {
               borderRadius: "8px",
               color: "#F9FAFB",
             }}
-            formatter={(value) => [`${value}%`, "Precision"]}
+            formatter={(value) => [`${value}%`, "Précision"]}
             labelStyle={{ color: "#9CA3AF" }}
           />
           <Line

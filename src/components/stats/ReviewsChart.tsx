@@ -58,7 +58,7 @@ export function ReviewsChart({ data }: ReviewsChartProps) {
           />
           <Legend
             wrapperStyle={{ color: "#9CA3AF" }}
-            formatter={(value) => (value === "reviews" ? "Revisions" : "Lecons")}
+            formatter={(value) => (value === "reviews" ? "Révisions" : "Leçons")}
           />
           <Bar
             dataKey="lessons"
