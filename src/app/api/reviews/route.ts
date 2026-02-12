@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { generalRateLimit, checkRateLimit } from "@/lib/upstash";
+import { getUserSubscription, getLevelFilter } from "@/lib/subscription";
 import type { ReviewItem } from "@/types";
 
 // GET /api/reviews - Returns items due for review
@@ -26,14 +27,20 @@ export async function GET() {
 
     const now = new Date();
 
+    // Check subscription and get level filter
+    const subscription = await getUserSubscription(userId);
+    const levelFilter = getLevelFilter(subscription.hasFullAccess);
+
     const reviews: ReviewItem[] = [];
 
   // Get radicals due for review
+  // Filter by level based on subscription status
   const radicalReviews = await prisma.userRadicalProgress.findMany({
     where: {
       userId,
       srsStage: { gte: 1, lt: 9 }, // Not locked, not burned
       nextReviewAt: { lte: now },
+      radical: levelFilter,
     },
     include: { radical: true },
   });
@@ -51,11 +58,13 @@ export async function GET() {
   }
 
   // Get kanji due for review
+  // Filter by level based on subscription status
   const kanjiReviews = await prisma.userKanjiProgress.findMany({
     where: {
       userId,
       srsStage: { gte: 1, lt: 9 },
       nextReviewAt: { lte: now },
+      kanji: levelFilter,
     },
     include: { kanji: true },
   });
@@ -74,11 +83,13 @@ export async function GET() {
   }
 
   // Get vocabulary due for review
+  // Filter by level based on subscription status
   const vocabReviews = await prisma.userVocabularyProgress.findMany({
     where: {
       userId,
       srsStage: { gte: 1, lt: 9 },
       nextReviewAt: { lte: now },
+      vocabulary: levelFilter,
     },
     include: { vocabulary: true },
   });

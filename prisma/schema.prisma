@@ -82,6 +82,15 @@ model User {
   // Leaderboard & Analytics
   leaderboardOptIn  Boolean   @default(false)
 
+  // Subscription & Billing
+  subscriptionStatus            String    @default("free")  // 'free' | 'active' | 'canceled' | 'past_due' | 'lifetime'
+  subscriptionPlan              String?   // 'monthly' | 'yearly' | 'lifetime'
+  stripeCustomerId              String?   @unique
+  stripeSubscriptionId          String?   @unique
+  subscriptionCurrentPeriodEnd  DateTime?
+  subscriptionCancelAtPeriodEnd Boolean   @default(false)
+  lifetimePurchasedAt           DateTime?
+
   // Progress relations
   radicalProgress    UserRadicalProgress[]
   kanjiProgress      UserKanjiProgress[]

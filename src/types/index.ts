@@ -132,6 +132,10 @@ export interface AnswerResult {
   srsStageTo: number;
 }
 
+// Subscription types
+export type SubscriptionStatus = "free" | "active" | "canceled" | "past_due" | "lifetime";
+export type SubscriptionPlan = "monthly" | "yearly" | "lifetime" | null;
+
 declare module "next-auth" {
   interface Session {
     user: {
@@ -141,6 +145,8 @@ declare module "next-auth" {
       emailVerified: Date | null;
       onboardingCompleted: boolean;
       isAdmin: boolean;
+      subscriptionStatus: SubscriptionStatus;
+      hasFullAccess: boolean;
     };
   }
 
@@ -149,5 +155,7 @@ declare module "next-auth" {
     emailVerified: Date | null;
     onboardingCompleted: boolean;
     isAdmin: boolean;
+    subscriptionStatus: SubscriptionStatus;
+    subscriptionCurrentPeriodEnd: Date | null;
   }
 }

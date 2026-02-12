@@ -27,6 +27,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             onboardingCompleted: true,
             isAdmin: true,
             isSuspended: true,
+            subscriptionStatus: true,
+            subscriptionCurrentPeriodEnd: true,
           },
         });
 
@@ -55,6 +57,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           emailVerified: user.emailVerified,
           onboardingCompleted: user.onboardingCompleted,
           isAdmin: user.isAdmin,
+          subscriptionStatus: user.subscriptionStatus as "free" | "active" | "canceled" | "past_due" | "lifetime",
+          subscriptionCurrentPeriodEnd: user.subscriptionCurrentPeriodEnd,
         };
       },
     }),
@@ -72,17 +76,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.emailVerified = user.emailVerified;
         token.onboardingCompleted = user.onboardingCompleted;
         token.isAdmin = user.isAdmin;
+        token.subscriptionStatus = user.subscriptionStatus;
+        token.subscriptionCurrentPeriodEnd = user.subscriptionCurrentPeriodEnd;
       }
-      // Refresh token data on update trigger (e.g., after email verification or onboarding)
+      // Refresh token data on update trigger (e.g., after email verification, onboarding, or subscription change)
       if (trigger === "update" && token.id) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.id as string },
-          select: { emailVerified: true, onboardingCompleted: true, isAdmin: true },
+          select: {
+            emailVerified: true,
+            onboardingCompleted: true,
+            isAdmin: true,
+            subscriptionStatus: true,
+            subscriptionCurrentPeriodEnd: true,
+          },
         });
         if (dbUser) {
           token.emailVerified = dbUser.emailVerified;
           token.onboardingCompleted = dbUser.onboardingCompleted;
           token.isAdmin = dbUser.isAdmin;
+          token.subscriptionStatus = dbUser.subscriptionStatus;
+          token.subscriptionCurrentPeriodEnd = dbUser.subscriptionCurrentPeriodEnd;
         }
       }
       return token;
@@ -93,6 +107,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.emailVerified = token.emailVerified as Date | null;
         session.user.onboardingCompleted = token.onboardingCompleted as boolean;
         session.user.isAdmin = token.isAdmin as boolean;
+        session.user.subscriptionStatus = (token.subscriptionStatus as "free" | "active" | "canceled" | "past_due" | "lifetime") || "free";
+
+        // Compute hasFullAccess
+        const status = session.user.subscriptionStatus;
+        const periodEnd = token.subscriptionCurrentPeriodEnd as Date | null;
+        session.user.hasFullAccess =
+          status === "lifetime" ||
+          status === "active" ||
+          (status === "canceled" && periodEnd !== null && new Date(periodEnd) > new Date());
       }
       return session;
     },

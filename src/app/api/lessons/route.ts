@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { SRS_STAGES } from "@/lib/srs";
 import { generalRateLimit, checkRateLimit } from "@/lib/upstash";
+import { getUserSubscription, getLevelFilter } from "@/lib/subscription";
 import type { LessonItem } from "@/types";
 
 // GET /api/lessons - Returns available lessons (unlocked items not yet started)
@@ -33,14 +34,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Check subscription and get level filter
+    const subscription = await getUserSubscription(userId);
+    const levelFilter = getLevelFilter(subscription.hasFullAccess);
+
     const lessons: LessonItem[] = [];
 
   const maxLessons = limit > 0 ? limit : user.lessonsPerDay;
 
   // Get radicals that are unlocked (stage 0) and not started
   // Optimized: Only fetch kanji character and first meaning for preview
+  // Filter by level based on subscription status
   const radicalProgress = await prisma.userRadicalProgress.findMany({
-    where: { userId, srsStage: SRS_STAGES.LOCKED },
+    where: { userId, srsStage: SRS_STAGES.LOCKED, radical: levelFilter },
     include: {
       radical: {
         include: {
@@ -76,8 +82,9 @@ export async function GET(request: NextRequest) {
 
   // Get kanji that are unlocked (stage 0) and not started
   // Optimized: Only fetch essential fields for radicals and vocabulary
+  // Filter by level based on subscription status
   const kanjiProgress = await prisma.userKanjiProgress.findMany({
-    where: { userId, srsStage: SRS_STAGES.LOCKED },
+    where: { userId, srsStage: SRS_STAGES.LOCKED, kanji: levelFilter },
     include: {
       kanji: {
         include: {
@@ -129,8 +136,9 @@ export async function GET(request: NextRequest) {
 
   // Get vocabulary that are unlocked (stage 0) and not started
   // Optimized: Kanji info not displayed in lessons, skip the join
+  // Filter by level based on subscription status
   const vocabProgress = await prisma.userVocabularyProgress.findMany({
-    where: { userId, srsStage: SRS_STAGES.LOCKED },
+    where: { userId, srsStage: SRS_STAGES.LOCKED, vocabulary: levelFilter },
     include: {
       vocabulary: true, // No need for kanji relation in lesson display
     },

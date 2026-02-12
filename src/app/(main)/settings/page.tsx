@@ -43,10 +43,18 @@ interface AccountInfo {
   };
 }
 
+interface SubscriptionInfo {
+  status: string;
+  plan: string | null;
+  hasFullAccess: boolean;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+}
+
 export default function SettingsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState<"learning" | "account" | "notifications">("learning");
+  const [activeTab, setActiveTab] = useState<"learning" | "account" | "notifications" | "subscription">("learning");
 
   // Learning settings state
   const [settings, setSettings] = useState<UserSettings>({
@@ -63,6 +71,11 @@ export default function SettingsPage() {
   // Account state
   const [account, setAccount] = useState<AccountInfo | null>(null);
   const [accountLoading, setAccountLoading] = useState(true);
+
+  // Subscription state
+  const [subscription, setSubscription] = useState<SubscriptionInfo | null>(null);
+  const [subscriptionLoading, setSubscriptionLoading] = useState(true);
+  const [portalLoading, setPortalLoading] = useState(false);
 
   // Notification préférences state
   const [notifications, setNotifications] = useState<NotificationPreferences>({
@@ -166,11 +179,30 @@ export default function SettingsPage() {
     fetchAccount();
   }, []);
 
+  // Fetch subscription info
+  useEffect(() => {
+    async function fetchSubscription() {
+      try {
+        const response = await fetch("/api/subscription");
+        if (response.ok) {
+          const data = await response.json();
+          setSubscription(data);
+        }
+      } catch (error) {
+        console.error("Error fetching subscription:", error);
+      } finally {
+        setSubscriptionLoading(false);
+      }
+    }
+
+    fetchSubscription();
+  }, []);
+
   // Fetch notification préférences
   useEffect(() => {
     async function fetchNotifications() {
       try {
-        const response = await fetch("/api/notifications/préférences");
+        const response = await fetch("/api/notifications/preferences");
         if (response.ok) {
           const data = await response.json();
           setNotifications(data);
@@ -213,7 +245,7 @@ export default function SettingsPage() {
     setNotificationsMessage("");
 
     try {
-      const response = await fetch("/api/notifications/préférences", {
+      const response = await fetch("/api/notifications/preferences", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(notifications),
@@ -230,6 +262,25 @@ export default function SettingsPage() {
       setNotificationsMessage("Erreur lors de l'enregistrement");
     } finally {
       setNotificationsSaving(false);
+    }
+  };
+
+  const handleOpenPortal = async () => {
+    setPortalLoading(true);
+    try {
+      const response = await fetch("/api/stripe/portal", {
+        method: "POST",
+      });
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setActionMessage({ type: "error", text: data.error || "Une erreur est survenue", field: "subscription" });
+      }
+    } catch {
+      setActionMessage({ type: "error", text: "Une erreur est survenue", field: "subscription" });
+    } finally {
+      setPortalLoading(false);
     }
   };
 
@@ -378,7 +429,7 @@ export default function SettingsPage() {
     }
   };
 
-  if (loading || accountLoading || notificationsLoading) {
+  if (loading || accountLoading || notificationsLoading || subscriptionLoading) {
     return (
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="animate-pulse space-y-4">
@@ -427,6 +478,16 @@ export default function SettingsPage() {
           }`}
         >
           Notifications
+        </button>
+        <button
+          onClick={() => setActiveTab("subscription")}
+          className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+            activeTab === "subscription"
+              ? "border-teal-500 text-teal-600"
+              : "border-transparent text-stone-500 hover:text-stone-700"
+          }`}
+        >
+          Abonnement
         </button>
       </div>
 
@@ -1043,6 +1104,153 @@ export default function SettingsPage() {
               {notificationsSaving ? "Enregistrement..." : "Enregistrer"}
             </Button>
           </div>
+        </div>
+      )}
+
+      {/* Subscription Tab */}
+      {activeTab === "subscription" && subscription && (
+        <div className="space-y-6">
+          {/* Current Plan */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Votre abonnement</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl">
+                  <div>
+                    <p className="text-sm text-stone-500">Plan actuel</p>
+                    <p className="text-lg font-semibold text-stone-900">
+                      {subscription.status === "lifetime"
+                        ? "À vie"
+                        : subscription.status === "active"
+                        ? subscription.plan === "yearly"
+                          ? "Annuel"
+                          : "Mensuel"
+                        : subscription.status === "canceled"
+                        ? "Annulé"
+                        : subscription.status === "past_due"
+                        ? "Paiement en retard"
+                        : "Gratuit"}
+                    </p>
+                  </div>
+                  <div
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      subscription.hasFullAccess
+                        ? "bg-emerald-100 text-emerald-700"
+                        : "bg-stone-200 text-stone-600"
+                    }`}
+                  >
+                    {subscription.hasFullAccess ? "Accès complet" : "Accès limité"}
+                  </div>
+                </div>
+
+                {subscription.currentPeriodEnd && subscription.status !== "lifetime" && (
+                  <div className="flex items-center justify-between p-4 bg-stone-50 rounded-xl">
+                    <div>
+                      <p className="text-sm text-stone-500">
+                        {subscription.cancelAtPeriodEnd
+                          ? "Accès jusqu'au"
+                          : "Prochain renouvellement"}
+                      </p>
+                      <p className="text-lg font-semibold text-stone-900">
+                        {new Date(subscription.currentPeriodEnd).toLocaleDateString("fr-FR", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                    {subscription.cancelAtPeriodEnd && (
+                      <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">
+                        Annulation programmée
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {subscription.status === "lifetime" && (
+                  <div className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl">
+                    <p className="text-amber-800">
+                      <span className="font-semibold">Accès à vie</span> — Vous avez un accès
+                      permanent à tout le contenu, présent et futur.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Manage Subscription */}
+          {subscription.status !== "free" && subscription.status !== "lifetime" && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Gérer l&apos;abonnement</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-stone-600">
+                  Gérez votre abonnement, modifiez votre moyen de paiement, ou téléchargez vos
+                  factures depuis le portail Stripe.
+                </p>
+                {actionMessage?.field === "subscription" && (
+                  <p className="text-sm text-red-600">{actionMessage.text}</p>
+                )}
+                <Button onClick={handleOpenPortal} disabled={portalLoading}>
+                  {portalLoading ? "Chargement..." : "Ouvrir le portail de gestion"}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Upgrade CTA for free users */}
+          {subscription.status === "free" && (
+            <Card className="border-teal-200 bg-gradient-to-br from-teal-50 to-emerald-50">
+              <CardHeader>
+                <CardTitle className="text-teal-900">Passez à Premium</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-stone-600">
+                  Débloquez tous les niveaux (1-60), plus de 2000 kanji et 6000 mots de vocabulaire
+                  avec des mnémoniques en français.
+                </p>
+                <ul className="space-y-2 text-sm text-stone-600">
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-500">✓</span>
+                    Accès à tous les niveaux
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-500">✓</span>
+                    Mnémoniques en français
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-500">✓</span>
+                    Statistiques détaillées
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-500">✓</span>
+                    Support prioritaire
+                  </li>
+                </ul>
+                <Button onClick={() => router.push("/pricing")}>Voir les offres</Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Re-subscribe CTA for canceled users */}
+          {subscription.status === "canceled" && !subscription.cancelAtPeriodEnd && (
+            <Card className="border-teal-200 bg-gradient-to-br from-teal-50 to-emerald-50">
+              <CardHeader>
+                <CardTitle className="text-teal-900">Réactivez votre abonnement</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-stone-600">
+                  Vous avez annulé votre abonnement. Réabonnez-vous pour retrouver l&apos;accès à
+                  tout le contenu.
+                </p>
+                <Button onClick={() => router.push("/pricing")}>Se réabonner</Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
       )}
 
