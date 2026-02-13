@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { SRS_STAGES, getSrsCategory } from "@/lib/srs";
 import { cacheGet, cacheSet, cacheKeys, generalRateLimit, checkRateLimit } from "@/lib/upstash";
+import { getTodayStart } from "@/lib/timezone";
 import type { UserProgress, SrsBreakdown, GamificationStats } from "@/types";
 
 export async function GET() {
@@ -43,8 +44,9 @@ export async function GET() {
     }
 
     const now = new Date();
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  // Use user's timezone to determine "today" for review/lesson counts
+  const userTimezone = user.timezone || "UTC";
+  const todayStart = getTodayStart(userTimezone);
 
   // Run all queries in parallel for maximum speed
   const [
@@ -178,6 +180,8 @@ export async function GET() {
     tanukiSkin: user.tanukiSkin,
     tanukiName: user.tanukiName,
     lastStudyDate: user.lastStudyDate,
+    // User timezone for streak calculations
+    timezone: user.timezone,
   };
 
   const progress: UserProgress = {

@@ -176,16 +176,34 @@ export function getTanukiSkinById(id: string): TanukiSkin | undefined {
 }
 
 // Get mood message based on activity
+// Note: timezone parameter allows for timezone-aware "studied today" calculation
 export function getTanukiMoodMessage(
   stage: TanukiStage,
   lastStudyDate: Date | null,
   currentStreak: number,
-  pendingReviews: number
+  pendingReviews: number,
+  timezone: string = "UTC"
 ): { mood: "happy" | "neutral" | "sleepy" | "excited"; message: string } {
   const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  // Check if studied today
+  // Calculate today's start in user's timezone
+  let today: Date;
+  try {
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+      timeZone: timezone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const todayStr = formatter.format(now);
+    const [year, month, day] = todayStr.split("-").map(Number);
+    today = new Date(year, month - 1, day);
+  } catch {
+    // Fallback to local time if timezone is invalid
+    today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  }
+
+  // Check if studied today (in user's timezone)
   const studiedToday = lastStudyDate && new Date(lastStudyDate) >= today;
 
   // Stage 1 (egg) has special messages

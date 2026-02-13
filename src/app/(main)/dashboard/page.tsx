@@ -567,6 +567,7 @@ export default function DashboardPage() {
         lastStudyDate={gamification.lastStudyDate ? new Date(gamification.lastStudyDate) : null}
         currentStreak={gamification.currentStreak}
         pendingReviews={progress.pendingReviews}
+        timezone={gamification.timezone || "UTC"}
       />
     </div>
   );

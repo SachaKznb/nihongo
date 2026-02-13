@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import crypto from "crypto";
 import { prisma } from "./db";
 import { GURU_THRESHOLD } from "./unlocks";
+import { withAIRetry } from "./ai-utils";
 import type {
   SentenceData,
   MasteredContext,
@@ -372,12 +373,14 @@ export async function generateSentences(
   const systemPrompt = buildSystemPrompt();
   const userPrompt = buildUserPrompt(vocabulary, context, userLevel);
 
-  const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 1500, // More tokens needed for structured JSON response
-    system: systemPrompt,
-    messages: [{ role: "user", content: userPrompt }],
-  });
+  const response = await withAIRetry(() =>
+    anthropic.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1500, // More tokens needed for structured JSON response
+      system: systemPrompt,
+      messages: [{ role: "user", content: userPrompt }],
+    })
+  );
 
   const textBlock = response.content.find((block) => block.type === "text");
   if (!textBlock || textBlock.type !== "text") {

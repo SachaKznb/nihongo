@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { prisma } from "./db";
+import { withAIRetry } from "./ai-utils";
 
 // Lazy-load Anthropic client
 function getAnthropicClient() {
@@ -351,10 +352,11 @@ ${translationDetails.join("\n")}
 Explique la difference de sens PRECISE entre ce que l'élève a repondu et la bonne réponse. Par exemple, si il confond "grand" et "gros", explique quand utiliser chaque terme en japonais.`;
   }
 
-  const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 200,
-    system: `Tu es un tuteur de japonais expert. Tu donnes des conseils ULTRA-SPECIFIQUES bases sur les erreurs exactes de l'élève.
+  const response = await withAIRetry(() =>
+    anthropic.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 200,
+      system: `Tu es un tuteur de japonais expert. Tu donnes des conseils ULTRA-SPECIFIQUES bases sur les erreurs exactes de l'élève.
 
 REGLES STRICTES:
 1. NE DIS JAMAIS "créé des mnémoniques" ou "utilise des associations" - l'app a déjà des mnémoniques
@@ -363,13 +365,14 @@ REGLES STRICTES:
 4. Commence directement par le conseil, pas de "Je vois que..." ou "Tu sembles..."
 5. Utilise les caracteres japonais dans ta réponse pour illustrer
 6. Sois précis: "le trait du haut" > "les éléments"`,
-    messages: [
-      {
-        role: "user",
-        content: promptContent,
-      },
-    ],
-  });
+      messages: [
+        {
+          role: "user",
+          content: promptContent,
+        },
+      ],
+    })
+  );
 
   const textBlock = response.content.find((block) => block.type === "text");
   if (!textBlock || textBlock.type !== "text") {

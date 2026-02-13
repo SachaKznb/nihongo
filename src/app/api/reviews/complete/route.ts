@@ -7,43 +7,43 @@ import {
   getMistakeCountSinceAnalysis,
   analyzeUserPatterns,
 } from "@/lib/pattern-analyzer";
+import { getTodayStart, getYesterdayStart, getWeekStart } from "@/lib/timezone";
 import type { ItemType } from "@/types";
 
 // Update gamification stats
 async function updateGamification(userId: string, correct: boolean) {
   const now = new Date();
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) return;
 
+  // Use user's timezone for day calculations (default to UTC if not set)
+  const userTimezone = user.timezone || "UTC";
+  const todayStart = getTodayStart(userTimezone);
+  const yesterdayStart = getYesterdayStart(userTimezone);
+  const weekStart = getWeekStart(userTimezone);
+
   // Calculate XP earned (5 for correct, 1 for incorrect but trying)
   const xpEarned = correct ? 5 : 1;
 
-  // Check if this is a new day for streak
+  // Check if this is a new day for streak (in user's timezone)
   const lastStudy = user.lastStudyDate;
-  const isNewDay = !lastStudy || lastStudy < todayStart;
+  const studiedToday = lastStudy && lastStudy >= todayStart;
 
   let newStreak = user.currentStreak;
 
-  if (isNewDay) {
-    // Check if continuing streak (studied yesterday)
-    const yesterdayStart = new Date(todayStart);
-    yesterdayStart.setDate(yesterdayStart.getDate() - 1);
-
+  if (!studiedToday) {
+    // First activity of the day in user's timezone
     if (lastStudy && lastStudy >= yesterdayStart) {
-      // Continuing streak
+      // Studied yesterday (in user's timezone), continuing streak
       newStreak = user.currentStreak + 1;
     } else if (!lastStudy || lastStudy < yesterdayStart) {
-      // Streak broken or first time
+      // Streak broken or first time studying
       newStreak = 1;
     }
   }
 
-  // Check if weekly XP needs reset (every Monday)
-  const weekStart = new Date(todayStart);
-  weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
+  // Check if weekly XP needs reset (every Monday in user's timezone)
   const needsWeeklyReset = user.weeklyXpResetAt < weekStart;
 
   await prisma.user.update({

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { getTodayStart } from "@/lib/timezone";
 
 export interface InboxNotification {
   id: string;
@@ -37,6 +38,7 @@ export async function GET() {
         currentStreak: true,
         lastStudyDate: true,
         lastPatternAnalysis: true,
+        timezone: true,
       },
     });
 
@@ -123,9 +125,9 @@ export async function GET() {
     }
 
     // 3. Check for weakness patterns (targeted study)
-    // Only show if user hasn't done targeted study today
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
+    // Only show if user hasn't done targeted study today (in user's timezone)
+    const userTimezone = user.timezone || "UTC";
+    const todayStart = getTodayStart(userTimezone);
 
     const didTargetedStudyToday = user.lastPatternAnalysis &&
       new Date(user.lastPatternAnalysis) >= todayStart;
@@ -156,16 +158,13 @@ export async function GET() {
       }
     }
 
-    // 4. Check streak at risk
+    // 4. Check streak at risk (using user's timezone)
     if (user.currentStreak > 0 && user.lastStudyDate) {
-      const todayStart = new Date();
-      todayStart.setHours(0, 0, 0, 0);
+      const userTimezone = user.timezone || "UTC";
+      const todayStart = getTodayStart(userTimezone);
 
-      const lastStudyDay = new Date(user.lastStudyDate);
-      lastStudyDay.setHours(0, 0, 0, 0);
-
-      // If last study was yesterday or before, and no reviews done today
-      if (lastStudyDay < todayStart && totalReviews === 0) {
+      // If last study was before today (in user's timezone) and no reviews done today
+      if (user.lastStudyDate < todayStart && totalReviews === 0) {
         notifications.push({
           id: "streak-at-risk",
           type: "streak_at_risk",

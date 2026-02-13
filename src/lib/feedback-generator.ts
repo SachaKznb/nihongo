@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { prisma } from "./db";
+import { withAIRetry } from "./ai-utils";
 import type { ItemType } from "@/types";
 
 // Lazy-load Anthropic client
@@ -275,12 +276,14 @@ export async function generateFeedback(
   const systemPrompt = buildSystemPrompt();
   const userPrompt = buildUserPrompt(context);
 
-  const response = await anthropic.messages.create({
-    model: "claude-sonnet-4-20250514",
-    max_tokens: 200,
-    system: systemPrompt,
-    messages: [{ role: "user", content: userPrompt }],
-  });
+  const response = await withAIRetry(() =>
+    anthropic.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 200,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userPrompt }],
+    })
+  );
 
   const textBlock = response.content.find((block) => block.type === "text");
   if (!textBlock || textBlock.type !== "text") {

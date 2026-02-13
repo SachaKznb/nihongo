@@ -4,43 +4,43 @@ import { prisma } from "@/lib/db";
 import { calculateNewStage, calculateNextReview, SRS_STAGES } from "@/lib/srs";
 import { unlockAvailableItems, levelUpUser } from "@/lib/unlocks";
 import { generalRateLimit, checkRateLimit, invalidateUserCache } from "@/lib/upstash";
+import { getTodayStart, getYesterdayStart, getWeekStart } from "@/lib/timezone";
 import type { ItemType, ReviewType, AnswerResult } from "@/types";
 
 // Update gamification stats
 async function updateGamification(userId: string, correct: boolean, isLesson: boolean = false) {
   const now = new Date();
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) return;
 
+  // Use user's timezone for day calculations (default to UTC if not set)
+  const userTimezone = user.timezone || "UTC";
+  const todayStart = getTodayStart(userTimezone);
+  const yesterdayStart = getYesterdayStart(userTimezone);
+  const weekStart = getWeekStart(userTimezone);
+
   // Calculate XP earned
   const xpEarned = isLesson ? 10 : (correct ? 5 : 1);
 
-  // Check if this is a new day for streak
+  // Check if this is a new day for streak (in user's timezone)
   const lastStudy = user.lastStudyDate;
-  const isNewDay = !lastStudy || lastStudy < todayStart;
+  const studiedToday = lastStudy && lastStudy >= todayStart;
 
   let newStreak = user.currentStreak;
 
-  if (isNewDay) {
-    // Check if continuing streak (studied yesterday)
-    const yesterdayStart = new Date(todayStart);
-    yesterdayStart.setDate(yesterdayStart.getDate() - 1);
-
+  if (!studiedToday) {
+    // First activity of the day in user's timezone
     if (lastStudy && lastStudy >= yesterdayStart) {
-      // Continuing streak
+      // Studied yesterday (in user's timezone), continuing streak
       newStreak = user.currentStreak + 1;
     } else if (!lastStudy || lastStudy < yesterdayStart) {
-      // Streak broken or first time
+      // Streak broken or first time studying
       newStreak = 1;
     }
   }
 
-  // Check if weekly XP needs reset (every Monday)
-  const weekStart = new Date(todayStart);
-  weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
+  // Check if weekly XP needs reset (every Monday in user's timezone)
   const needsWeeklyReset = user.weeklyXpResetAt < weekStart;
 
   // Check for perfect day (100% accuracy for today)
@@ -157,53 +157,210 @@ function levenshteinDistance(a: string, b: string): number {
 }
 
 function romajiToHiragana(romaji: string): string {
+  // Comprehensive romaji to hiragana mapping
+  // Using actual hiragana characters for better readability
   const map: Record<string, string> = {
-    a: "\u3042", i: "\u3044", u: "\u3046", e: "\u3048", o: "\u304a",
-    ka: "\u304b", ki: "\u304d", ku: "\u304f", ke: "\u3051", ko: "\u3053",
-    sa: "\u3055", shi: "\u3057", su: "\u3059", se: "\u305b", so: "\u305d",
-    ta: "\u305f", chi: "\u3061", tsu: "\u3064", te: "\u3066", to: "\u3068",
-    na: "\u306a", ni: "\u306b", nu: "\u306c", ne: "\u306d", no: "\u306e",
-    ha: "\u306f", hi: "\u3072", fu: "\u3075", he: "\u3078", ho: "\u307b",
-    ma: "\u307e", mi: "\u307f", mu: "\u3080", me: "\u3081", mo: "\u3082",
-    ya: "\u3084", yu: "\u3086", yo: "\u3088",
-    ra: "\u3089", ri: "\u308a", ru: "\u308b", re: "\u308c", ro: "\u308d",
-    wa: "\u308f", wo: "\u3092", n: "\u3093",
-    ga: "\u304c", gi: "\u304e", gu: "\u3050", ge: "\u3052", go: "\u3054",
-    za: "\u3056", ji: "\u3058", zu: "\u305a", ze: "\u305c", zo: "\u305e",
-    da: "\u3060", di: "\u3062", du: "\u3065", de: "\u3067", do: "\u3069",
-    ba: "\u3070", bi: "\u3073", bu: "\u3076", be: "\u3079", bo: "\u307c",
-    pa: "\u3071", pi: "\u3074", pu: "\u3077", pe: "\u307a", po: "\u307d",
-    kya: "\u304d\u3083", kyu: "\u304d\u3085", kyo: "\u304d\u3087",
-    sha: "\u3057\u3083", shu: "\u3057\u3085", sho: "\u3057\u3087",
-    cha: "\u3061\u3083", chu: "\u3061\u3085", cho: "\u3061\u3087",
-    nya: "\u306b\u3083", nyu: "\u306b\u3085", nyo: "\u306b\u3087",
-    hya: "\u3072\u3083", hyu: "\u3072\u3085", hyo: "\u3072\u3087",
-    mya: "\u307f\u3083", myu: "\u307f\u3085", myo: "\u307f\u3087",
-    rya: "\u308a\u3083", ryu: "\u308a\u3085", ryo: "\u308a\u3087",
-    gya: "\u304e\u3083", gyu: "\u304e\u3085", gyo: "\u304e\u3087",
-    ja: "\u3058\u3083", ju: "\u3058\u3085", jo: "\u3058\u3087",
-    bya: "\u3073\u3083", byu: "\u3073\u3085", byo: "\u3073\u3087",
-    pya: "\u3074\u3083", pyu: "\u3074\u3085", pyo: "\u3074\u3087",
+    // Basic vowels
+    a: "あ", i: "い", u: "う", e: "え", o: "お",
+
+    // K-row
+    ka: "か", ki: "き", ku: "く", ke: "け", ko: "こ",
+
+    // S-row (including alternative romanizations)
+    sa: "さ", shi: "し", si: "し", su: "す", se: "せ", so: "そ",
+
+    // T-row (including alternative romanizations)
+    ta: "た", chi: "ち", ti: "ち", tsu: "つ", tu: "つ", te: "て", to: "と",
+
+    // N-row
+    na: "な", ni: "に", nu: "ぬ", ne: "ね", no: "の",
+
+    // H-row (including hu → ふ alternative)
+    ha: "は", hi: "ひ", fu: "ふ", hu: "ふ", he: "へ", ho: "ほ",
+
+    // M-row
+    ma: "ま", mi: "み", mu: "む", me: "め", mo: "も",
+
+    // Y-row
+    ya: "や", yu: "ゆ", yo: "よ",
+
+    // R-row
+    ra: "ら", ri: "り", ru: "る", re: "れ", ro: "ろ",
+
+    // W-row and n
+    wa: "わ", wi: "ゐ", we: "ゑ", wo: "を",
+    nn: "ん", // Double n always becomes ん
+
+    // G-row (voiced K)
+    ga: "が", gi: "ぎ", gu: "ぐ", ge: "げ", go: "ご",
+
+    // Z-row (voiced S, including alternatives)
+    za: "ざ", ji: "じ", zi: "じ", zu: "ず", ze: "ぜ", zo: "ぞ",
+
+    // D-row (voiced T, including alternatives)
+    da: "だ", di: "ぢ", du: "づ", de: "で", do: "ど",
+
+    // B-row (voiced H)
+    ba: "ば", bi: "び", bu: "ぶ", be: "べ", bo: "ぼ",
+
+    // P-row (semi-voiced H)
+    pa: "ぱ", pi: "ぴ", pu: "ぷ", pe: "ぺ", po: "ぽ",
+
+    // K-row combinations (きゃ, きゅ, きょ)
+    kya: "きゃ", kyu: "きゅ", kyo: "きょ",
+
+    // S-row combinations (しゃ, しゅ, しょ) - multiple romanizations
+    sha: "しゃ", shu: "しゅ", sho: "しょ",
+    sya: "しゃ", syu: "しゅ", syo: "しょ",
+
+    // C-row combinations (ちゃ, ちゅ, ちょ) - multiple romanizations
+    cha: "ちゃ", chu: "ちゅ", cho: "ちょ",
+    tya: "ちゃ", tyu: "ちゅ", tyo: "ちょ",
+    cya: "ちゃ", cyu: "ちゅ", cyo: "ちょ",
+
+    // N-row combinations
+    nya: "にゃ", nyu: "にゅ", nyo: "にょ",
+
+    // H-row combinations
+    hya: "ひゃ", hyu: "ひゅ", hyo: "ひょ",
+
+    // M-row combinations
+    mya: "みゃ", myu: "みゅ", myo: "みょ",
+
+    // R-row combinations
+    rya: "りゃ", ryu: "りゅ", ryo: "りょ",
+
+    // G-row combinations
+    gya: "ぎゃ", gyu: "ぎゅ", gyo: "ぎょ",
+
+    // J-row combinations (じゃ, じゅ, じょ) - multiple romanizations
+    ja: "じゃ", ju: "じゅ", jo: "じょ",
+    jya: "じゃ", jyu: "じゅ", jyo: "じょ",
+    zya: "じゃ", zyu: "じゅ", zyo: "じょ",
+
+    // D-row combinations (ぢゃ, ぢゅ, ぢょ)
+    dya: "ぢゃ", dyu: "ぢゅ", dyo: "ぢょ",
+
+    // B-row combinations
+    bya: "びゃ", byu: "びゅ", byo: "びょ",
+
+    // P-row combinations
+    pya: "ぴゃ", pyu: "ぴゅ", pyo: "ぴょ",
+
+    // F-row combinations (for modern words)
+    fa: "ふぁ", fi: "ふぃ", fe: "ふぇ", fo: "ふぉ",
+
+    // T-row extended combinations
+    tsa: "つぁ", tsi: "つぃ", tse: "つぇ", tso: "つぉ",
+
+    // Small kana (for special cases)
+    xa: "ぁ", xi: "ぃ", xu: "ぅ", xe: "ぇ", xo: "ぉ",
+    xya: "ゃ", xyu: "ゅ", xyo: "ょ",
+    xtu: "っ", xtsu: "っ", ltu: "っ", ltsu: "っ",
+    xwa: "ゎ",
+    la: "ぁ", li: "ぃ", lu: "ぅ", le: "ぇ", lo: "ぉ",
+    lya: "ゃ", lyu: "ゅ", lyo: "ょ",
+    lwa: "ゎ",
   };
+
+  // Consonants that can be doubled to produce っ (small tsu)
+  const doubleConsonants = new Set([
+    'k', 'g', 's', 'z', 't', 'd', 'n', 'h', 'f', 'b', 'p', 'm', 'r', 'w', 'j', 'c'
+  ]);
+
+  // Special handling for "tch" -> っち (e.g., "matchi" → まっち)
+  // and "cch" -> っち (e.g., "kocchi" → こっち)
+  let processed = romaji.toLowerCase();
+  processed = processed.replace(/tch/g, "っch");
+  processed = processed.replace(/cch/g, "っch");
+  processed = processed.replace(/tts/g, "っts"); // e.g., "mittsu" → みっつ
 
   let result = "";
   let i = 0;
 
-  while (i < romaji.length) {
-    // Try 3-char combinations first
-    if (i + 3 <= romaji.length && map[romaji.slice(i, i + 3)]) {
-      result += map[romaji.slice(i, i + 3)];
-      i += 3;
-    } else if (i + 2 <= romaji.length && map[romaji.slice(i, i + 2)]) {
-      result += map[romaji.slice(i, i + 2)];
-      i += 2;
-    } else if (map[romaji[i]]) {
-      result += map[romaji[i]];
-      i += 1;
-    } else {
-      result += romaji[i];
-      i += 1;
+  while (i < processed.length) {
+    // Handle double consonants (gemination) -> っ
+    // Check if current char equals next char and is a consonant
+    if (
+      i + 1 < processed.length &&
+      processed[i] === processed[i + 1] &&
+      doubleConsonants.has(processed[i]) &&
+      processed[i] !== 'n' // 'nn' is handled separately as ん
+    ) {
+      result += "っ";
+      i += 1; // Skip one consonant, let the next iteration handle the syllable
+      continue;
     }
+
+    // Handle standalone 'n' - needs special logic
+    // 'n' becomes ん when:
+    // - followed by a consonant (except y)
+    // - at the end of the string
+    // - followed by another 'n' (nn -> ん)
+    // - followed by punctuation/space
+    if (processed[i] === 'n') {
+      // Check for 'nn' -> ん
+      if (i + 1 < processed.length && processed[i + 1] === 'n') {
+        result += "ん";
+        i += 2;
+        continue;
+      }
+
+      // Check if 'n' should become ん (before consonant that's not y, or at end)
+      const nextChar = i + 1 < processed.length ? processed[i + 1] : '';
+      const isBeforeConsonant = nextChar && !/[aiueoy]/.test(nextChar);
+      const isAtEnd = i + 1 >= processed.length;
+      const isBeforeNonRomaji = nextChar && !/[a-z]/.test(nextChar);
+
+      if ((isBeforeConsonant || isAtEnd || isBeforeNonRomaji) && !map['n' + nextChar]) {
+        // Check it's not part of a valid syllable like "na", "ni", etc.
+        let foundSyllable = false;
+        for (let len = 3; len >= 2; len--) {
+          const slice = processed.slice(i, i + len);
+          if (map[slice]) {
+            foundSyllable = true;
+            break;
+          }
+        }
+        if (!foundSyllable) {
+          result += "ん";
+          i += 1;
+          continue;
+        }
+      }
+    }
+
+    // Try 4-char combinations first (for xtsu, ltsu, etc.)
+    if (i + 4 <= processed.length && map[processed.slice(i, i + 4)]) {
+      result += map[processed.slice(i, i + 4)];
+      i += 4;
+      continue;
+    }
+
+    // Try 3-char combinations
+    if (i + 3 <= processed.length && map[processed.slice(i, i + 3)]) {
+      result += map[processed.slice(i, i + 3)];
+      i += 3;
+      continue;
+    }
+
+    // Try 2-char combinations
+    if (i + 2 <= processed.length && map[processed.slice(i, i + 2)]) {
+      result += map[processed.slice(i, i + 2)];
+      i += 2;
+      continue;
+    }
+
+    // Try single char
+    if (map[processed[i]]) {
+      result += map[processed[i]];
+      i += 1;
+      continue;
+    }
+
+    // Keep character as-is if not in map (handles っ already inserted, punctuation, etc.)
+    result += processed[i];
+    i += 1;
   }
 
   return result;

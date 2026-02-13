@@ -20,6 +20,7 @@ interface TanukiPetProps {
   lastStudyDate: Date | null;
   currentStreak: number;
   pendingReviews: number;
+  timezone?: string;
 }
 
 export default function TanukiPet({
@@ -29,6 +30,7 @@ export default function TanukiPet({
   lastStudyDate,
   currentStreak,
   pendingReviews,
+  timezone = "UTC",
 }: TanukiPetProps) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [showEvolution, setShowEvolution] = useState(false);
@@ -37,7 +39,7 @@ export default function TanukiPet({
   const nextStage = getNextTanukiStage(totalXp);
   const progress = getProgressToNextStage(totalXp);
   const skin = getTanukiSkinById(skinId) || getTanukiSkinById("classic")!;
-  const { mood, message } = getTanukiMoodMessage(stage, lastStudyDate, currentStreak, pendingReviews);
+  const { mood, message } = getTanukiMoodMessage(stage, lastStudyDate, currentStreak, pendingReviews, timezone);
 
   // Periodic animation
   useEffect(() => {

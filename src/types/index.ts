@@ -108,6 +108,8 @@ export interface GamificationStats {
   tanukiSkin?: string;
   tanukiName?: string | null;
   lastStudyDate?: Date | null;
+  // User timezone for streak calculations
+  timezone?: string;
 }
 
 export interface UserProgress {
