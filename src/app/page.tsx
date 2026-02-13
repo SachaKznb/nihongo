@@ -90,10 +90,10 @@ export default function Home() {
                 </span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-display text-stone-900 leading-tight mb-4 sm:mb-6">
-                Maîtrisez les
-                <span className="relative inline-block">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-emerald-500"> kanji</span>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-display text-stone-900 leading-snug sm:leading-tight mb-5 sm:mb-6">
+                Maîtrisez les{" "}
+                <span className="relative whitespace-nowrap">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-emerald-500">kanji</span>
                   <svg className="absolute -bottom-1 sm:-bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
                     <path d="M2 10C50 2 150 2 198 10" stroke="url(#gradient)" strokeWidth="3" strokeLinecap="round"/>
                     <defs>
@@ -104,12 +104,11 @@ export default function Home() {
                     </defs>
                   </svg>
                 </span>
-                <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>naturellement
+                <br />
+                naturellement
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-stone-600 mb-6 sm:mb-8 leading-relaxed">
-                Apprenez les caractères japonais avec des mnémoniques en français
-                et un système de répétition espacée qui s&apos;adapte à votre rythme.
+              <p className="text-base sm:text-lg md:text-xl text-stone-600 mb-6 sm:mb-8 leading-relaxed max-w-lg lg:max-w-none">
+                Apprenez les caractères japonais avec des mnémoniques en français et un système de répétition espacée qui s&apos;adapte à votre rythme.
               </p>
 
               {/* Trust indicators */}
