@@ -4,6 +4,20 @@ type AudioSource = "kanji_on" | "kanji_kun" | "vocab" | "sentence";
 // Audio cache to avoid re-creating Audio elements
 const audioCache = new Map<string, HTMLAudioElement>();
 
+// Check if we should use Vercel Blob storage
+// In production, we use blob storage; in development, we use local files
+function getBlobBaseUrl(): string | null {
+  // This is set at build time for client-side code
+  if (typeof window !== "undefined") {
+    // Check for blob base URL injected via environment
+    const blobUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
+    if (blobUrl && process.env.NODE_ENV === "production") {
+      return blobUrl;
+    }
+  }
+  return null;
+}
+
 // Get the path for pre-generated audio
 function getAudioPath(source: AudioSource, character: string, reading: string, vocabId?: number): string {
   // URL-safe encoding (matches generation script)
@@ -12,21 +26,37 @@ function getAudioPath(source: AudioSource, character: string, reading: string, v
 
   // For sentences, use vocab ID
   if (source === "sentence" && vocabId) {
-    return `/audio/sentences/${vocabId}.wav`;
+    const localPath = `/audio/sentences/${vocabId}.wav`;
+    return prependBlobUrl(localPath);
   }
 
   const fileName = `${safeChar}-${safeReading}.wav`;
 
+  let localPath: string;
   switch (source) {
     case "kanji_on":
-      return `/audio/kanji/on/${fileName}`;
+      localPath = `/audio/kanji/on/${fileName}`;
+      break;
     case "kanji_kun":
-      return `/audio/kanji/kun/${fileName}`;
+      localPath = `/audio/kanji/kun/${fileName}`;
+      break;
     case "vocab":
-      return `/audio/vocab/${fileName}`;
+      localPath = `/audio/vocab/${fileName}`;
+      break;
     default:
-      return `/audio/vocab/${fileName}`;
+      localPath = `/audio/vocab/${fileName}`;
   }
+
+  return prependBlobUrl(localPath);
+}
+
+// Prepend blob base URL in production
+function prependBlobUrl(localPath: string): string {
+  const blobUrl = getBlobBaseUrl();
+  if (blobUrl) {
+    return `${blobUrl}${localPath}`;
+  }
+  return localPath;
 }
 
 // Current audio element for stopping
