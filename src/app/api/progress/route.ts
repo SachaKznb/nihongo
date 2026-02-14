@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { SRS_STAGES, getSrsCategory } from "@/lib/srs";
 import { cacheGet, cacheSet, cacheKeys, generalRateLimit, checkRateLimit } from "@/lib/upstash";
 import { getTodayStart } from "@/lib/timezone";
+import { getUserSubscription, FREE_TIER_MAX_LEVEL } from "@/lib/subscription";
 import type { UserProgress, SrsBreakdown, GamificationStats } from "@/types";
 
 export async function GET() {
@@ -62,12 +63,18 @@ export async function GET() {
     prisma.radical.count({ where: { levelId: user.currentLevel } }),
     prisma.kanji.count({ where: { levelId: user.currentLevel } }),
     prisma.vocabulary.count({ where: { levelId: user.currentLevel } }),
-    prisma.userRadicalProgress.findMany({ where: { userId } }),
+    prisma.userRadicalProgress.findMany({
+      where: { userId },
+      include: { radical: { select: { levelId: true } } }
+    }),
     prisma.userKanjiProgress.findMany({
       where: { userId },
       include: { kanji: { select: { levelId: true } } }
     }),
-    prisma.userVocabularyProgress.findMany({ where: { userId } }),
+    prisma.userVocabularyProgress.findMany({
+      where: { userId },
+      include: { vocabulary: { select: { levelId: true } } }
+    }),
     prisma.review.findMany({
       where: { userId, createdAt: { gte: todayStart } },
       select: { correct: true }
@@ -111,10 +118,14 @@ export async function GET() {
 
   // Count pending lessons and reviews
   // pendingLessons shows how many are available in the next batch (capped at lessonsPerDay)
+  // Also filter by subscription level to match what lessons API actually shows
+  const subscription = await getUserSubscription(userId);
+  const maxLevel = subscription.hasFullAccess ? 999 : FREE_TIER_MAX_LEVEL;
+
   const totalUnlocked =
-    radicalProgress.filter((rp) => rp.srsStage === SRS_STAGES.LOCKED).length +
-    kanjiProgress.filter((kp) => kp.srsStage === SRS_STAGES.LOCKED).length +
-    vocabProgress.filter((vp) => vp.srsStage === SRS_STAGES.LOCKED).length;
+    radicalProgress.filter((rp) => rp.srsStage === SRS_STAGES.LOCKED && rp.radical.levelId <= maxLevel).length +
+    kanjiProgress.filter((kp) => kp.srsStage === SRS_STAGES.LOCKED && kp.kanji.levelId <= maxLevel).length +
+    vocabProgress.filter((vp) => vp.srsStage === SRS_STAGES.LOCKED && vp.vocabulary.levelId <= maxLevel).length;
   const pendingLessons = Math.min(totalUnlocked, user.lessonsPerDay);
 
   const pendingReviews =
