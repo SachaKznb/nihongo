@@ -50,6 +50,9 @@ export default function OnboardingPage() {
   const [batchesCompleted, setBatchesCompleted] = useState(0);
   const [allLearnedRadicals, setAllLearnedRadicals] = useState<LessonItem[]>([]);
 
+  // Track if onboarding is being completed to prevent race conditions
+  const [isCompleting, setIsCompleting] = useState(false);
+
   // Demo state
   const [demoStep, setDemoStep] = useState(0);
 
@@ -58,6 +61,8 @@ export default function OnboardingPage() {
 
   // Redirect if not authenticated or already onboarded
   useEffect(() => {
+    // Don't redirect if we're in the middle of completing onboarding
+    if (isCompleting) return;
     if (status === "loading") return;
 
     if (status === "unauthenticated") {
@@ -65,16 +70,18 @@ export default function OnboardingPage() {
       return;
     }
 
-    if (session?.user?.onboardingCompleted) {
+    // Only redirect if onboarding is completed AND we're not in the complété phase
+    if (session?.user?.onboardingCompleted && phase !== "complété") {
       router.push("/dashboard");
     }
-  }, [session, status, router]);
+  }, [session, status, router, isCompleting, phase]);
 
   // Fetch onboarding lessons (only once, after session is loaded)
   useEffect(() => {
     if (status === "loading" || hasFetched) return;
     if (status === "unauthenticated") return;
     if (session?.user?.onboardingCompleted) return;
+    if (isCompleting) return; // Don't refetch if we're completing
 
     async function fetchLessons() {
       setHasFetched(true);
@@ -193,7 +200,10 @@ export default function OnboardingPage() {
   };
 
   const complétéOnboarding = async (radicalsToSave?: LessonItem[]) => {
+    // Set both flags to prevent race conditions
+    setIsCompleting(true);
     setCompleting(true);
+
     try {
       const radicalsToComplete = radicalsToSave || [...allLearnedRadicals, ...lessons];
       const radicalIds = radicalsToComplete.map((l) => l.id);
@@ -207,11 +217,13 @@ export default function OnboardingPage() {
         throw new Error("Erreur lors de la complétion");
       }
 
-      // Update session to reflect onboardingCompleted
-      await updateSession();
-
+      // Set complété phase BEFORE updating session to avoid race condition
       setPhase("complété");
+
+      // Update session in background (don't await to avoid re-render issues)
+      updateSession();
     } catch (err) {
+      setIsCompleting(false);
       setError(err instanceof Error ? err.message : "Erreur");
     } finally {
       setCompleting(false);
@@ -312,8 +324,8 @@ export default function OnboardingPage() {
     },
   ];
 
-  // Show loading while session or lessons are loading
-  if (status === "loading" || loading) {
+  // Show loading while session or lessons are loading (but not if completing)
+  if ((status === "loading" || loading) && !isCompleting && phase !== "complété") {
     return (
       <div className="max-w-lg w-full">
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
@@ -324,8 +336,8 @@ export default function OnboardingPage() {
     );
   }
 
-  // Don't render if already onboarded (will redirect)
-  if (session?.user?.onboardingCompleted) {
+  // Don't render if already onboarded (will redirect) - but allow complété phase
+  if (session?.user?.onboardingCompleted && phase !== "complété" && !isCompleting) {
     return (
       <div className="max-w-lg w-full">
         <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
