@@ -7,7 +7,7 @@ import { ReviewCard } from "./ReviewCard";
 import { ReviewInput } from "./ReviewInput";
 import { Button } from "@/components/ui/Button";
 import { SRS_STAGE_NAMES } from "@/lib/srs";
-import { playReading } from "@/lib/audio";
+import { playReading, playKanjiReading, playVocabReading } from "@/lib/audio";
 import { useToast } from "@/components/ui/Toast";
 
 interface ReviewSessionProps {
@@ -684,7 +684,17 @@ export function ReviewSession({ reviews }: ReviewSessionProps) {
                   currentQuestion?.item.readings &&
                   currentQuestion.item.readings.length > 0 && (
                     <button
-                      onClick={() => playReading(currentQuestion.item.readings![0])}
+                      onClick={() => {
+                        const item = currentQuestion.item;
+                        const reading = item.readings![0];
+                        if (item.type === "vocabulary" && item.character) {
+                          playVocabReading(item.character, reading, item.id);
+                        } else if (item.type === "kanji" && item.character) {
+                          playKanjiReading(item.character, reading, "on");
+                        } else {
+                          playReading(reading);
+                        }
+                      }}
                       className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-stone-600 bg-white/80 hover:bg-white rounded-lg transition-colors shadow-sm"
                     >
                       <span>🔊</span>

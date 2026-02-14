@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { LessonItem } from "@/types";
-import { playReading } from "@/lib/audio";
+import { playReading, playKanjiReading, playVocabReading } from "@/lib/audio";
 import { ExampleSentences } from "@/components/vocabulary/ExampleSentences";
 
 interface LessonCardProps {
@@ -30,7 +30,18 @@ export function LessonCard({
   const hasMeaningCustom = !!item.customMnemonic;
   const hasReadingCustom = !!item.customReadingMnemonic;
   const handlePlayAudio = () => {
-    if (item.readings && item.readings.length > 0) {
+    if (item.type === "vocabulary" && item.readings && item.readings.length > 0 && item.character) {
+      // Use pre-generated vocab audio
+      playVocabReading(item.character, item.readings[0], item.id);
+    } else if (item.type === "kanji" && item.character) {
+      // Use pre-generated kanji audio (prefer on'yomi)
+      if (item.readingsOn && item.readingsOn.length > 0) {
+        playKanjiReading(item.character, item.readingsOn[0], "on");
+      } else if (item.readingsKun && item.readingsKun.length > 0) {
+        playKanjiReading(item.character, item.readingsKun[0], "kun");
+      }
+    } else if (item.readings && item.readings.length > 0) {
+      // Fallback for other types
       playReading(item.readings[0]);
     } else if (item.readingsOn && item.readingsOn.length > 0) {
       playReading(item.readingsOn[0]);
