@@ -128,6 +128,53 @@ function checkReadingAnswer(userAnswer: string, acceptedReadings: string[]): boo
   return false;
 }
 
+function checkGrammarAnswer(
+  userAnswer: string,
+  expectedAnswers: string[],
+  formation: string
+): boolean {
+  const normalizedAnswer = userAnswer.trim().toLowerCase();
+  const normalizedAnswerHiragana = romajiToHiragana(normalizedAnswer);
+
+  // Check against the main expected answers (titleJp)
+  for (const expected of expectedAnswers) {
+    const normalizedExpected = expected.toLowerCase().trim();
+    if (normalizedAnswer === normalizedExpected) return true;
+    if (normalizedAnswerHiragana === normalizedExpected) return true;
+    // Remove tilde (~) and check again for grammar patterns like ~て
+    const cleanExpected = normalizedExpected.replace(/[~～]/g, "").trim();
+    if (normalizedAnswer === cleanExpected) return true;
+    if (normalizedAnswerHiragana === cleanExpected) return true;
+  }
+
+  // Also extract key grammar forms from the formation field
+  // Look for patterns in Japanese (hiragana/katakana/kanji)
+  const japanesePattern = /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FFF]+/g;
+  const formationForms = formation.match(japanesePattern) || [];
+
+  for (const form of formationForms) {
+    const cleanForm = form.replace(/[~～]/g, "").trim().toLowerCase();
+    if (normalizedAnswer === cleanForm) return true;
+    if (normalizedAnswerHiragana === cleanForm) return true;
+  }
+
+  // Allow small typos for longer answers
+  for (const expected of expectedAnswers) {
+    const cleanExpected = expected.replace(/[~～]/g, "").trim().toLowerCase();
+    if (cleanExpected.length > 3) {
+      const maxDistance = cleanExpected.length > 6 ? 2 : 1;
+      if (levenshteinDistance(normalizedAnswer, cleanExpected) <= maxDistance) {
+        return true;
+      }
+      if (levenshteinDistance(normalizedAnswerHiragana, cleanExpected) <= maxDistance) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 function levenshteinDistance(a: string, b: string): number {
   const matrix: number[][] = [];
 
@@ -582,6 +629,70 @@ export async function POST(request: NextRequest) {
           itemType: type,
           itemId: id,
           reviewType,
+          correct,
+          srsStageFrom: currentStage,
+          srsStageTo: newStage,
+        },
+      });
+
+      // Update gamification stats
+      await updateGamification(userId, correct, currentStage === 0);
+
+      await unlockAvailableItems(userId);
+      await levelUpUser(userId);
+
+      const result: AnswerResult = {
+        correct,
+        expectedAnswers,
+        srsStageFrom: currentStage,
+        srsStageTo: newStage,
+      };
+
+      return NextResponse.json(result);
+    }
+
+    if (type === "grammar") {
+      const grammar = await prisma.grammarPoint.findUnique({ where: { id } });
+      const progress = await prisma.userGrammarProgress.findUnique({
+        where: { userId_grammarId: { userId, grammarId: id } },
+      });
+
+      if (!grammar || !progress) {
+        return NextResponse.json({ error: "Item non trouvé" }, { status: 404 });
+      }
+
+      currentStage = progress.srsStage;
+
+      // Grammar reviews use fill-in-the-blank style
+      // The expected answer is typically a grammar form that completes a sentence
+      // We accept the grammar title (titleJp) or common forms from the formation field
+      expectedAnswers = [grammar.titleJp];
+
+      // For grammar, we check if the user's answer matches the expected grammar pattern
+      // This is more lenient than kanji/vocab since grammar patterns can vary
+      correct = checkGrammarAnswer(answer, expectedAnswers, grammar.formation);
+
+      const newStage = calculateNewStage(currentStage, correct);
+      const nextReviewAt =
+        newStage === SRS_STAGES.BURNED ? null : calculateNextReview(newStage);
+
+      await prisma.userGrammarProgress.update({
+        where: { userId_grammarId: { userId, grammarId: id } },
+        data: {
+          srsStage: newStage,
+          nextReviewAt,
+          correctCount: { increment: correct ? 1 : 0 },
+          incorrectCount: { increment: correct ? 0 : 1 },
+          burnedAt: newStage === SRS_STAGES.BURNED ? new Date() : undefined,
+        },
+      });
+
+      await prisma.review.create({
+        data: {
+          userId,
+          itemType: type,
+          itemId: id,
+          reviewType: "grammar",
           correct,
           srsStageFrom: currentStage,
           srsStageTo: newStage,

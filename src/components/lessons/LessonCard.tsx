@@ -58,6 +58,12 @@ export function LessonCard({
       label: "Vocabulaire",
       headerBg: "bg-gradient-to-r from-purple-500 to-purple-600",
     },
+    grammar: {
+      bg: "gradient-grammar",
+      color: "teal",
+      label: "Grammaire",
+      headerBg: "bg-gradient-to-r from-teal-500 to-teal-600",
+    },
   };
 
   const config = typeConfig[item.type];
@@ -367,6 +373,46 @@ export function LessonCard({
             </h4>
             <p className="text-lg font-japanese text-stone-800 mb-1">{item.sentence.jp}</p>
             <p className="text-stone-600">{item.sentence.fr}</p>
+          </div>
+        )}
+
+        {/* Grammar-specific: Formation */}
+        {item.type === "grammar" && item.formation && (
+          <div className="bg-gradient-to-r from-cyan-50 to-teal-50 rounded-2xl p-4 border border-cyan-100">
+            <h4 className="text-xs font-semibold text-cyan-700 uppercase tracking-wide mb-2 flex items-center gap-2">
+              <span>📐</span> Formation
+            </h4>
+            <p className="text-stone-700 leading-relaxed whitespace-pre-wrap">{item.formation}</p>
+            {item.formationNotes && (
+              <p className="text-stone-500 text-sm mt-2 italic">{item.formationNotes}</p>
+            )}
+          </div>
+        )}
+
+        {/* Grammar-specific: Example sentences */}
+        {item.type === "grammar" && item.exampleSentences && item.exampleSentences.length > 0 && (
+          <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-4 border border-emerald-100">
+            <h4 className="text-xs font-semibold text-emerald-700 uppercase tracking-wide mb-3 flex items-center gap-2">
+              <span>💬</span> Exemples
+            </h4>
+            <div className="space-y-3">
+              {item.exampleSentences.map((sentence, i) => (
+                <div key={i} className="bg-white rounded-xl p-3 shadow-sm">
+                  <p className="text-lg font-japanese text-stone-800 mb-1">{sentence.japanese}</p>
+                  <p className="text-stone-600 text-sm">{sentence.french}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Grammar-specific: Nuances */}
+        {item.type === "grammar" && item.nuancesFr && (
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-4 border border-indigo-100">
+            <h4 className="text-xs font-semibold text-indigo-700 uppercase tracking-wide mb-2 flex items-center gap-2">
+              <span>🎯</span> Nuances
+            </h4>
+            <p className="text-stone-700 leading-relaxed">{item.nuancesFr}</p>
           </div>
         )}
 

@@ -160,6 +160,41 @@ export async function GET(request: NextRequest) {
     });
   }
 
+  // Get grammar that is unlocked (stage 0) and not started
+  // Grammar unlocks when user reaches the level (same as radicals)
+  // Filter by level based on subscription status
+  const grammarProgress = await prisma.userGrammarProgress.findMany({
+    where: { userId, srsStage: SRS_STAGES.LOCKED, grammar: levelFilter },
+    include: {
+      grammar: true,
+    },
+    take: Math.max(0, maxLessons - lessons.length),
+  });
+
+  for (const gp of grammarProgress) {
+    // Parse example sentences from JSON
+    const exampleSentences = gp.grammar.exampleSentences as Array<{
+      japanese: string;
+      french: string;
+      audio?: string;
+    }>;
+
+    lessons.push({
+      type: "grammar",
+      id: gp.grammar.id,
+      character: gp.grammar.titleJp,
+      meaningsFr: [gp.grammar.titleFr],
+      mnemonic: gp.grammar.mnemonicFr,
+      // Grammar-specific fields
+      formation: gp.grammar.formation,
+      formationNotes: gp.grammar.formationNotes,
+      exampleSentences,
+      nuancesFr: gp.grammar.nuancesFr,
+      jlptLevel: gp.grammar.jlptLevel,
+      slug: gp.grammar.slug,
+    });
+  }
+
     return NextResponse.json(
       { lessons, total: lessons.length },
       {

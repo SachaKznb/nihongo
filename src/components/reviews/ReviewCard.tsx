@@ -5,7 +5,7 @@ import { SRS_STAGE_NAMES, SRS_STAGE_COLORS } from "@/lib/srs";
 
 interface ReviewCardProps {
   item: ReviewItem;
-  reviewType: "meaning" | "reading";
+  reviewType: "meaning" | "reading" | "grammar";
 }
 
 export function ReviewCard({ item, reviewType }: ReviewCardProps) {
@@ -13,13 +13,20 @@ export function ReviewCard({ item, reviewType }: ReviewCardProps) {
     radical: "bg-blue-500",
     kanji: "bg-pink-500",
     vocabulary: "bg-purple-500",
+    grammar: "bg-teal-500",
   };
 
   const typeLabels = {
     radical: "Radical",
     kanji: "Kanji",
     vocabulary: "Vocabulaire",
+    grammar: "Grammaire",
   };
+
+  // For grammar reviews, pick a random example sentence to use as fill-in-the-blank
+  const grammarSentence = item.type === "grammar" && item.exampleSentences && item.exampleSentences.length > 0
+    ? item.exampleSentences[0]
+    : null;
 
   return (
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -35,7 +42,18 @@ export function ReviewCard({ item, reviewType }: ReviewCardProps) {
 
       {/* Character display */}
       <div className="py-16 px-4 text-center bg-gray-50">
-        {item.character ? (
+        {item.type === "grammar" ? (
+          // Grammar: Show the sentence with a blank or the grammar point
+          <div className="space-y-4">
+            <span className="text-6xl font-japanese text-teal-600">{item.character}</span>
+            {grammarSentence && (
+              <div className="mt-6 px-4">
+                <p className="text-sm text-gray-500 mb-2">Completez avec le point de grammaire correct :</p>
+                <p className="text-lg font-japanese text-stone-700">{grammarSentence.french}</p>
+              </div>
+            )}
+          </div>
+        ) : item.character ? (
           <span className="text-9xl font-japanese">{item.character}</span>
         ) : item.imageUrl ? (
           <img
@@ -51,9 +69,11 @@ export function ReviewCard({ item, reviewType }: ReviewCardProps) {
       {/* Question */}
       <div className="p-6 text-center border-t border-gray-100">
         <p className="text-gray-600">
-          {reviewType === "meaning"
-            ? "Quelle est la signification ?"
-            : "Quelle est la lecture ?"}
+          {item.type === "grammar"
+            ? "Quel point de grammaire complete cette phrase ?"
+            : reviewType === "meaning"
+              ? "Quelle est la signification ?"
+              : "Quelle est la lecture ?"}
         </p>
       </div>
     </div>

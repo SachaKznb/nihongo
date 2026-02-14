@@ -11,8 +11,8 @@ import type {
 
 export type { User, Radical, Kanji, Vocabulary, Review };
 
-export type ItemType = "radical" | "kanji" | "vocabulary";
-export type ReviewType = "meaning" | "reading";
+export type ItemType = "radical" | "kanji" | "vocabulary" | "grammar";
+export type ReviewType = "meaning" | "reading" | "grammar";
 
 export interface RadicalWithProgress extends Radical {
   userProgress?: UserRadicalProgress | null;
@@ -48,6 +48,13 @@ export interface LessonItem {
   componentRadicals?: { character: string | null; meaningFr: string; imageUrl?: string | null }[];
   // For kanji: vocabulary using this kanji
   usedInVocabulary?: { word: string; meaningFr: string; reading: string }[];
+  // For grammar: additional fields
+  formation?: string;
+  formationNotes?: string | null;
+  exampleSentences?: { japanese: string; french: string; audio?: string }[];
+  nuancesFr?: string | null;
+  jlptLevel?: number;
+  slug?: string;
 }
 
 export interface ReviewItem {
@@ -60,6 +67,10 @@ export interface ReviewItem {
   imageUrl?: string | null;
   mnemonic?: string;
   readingMnemonic?: string;
+  // For grammar reviews (fill-in-the-blank style)
+  exampleSentences?: { japanese: string; french: string; audio?: string }[];
+  formation?: string;
+  slug?: string;
 }
 
 export interface SrsBreakdown {

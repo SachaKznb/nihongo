@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { SRS_STAGE_NAMES, SRS_STAGE_COLORS } from "@/lib/srs";
 import { ReadingBadges } from "@/components/ReadingBadges";
+import { KanjiDetailClient } from "./KanjiDetailClient";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -176,7 +177,7 @@ export default async function KanjiDetailPage({ params }: Props) {
                     </div>
                   </div>
                   {meaningAccuracy !== null && (
-                    <p className="text-sm font-medium text-stone-600 mt-2">{meaningAccuracy}% précision</p>
+                    <p className="text-sm font-medium text-stone-600 mt-2">{meaningAccuracy}% precision</p>
                   )}
                 </div>
                 <div className="text-center p-3 bg-white rounded-xl">
@@ -192,7 +193,7 @@ export default async function KanjiDetailPage({ params }: Props) {
                     </div>
                   </div>
                   {readingAccuracy !== null && (
-                    <p className="text-sm font-medium text-stone-600 mt-2">{readingAccuracy}% précision</p>
+                    <p className="text-sm font-medium text-stone-600 mt-2">{readingAccuracy}% precision</p>
                   )}
                 </div>
               </div>
@@ -209,55 +210,24 @@ export default async function KanjiDetailPage({ params }: Props) {
             </div>
           )}
 
-          {/* Meaning Mnemonic */}
-          <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-4 border border-amber-100">
-            <h4 className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-2 flex items-center gap-2">
-              <span>💡</span> Mnemonique de sens
-            </h4>
-            {progress?.customMeaningMnemonic ? (
-              <div className="space-y-2">
-                <div className="bg-amber-100 rounded-lg p-3 border-l-4 border-amber-400">
-                  <p className="text-stone-700 leading-relaxed">{progress.customMeaningMnemonic}</p>
-                </div>
-                <details className="text-sm">
-                  <summary className="text-stone-500 cursor-pointer hover:text-stone-700">
-                    Voir l'original
-                  </summary>
-                  <p className="text-stone-500 mt-2 pl-4">{kanji.meaningMnemonicFr}</p>
-                </details>
-              </div>
-            ) : (
-              <p className="text-stone-700 leading-relaxed">{kanji.meaningMnemonicFr}</p>
-            )}
-          </div>
-
-          {/* Reading Mnemonic */}
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-4 border border-purple-100">
-            <h4 className="text-xs font-semibold text-purple-700 uppercase tracking-wide mb-2 flex items-center gap-2">
-              <span>🎵</span> Mnemonique de lecture
-            </h4>
-            {progress?.customReadingMnemonic ? (
-              <div className="space-y-2">
-                <div className="bg-purple-100 rounded-lg p-3 border-l-4 border-purple-400">
-                  <p className="text-stone-700 leading-relaxed">{progress.customReadingMnemonic}</p>
-                </div>
-                <details className="text-sm">
-                  <summary className="text-stone-500 cursor-pointer hover:text-stone-700">
-                    Voir l'original
-                  </summary>
-                  <p className="text-stone-500 mt-2 pl-4">{kanji.readingMnemonicFr}</p>
-                </details>
-              </div>
-            ) : (
-              <p className="text-stone-700 leading-relaxed">{kanji.readingMnemonicFr}</p>
-            )}
-          </div>
+          {/* AI-Powered Features (Client Component) */}
+          <KanjiDetailClient
+            kanjiId={kanji.id}
+            character={kanji.character}
+            meaningMnemonicFr={kanji.meaningMnemonicFr}
+            readingMnemonicFr={kanji.readingMnemonicFr}
+            customMeaningMnemonic={progress?.customMeaningMnemonic}
+            customReadingMnemonic={progress?.customReadingMnemonic}
+          />
 
           {/* Related Vocabulary */}
           {kanji.vocabulary.length > 0 && (
-            <div>
-              <h4 className="text-xs font-semibold text-stone-500 uppercase tracking-wide mb-3 flex items-center gap-2">
-                <span>📖</span> Vocabulaire associe ({kanji.vocabulary.length})
+            <div className="bg-purple-50/50 rounded-2xl p-4">
+              <h4 className="text-xs font-semibold text-purple-600 uppercase tracking-wide mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
+                Vocabulaire associe ({kanji.vocabulary.length})
               </h4>
               <div className="space-y-2">
                 {kanji.vocabulary.map((kv) => {
@@ -269,22 +239,25 @@ export default async function KanjiDetailPage({ params }: Props) {
                     <Link
                       key={kv.vocabularyId}
                       href={`/vocabulary/${kv.vocabularyId}`}
-                      className={`flex items-center justify-between rounded-xl px-4 py-3 transition-all hover:shadow-md ${
-                        vocabLocked ? "bg-gray-100" : "bg-purple-50 hover:bg-purple-100"
+                      className={`flex items-center justify-between rounded-xl px-4 py-3 transition-all hover:shadow-md focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 ${
+                        vocabLocked ? "bg-gray-100" : "bg-white hover:bg-purple-100"
                       }`}
                     >
-                      <div className="flex items-center gap-3">
-                        <span className={`text-lg font-japanese ${vocabLocked ? "text-gray-500" : "text-purple-700"}`}>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className={`text-lg font-japanese flex-shrink-0 ${vocabLocked ? "text-gray-500" : "text-purple-700"}`}>
                           {kv.vocabulary.word}
                         </span>
-                        <span className="text-sm text-stone-400 font-japanese">
+                        <span className="text-sm text-stone-500 font-japanese truncate">
                           {kv.vocabulary.readings[0]}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-stone-600">{kv.vocabulary.meaningsFr[0]}</span>
+                      <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                        <span className="text-sm text-stone-600 truncate max-w-[120px] sm:max-w-none">{kv.vocabulary.meaningsFr[0]}</span>
                         {vocabStage > 0 && (
-                          <div className={`w-2.5 h-2.5 rounded-full ${SRS_STAGE_COLORS[vocabStage]}`} />
+                          <div className="flex items-center gap-1">
+                            <div className={`w-2.5 h-2.5 rounded-full ${SRS_STAGE_COLORS[vocabStage]}`} />
+                            <span className="sr-only">{SRS_STAGE_NAMES[vocabStage]}</span>
+                          </div>
                         )}
                       </div>
                     </Link>

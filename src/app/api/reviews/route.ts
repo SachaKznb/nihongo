@@ -106,6 +106,40 @@ export async function GET() {
     });
   }
 
+  // Get grammar due for review
+  // Filter by level based on subscription status
+  const grammarReviews = await prisma.userGrammarProgress.findMany({
+    where: {
+      userId,
+      srsStage: { gte: 1, lt: 9 }, // Not locked, not burned
+      nextReviewAt: { lte: now },
+      grammar: levelFilter,
+    },
+    include: { grammar: true },
+  });
+
+  for (const gp of grammarReviews) {
+    // Parse example sentences from JSON
+    const exampleSentences = gp.grammar.exampleSentences as Array<{
+      japanese: string;
+      french: string;
+      audio?: string;
+    }>;
+
+    reviews.push({
+      type: "grammar",
+      id: gp.grammar.id,
+      character: gp.grammar.titleJp,
+      meaningsFr: [gp.grammar.titleFr],
+      currentStage: gp.srsStage,
+      mnemonic: gp.grammar.mnemonicFr,
+      // Grammar-specific fields for fill-in-the-blank reviews
+      exampleSentences,
+      formation: gp.grammar.formation,
+      slug: gp.grammar.slug,
+    });
+  }
+
     // Fisher-Yates shuffle for better randomization
     for (let i = reviews.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));

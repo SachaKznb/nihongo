@@ -79,6 +79,12 @@ model User {
   // Level-Aware Sentences setting
   levelAwareSentencesEnabled  Boolean   @default(true)
 
+  // Personalized AI Mnemonics
+  interests         String[]  @default([])  // ["gaming", "cooking", "football", "cinema", "music"]
+
+  // JLPT Mock Tests
+  jlptMockTests     JLPTMockTest[]
+
   // Leaderboard & Analytics
   leaderboardOptIn  Boolean   @default(false)
 
@@ -95,6 +101,7 @@ model User {
   radicalProgress    UserRadicalProgress[]
   kanjiProgress      UserKanjiProgress[]
   vocabularyProgress UserVocabularyProgress[]
+  grammarProgress    UserGrammarProgress[]
   reviews            Review[]
 
   // Token relations
@@ -118,11 +125,12 @@ model User {
 }
 
 model Level {
-  id         Int          @id @default(autoincrement())
-  name       String?
-  radicals   Radical[]
-  kanji      Kanji[]
-  vocabulary Vocabulary[]
+  id            Int            @id @default(autoincrement())
+  name          String?
+  radicals      Radical[]
+  kanji         Kanji[]
+  vocabulary    Vocabulary[]
+  grammarPoints GrammarPoint[]
 }
 
 model Radical {
@@ -134,6 +142,10 @@ model Radical {
   imageUrl      String? // for radicals without unicode
   levelId       Int
   level         Level   @relation(fields: [levelId], references: [id])
+
+  // Metadata for reorganization
+  usageCount    Int?    // How many kanji use this radical
+  complexity    Int?    // Visual complexity (1-5)
 
   kanji        KanjiRadical[]
   userProgress UserRadicalProgress[]
@@ -153,11 +165,19 @@ model Kanji {
   levelId           Int
   level             Level    @relation(fields: [levelId], references: [id])
 
+  // JLPT and frequency metadata
+  jlptLevel         Int?     // 5=N5, 4=N4, 3=N3, 2=N2, 1=N1
+  frequencyRank     Int?     // 1-2500 newspaper frequency
+  gradeLevel        Int?     // Japanese school grade (1-6 for Joyo)
+  strokeCount       Int?     // Number of strokes
+
   radicals     KanjiRadical[]
   vocabulary   VocabularyKanji[]
   userProgress UserKanjiProgress[]
+  etymologyCache KanjiEtymologyCache?
 
   @@index([levelId])
+  @@index([jlptLevel])
 }
 
 model Vocabulary {
@@ -171,12 +191,17 @@ model Vocabulary {
   levelId    Int
   level      Level    @relation(fields: [levelId], references: [id])
 
+  // JLPT and frequency metadata
+  jlptLevel     Int?  // 5=N5, 4=N4, 3=N3, 2=N2, 1=N1
+  frequencyRank Int?  // Word frequency rank
+
   kanji         VocabularyKanji[]
   userProgress  UserVocabularyProgress[]
   sentenceCache UserSentenceCache[]
 
   @@unique([word, levelId])
   @@index([levelId])
+  @@index([jlptLevel])
 }
 
 // Junction tables
@@ -476,4 +501,174 @@ model UserDailyStats {
   @@unique([userId, date])
   @@index([userId])
   @@index([date])
+}
+
+// ============================================
+// JLPT MOCK TEST SYSTEM
+// ============================================
+
+model JLPTMockTest {
+  id              String    @id @default(cuid())
+  userId          String
+  jlptLevel       Int       // 5, 4, 3, 2, 1 (N5, N4, N3, N2, N1)
+
+  // Timing
+  startedAt       DateTime  @default(now())
+  completedAt     DateTime?
+  timeSpentMinutes Int?
+
+  // Scores (percentage 0-100)
+  vocabularyScore Float?
+  grammarScore    Float?
+  readingScore    Float?
+  listeningScore  Float?
+  totalScore      Float?
+  passed          Boolean?  // >= 60% to pass
+
+  // AI Analysis (generated after completion)
+  weakAreas       Json?     // ["kanji_reading", "grammar_particles", "time_expressions"]
+  studyPlan       Json?     // AI-generated 30-day personalized plan
+  analysisText    String?   @db.Text  // Human-readable AI analysis in French
+
+  // Integration tracking
+  weakItemsAddedToSRS  Boolean   @default(false)  // Have we boosted weak items?
+  studyPlanStartedAt   DateTime?
+
+  answers         JLPTTestAnswer[]
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, jlptLevel])
+  @@index([completedAt])
+}
+
+model JLPTTestAnswer {
+  id            String   @id @default(cuid())
+  testId        String
+  questionId    Int
+
+  // Answer data
+  userAnswer    String
+  isCorrect     Boolean
+  timeSpentSecs Int?
+
+  // AI explanation (generated for wrong answers)
+  aiExplanation String?  @db.Text  // Why wrong + how to remember
+
+  test          JLPTMockTest @relation(fields: [testId], references: [id], onDelete: Cascade)
+  question      JLPTQuestion @relation(fields: [questionId], references: [id])
+
+  @@index([testId])
+}
+
+model JLPTQuestion {
+  id            Int      @id @default(autoincrement())
+  jlptLevel     Int      // 5, 4, 3, 2, 1
+  section       String   // "vocabulary" | "grammar" | "reading" | "listening"
+  questionType  String   // "meaning" | "reading" | "usage" | "fill_blank" | "passage" | "audio"
+
+  // Question content
+  questionText  String   @db.Text
+  questionAudio String?  // URL to audio file (for listening)
+  passageText   String?  @db.Text  // Reading passage (for reading section)
+
+  // Options (for multiple choice)
+  options       String[]
+  correctIndex  Int      // 0-3 for which option is correct
+
+  // Explanation
+  explanation   String   @db.Text  // Why this answer is correct
+
+  // Links to app content (for integration)
+  relatedKanji  String[] // ["日", "本", "語"]
+  relatedVocab  String[] // ["日本語", "日本人"]
+  grammarPoint  String?  // "te-form", "passive", etc.
+
+  // Metadata
+  difficulty    Int      @default(1)  // 1-3 within the JLPT level
+  createdAt     DateTime @default(now())
+
+  answers       JLPTTestAnswer[]
+
+  @@index([jlptLevel, section])
+  @@index([jlptLevel, difficulty])
+}
+
+// Track which JLPT levels user has unlocked (based on app level)
+model UserJLPTAccess {
+  id            String   @id @default(cuid())
+  userId        String
+  jlptLevel     Int      // 5, 4, 3, 2, 1
+  unlockedAt    DateTime @default(now())
+  freeTestUsed  Boolean  @default(false)  // Has used their 1 free test?
+
+  @@unique([userId, jlptLevel])
+  @@index([userId])
+}
+
+// ============================================
+// KANJI ETYMOLOGY CACHE
+// ============================================
+
+// Cache for AI-generated kanji etymology explanations (global, same for all users)
+model KanjiEtymologyCache {
+  id            String   @id @default(cuid())
+  kanjiId       Int      @unique
+  character     String
+  etymology     String   @db.Text  // AI-generated etymology explanation in French
+  origin        String   // "pictographic" | "ideographic" | "compound"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  kanji         Kanji    @relation(fields: [kanjiId], references: [id], onDelete: Cascade)
+
+  @@index([kanjiId])
+}
+
+// ============================================
+// GRAMMAR SRS SYSTEM (Bunpro-style)
+// ============================================
+
+// A grammar concept to learn (unlocks alongside kanji at each level)
+model GrammarPoint {
+  id                Int      @id @default(autoincrement())
+  levelId           Int      // Which level this unlocks at
+  jlptLevel         Int      // 5=N5, 4=N4, 3=N3, 2=N2, 1=N1
+  slug              String   @unique // URL-friendly identifier
+  titleJp           String   // Japanese title (e.g., "～てform")
+  titleFr           String   // French title
+  meaningFr         String   @db.Text // French meaning/usage
+  formation         String   @db.Text // How to form it
+  formationNotes    String?  @db.Text // Additional formation notes
+  exampleSentences  Json     // Array of {japanese, french, audio?}
+  nuancesFr         String?  @db.Text // Nuances and usage notes in French
+  mnemonicFr        String   @db.Text // French mnemonic
+  relatedGrammar    Int[]    // IDs of related grammar points
+  order             Int      @default(0) // Order within level
+
+  level             Level    @relation(fields: [levelId], references: [id])
+  userProgress      UserGrammarProgress[]
+
+  @@index([levelId])
+  @@index([jlptLevel])
+}
+
+// User's SRS progress on grammar
+model UserGrammarProgress {
+  id              String    @id @default(cuid())
+  userId          String
+  grammarId       Int
+  srsStage        Int       @default(0) // 0=locked, 1-4=apprentice, 5-6=guru, 7=master, 8=enlightened, 9=burned
+  correctCount    Int       @default(0)
+  incorrectCount  Int       @default(0)
+  nextReviewAt    DateTime?
+  unlockedAt      DateTime?
+  burnedAt        DateTime?
+
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  grammar         GrammarPoint @relation(fields: [grammarId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, grammarId])
+  @@index([userId, srsStage])
+  @@index([userId, nextReviewAt])
 }
