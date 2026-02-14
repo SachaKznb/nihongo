@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { SRS_STAGE_NAMES, SRS_STAGE_COLORS } from "@/lib/srs";
 import { ExampleSentences } from "@/components/vocabulary/ExampleSentences";
+import { VocabularyAudioButton } from "./VocabularyAudioButton";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -82,6 +83,11 @@ export default async function VocabularyDetailPage({ params }: Props) {
             Vocabulaire - Niveau {vocabulary.levelId}
           </span>
           <div className="flex items-center gap-2">
+            <VocabularyAudioButton
+              word={vocabulary.word}
+              reading={vocabulary.readings[0]}
+              vocabId={vocabulary.id}
+            />
             <span className={`px-3 py-1 rounded-full text-xs font-medium ${
               isLocked ? "bg-white/20 text-white" : `${SRS_STAGE_COLORS[stage]} text-white`
             }`}>
@@ -216,8 +222,38 @@ export default async function VocabularyDetailPage({ params }: Props) {
               <h4 className="text-xs font-semibold text-teal-700 uppercase tracking-wide mb-2 flex items-center gap-2">
                 <span>💬</span> Exemple
               </h4>
-              <p className="text-lg font-japanese text-stone-800 mb-1">{vocabulary.sentenceJp}</p>
-              <p className="text-stone-600">{vocabulary.sentenceFr}</p>
+              {(() => {
+                // Try to parse as JSON array (new format)
+                try {
+                  const sentences = JSON.parse(vocabulary.sentenceJp);
+                  if (Array.isArray(sentences)) {
+                    return (
+                      <div className="space-y-3">
+                        {sentences.map((s: { japanese?: string; french?: string } | string, i: number) => (
+                          <div key={i} className="bg-white rounded-xl p-3">
+                            <p className="text-lg font-japanese text-stone-800 mb-1">
+                              {typeof s === 'string' ? s : s.japanese}
+                            </p>
+                            <p className="text-stone-600">
+                              {typeof s === 'string'
+                                ? (JSON.parse(vocabulary.sentenceFr || '[]')[i] || '')
+                                : s.french}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  }
+                } catch {
+                  // Not JSON, display as plain text
+                }
+                return (
+                  <>
+                    <p className="text-lg font-japanese text-stone-800 mb-1">{vocabulary.sentenceJp}</p>
+                    <p className="text-stone-600">{vocabulary.sentenceFr}</p>
+                  </>
+                );
+              })()}
             </div>
           )}
 
