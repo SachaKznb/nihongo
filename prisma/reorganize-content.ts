@@ -228,86 +228,81 @@ function getFrequencyRank(char: string): number {
   return KANJI_FREQUENCY[char] || 9999;
 }
 
-// Track kanji counts per JLPT level for even distribution
-const jlptKanjiCounts: Record<number, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0, 0: 0 };
-
 function calculateKanjiLevels(kanjiList: KanjiData[]): Map<number, number> {
-  console.log("\n[2/8] Calculating kanji levels based on JLPT and frequency...");
+  console.log("\n[2/8] Calculating kanji levels (WaniKani-style: ~23 kanji per level)...");
 
   const kanjiLevelMap = new Map<number, number>();
 
-  // Group kanji by JLPT level
-  const byJlpt: Record<number, KanjiData[]> = { 5: [], 4: [], 3: [], 2: [], 1: [], 0: [] };
+  // WaniKani-style: distribute ALL kanji evenly across 60 levels
+  // Target: ~23 kanji per level (1405 / 60 = 23.4)
+  const TARGET_PER_LEVEL = 24;
 
-  for (const kanji of kanjiList) {
-    const jlpt = kanji.jlptLevel ?? 0;
-    byJlpt[jlpt].push(kanji);
-  }
+  // Basic kanji that MUST be in level 1-2 (numbers, days)
+  const level1Kanji = new Set([
+    "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", // Numbers
+    "日", "上", "下", "大", "小", "人", "入", "口", "山", "川", // Basic WaniKani L1
+    "力", "工", "女", "子" // More L1 basics
+  ]);
 
-  // Sort each group by frequency (more common = earlier)
-  for (const jlpt of Object.keys(byJlpt)) {
-    byJlpt[parseInt(jlpt)].sort((a, b) => (a.frequencyRank || 9999) - (b.frequencyRank || 9999));
-  }
+  const level2Kanji = new Set([
+    "月", "火", "水", "木", "金", "土", // Days of week
+    "中", "円", "出", "右", "左", "本", "正", "玉", "王", "目" // WaniKani L2 style
+  ]);
 
-  // Define level ranges for each JLPT level
-  const jlptRanges: Record<number, { start: number; end: number }> = {
-    5: { start: 1, end: 10 },   // N5 -> levels 1-10
-    4: { start: 11, end: 20 },  // N4 -> levels 11-20
-    3: { start: 21, end: 35 },  // N3 -> levels 21-35
-    2: { start: 36, end: 50 },  // N2 -> levels 36-50
-    1: { start: 51, end: 60 },  // N1 -> levels 51-60
-    0: { start: 30, end: 60 },  // Unknown -> levels 30-60
-  };
+  // Sort ALL kanji by:
+  // 1. JLPT level (N5 first, then N4, etc., unknown last)
+  // 2. Frequency rank (more common first)
+  const sortedKanji = [...kanjiList].sort((a, b) => {
+    // JLPT priority: 5 (N5) > 4 (N4) > 3 > 2 > 1 > null/0
+    const jlptA = a.jlptLevel ?? 0;
+    const jlptB = b.jlptLevel ?? 0;
+    // Higher JLPT number = easier = should come first
+    if (jlptB !== jlptA) return jlptB - jlptA;
+    // Then by frequency (lower = more common = first)
+    return (a.frequencyRank || 9999) - (b.frequencyRank || 9999);
+  });
 
-  // Basic kanji that must be in specific early levels
-  const basicKanjiLevels: Record<string, number> = {
-    // Numbers 1-10 and sun in level 1
-    "一": 1, "二": 1, "三": 1, "四": 1, "五": 1, "六": 1, "七": 1, "八": 1, "九": 1, "十": 1, "日": 1,
-    // Days of week in level 2
-    "月": 2, "火": 2, "水": 2, "木": 2, "金": 2, "土": 2,
-    // Other basic kanji in level 3
-    "大": 3, "小": 3, "上": 3, "下": 3, "中": 3,
-  };
-
-  // Track how many kanji we've assigned to each level
+  // Track level counts
   const levelCounts: Record<number, number> = {};
   for (let l = 1; l <= 60; l++) levelCounts[l] = 0;
 
-  // First, assign basic kanji
-  for (const kanji of kanjiList) {
-    const fixedLevel = basicKanjiLevels[kanji.character];
-    if (fixedLevel) {
-      kanjiLevelMap.set(kanji.id, fixedLevel);
-      levelCounts[fixedLevel]++;
+  // First pass: assign basic kanji to levels 1-2
+  for (const kanji of sortedKanji) {
+    if (level1Kanji.has(kanji.character)) {
+      kanjiLevelMap.set(kanji.id, 1);
+      levelCounts[1]++;
+    } else if (level2Kanji.has(kanji.character)) {
+      kanjiLevelMap.set(kanji.id, 2);
+      levelCounts[2]++;
     }
   }
 
-  // Then distribute remaining kanji evenly within JLPT ranges
-  for (const jlptLevel of [5, 4, 3, 2, 1, 0]) {
-    const kanjiInJlpt = byJlpt[jlptLevel].filter(k => !basicKanjiLevels[k.character]);
-    const range = jlptRanges[jlptLevel];
-    const levelSpan = range.end - range.start + 1;
-    const kanjiPerLevel = Math.ceil(kanjiInJlpt.length / levelSpan);
+  // Second pass: distribute remaining kanji evenly across levels
+  let currentLevel = 1;
+  for (const kanji of sortedKanji) {
+    if (kanjiLevelMap.has(kanji.id)) continue; // Already assigned
 
-    let currentLevel = range.start;
-    let countInCurrentLevel = levelCounts[currentLevel] || 0;
-
-    for (const kanji of kanjiInJlpt) {
-      // Move to next level if current level is full
-      while (countInCurrentLevel >= kanjiPerLevel && currentLevel < range.end) {
-        currentLevel++;
-        countInCurrentLevel = levelCounts[currentLevel] || 0;
-      }
-
-      kanjiLevelMap.set(kanji.id, currentLevel);
-      levelCounts[currentLevel] = (levelCounts[currentLevel] || 0) + 1;
-      countInCurrentLevel++;
+    // Find next level that isn't full
+    while (levelCounts[currentLevel] >= TARGET_PER_LEVEL && currentLevel < 60) {
+      currentLevel++;
     }
 
-    jlptKanjiCounts[jlptLevel] = kanjiInJlpt.length + (jlptLevel === 5 ? Object.keys(basicKanjiLevels).length : 0);
+    kanjiLevelMap.set(kanji.id, currentLevel);
+    levelCounts[currentLevel]++;
   }
 
   // Log distribution
+  console.log("   Distribution summary:");
+  console.log(`     Total kanji: ${kanjiList.length}`);
+  console.log(`     Target per level: ${TARGET_PER_LEVEL}`);
+
+  // Show sample levels
+  console.log("   Sample kanji per level:");
+  for (const level of [1, 2, 3, 5, 10, 20, 30, 40, 50, 60]) {
+    console.log(`     Level ${level}: ${levelCounts[level] || 0} kanji`);
+  }
+
+  // JLPT stats
   const jlptCounts = { N5: 0, N4: 0, N3: 0, N2: 0, N1: 0, unknown: 0 };
   for (const kanji of kanjiList) {
     const jlpt = kanji.jlptLevel;
@@ -318,20 +313,8 @@ function calculateKanjiLevels(kanjiList: KanjiData[]): Map<number, number> {
     else if (jlpt === 1) jlptCounts.N1++;
     else jlptCounts.unknown++;
   }
-
-  console.log("   JLPT distribution:");
-  console.log(`     N5: ${jlptCounts.N5} kanji -> levels 1-10`);
-  console.log(`     N4: ${jlptCounts.N4} kanji -> levels 11-20`);
-  console.log(`     N3: ${jlptCounts.N3} kanji -> levels 21-35`);
-  console.log(`     N2: ${jlptCounts.N2} kanji -> levels 36-50`);
-  console.log(`     N1: ${jlptCounts.N1} kanji -> levels 51-60`);
-  console.log(`     Unknown: ${jlptCounts.unknown} kanji -> levels 30-60 (by frequency)`);
-
-  // Show sample level distribution
-  console.log("   Sample kanji per level:");
-  for (const level of [1, 2, 3, 5, 10]) {
-    console.log(`     Level ${level}: ${levelCounts[level] || 0} kanji`);
-  }
+  console.log("   JLPT breakdown in source data:");
+  console.log(`     N5: ${jlptCounts.N5}, N4: ${jlptCounts.N4}, N3: ${jlptCounts.N3}, N2: ${jlptCounts.N2}, N1: ${jlptCounts.N1}, Unknown: ${jlptCounts.unknown}`);
 
   return kanjiLevelMap;
 }
