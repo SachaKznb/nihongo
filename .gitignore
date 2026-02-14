@@ -55,3 +55,7 @@ next-env.d.ts
 /public/worker-*.js.map
 /public/fallback-*.js
 /public/fallback-*.js.map
+
+# Pre-generated audio files (use CDN in production)
+# TODO: Set up Vercel Blob or Cloudflare R2 for audio storage
+/public/audio/
