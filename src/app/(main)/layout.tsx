@@ -3,6 +3,7 @@ import Link from "next/link";
 import { auth, signOut } from "@/lib/auth";
 import NotificationInbox from "@/components/NotificationInbox";
 import MobileNav from "@/components/MobileNav";
+import DesktopNav from "@/components/DesktopNav";
 
 export default async function MainLayout({
   children,
@@ -26,78 +27,17 @@ export default async function MainLayout({
   }
 
   return (
-    <div className="min-h-scréén bg-stone-50">
+    <div className="min-h-screen bg-stone-50">
       {/* Navigation - Sticky header */}
       <nav className="bg-white border-b border-stone-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-6">
               <Link href="/dashboard" className="flex items-center gap-2">
                 <span className="text-2xl font-japanese">&#26085;</span>
                 <span className="text-lg font-bold text-stone-800">nihongo</span>
               </Link>
-              <div className="hidden md:flex items-center gap-1">
-                <Link
-                  href="/dashboard"
-                  prefetch={true}
-                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
-                >
-                  Tableau de bord
-                </Link>
-                <Link
-                  href="/lessons"
-                  prefetch={true}
-                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
-                >
-                  Leçons
-                </Link>
-                <Link
-                  href="/reviews"
-                  prefetch={true}
-                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
-                >
-                  Révisions
-                </Link>
-                <div className="w-px h-6 bg-stone-200 mx-2"></div>
-                <Link
-                  href="/radicals"
-                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
-                >
-                  Radicaux
-                </Link>
-                <Link
-                  href="/kanji"
-                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
-                >
-                  Kanji
-                </Link>
-                <Link
-                  href="/vocabulary"
-                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
-                >
-                  Vocabulaire
-                </Link>
-                <div className="w-px h-6 bg-stone-200 mx-2"></div>
-                <Link
-                  href="/stats"
-                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
-                >
-                  Stats
-                </Link>
-                <Link
-                  href="/leaderboard"
-                  className="px-4 py-2 text-sm text-stone-600 hover:text-stone-900 hover:bg-stone-100 rounded-lg transition-colors"
-                >
-                  Classement
-                </Link>
-                <div className="w-px h-6 bg-stone-200 mx-2"></div>
-                <Link
-                  href="/rewards"
-                  className="px-4 py-2 text-sm text-amber-600 hover:text-amber-700 hover:bg-amber-50 rounded-lg transition-colors font-medium"
-                >
-                  Récompenses
-                </Link>
-              </div>
+              <DesktopNav />
             </div>
             <div className="flex items-center gap-2">
               {/* Notification Inbox */}

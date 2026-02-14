@@ -14,15 +14,18 @@ export default function MobileNav({ userName }: MobileNavProps) {
 
   const navLinks = [
     { href: "/dashboard", label: "Tableau de bord", icon: "🏠" },
-    { href: "/lessons", label: "Leçons", icon: "📚" },
-    { href: "/reviews", label: "Révisions", icon: "🔄" },
+    { href: "/lessons", label: "Lecons", icon: "📚" },
+    { href: "/reviews", label: "Revisions", icon: "🔄" },
+    { href: "/reading-practice", label: "Lecture", icon: "📖" },
     { href: "/radicals", label: "Radicaux", icon: "部" },
     { href: "/kanji", label: "Kanji", icon: "漢" },
     { href: "/vocabulary", label: "Vocabulaire", icon: "語" },
+    { href: "/grammar", label: "Grammaire", icon: "文" },
     { href: "/stats", label: "Statistiques", icon: "📊" },
     { href: "/leaderboard", label: "Classement", icon: "🏆" },
-    { href: "/rewards", label: "Récompenses", icon: "🎁", highlight: true },
-    { href: "/settings", label: "Paramètres", icon: "⚙️" },
+    { href: "/levels", label: "Niveaux", icon: "📈" },
+    { href: "/rewards", label: "Recompenses", icon: "🎁", highlight: true },
+    { href: "/settings", label: "Parametres", icon: "⚙️" },
   ];
 
   const isActive = (href: string) => pathname === href;
