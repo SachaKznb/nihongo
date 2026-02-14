@@ -110,10 +110,12 @@ export async function GET() {
   }
 
   // Count pending lessons and reviews
-  const pendingLessons =
+  // pendingLessons shows how many are available in the next batch (capped at lessonsPerDay)
+  const totalUnlocked =
     radicalProgress.filter((rp) => rp.srsStage === SRS_STAGES.LOCKED).length +
     kanjiProgress.filter((kp) => kp.srsStage === SRS_STAGES.LOCKED).length +
     vocabProgress.filter((vp) => vp.srsStage === SRS_STAGES.LOCKED).length;
+  const pendingLessons = Math.min(totalUnlocked, user.lessonsPerDay);
 
   const pendingReviews =
     radicalProgress.filter((rp) => rp.srsStage >= 1 && rp.srsStage < 9 && rp.nextReviewAt && rp.nextReviewAt <= now).length +
