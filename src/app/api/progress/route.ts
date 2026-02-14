@@ -77,10 +77,15 @@ export async function GET() {
     }),
   ]);
 
-  // Calculate learned counts
+  // Calculate learned counts (stage 1+ = started, stage 5+ = guru/mastered)
   const learnedRadicals = radicalProgress.filter((rp) => rp.srsStage >= 1).length;
   const learnedKanji = kanjiProgress.filter((kp) => kp.srsStage >= 1).length;
   const learnedVocabulary = vocabProgress.filter((vp) => vp.srsStage >= 1).length;
+
+  // Guru counts (stage 5+) - these are what matter for unlocking next items
+  const guruRadicals = radicalProgress.filter((rp) => rp.srsStage >= 5).length;
+  const guruKanji = kanjiProgress.filter((kp) => kp.srsStage >= 5).length;
+  const guruVocabulary = vocabProgress.filter((vp) => vp.srsStage >= 5).length;
 
   // Calculate SRS breakdown in one pass
   const srsBreakdown: SrsBreakdown = {
@@ -192,6 +197,9 @@ export async function GET() {
     learnedRadicals,
     learnedKanji,
     learnedVocabulary,
+    guruRadicals,
+    guruKanji,
+    guruVocabulary,
     srsBreakdown,
     pendingLessons,
     pendingReviews,

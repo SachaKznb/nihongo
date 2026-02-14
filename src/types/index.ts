@@ -131,6 +131,9 @@ export interface UserProgress {
   learnedRadicals: number;
   learnedKanji: number;
   learnedVocabulary: number;
+  guruRadicals: number;
+  guruKanji: number;
+  guruVocabulary: number;
   srsBreakdown: SrsBreakdown;
   pendingLessons: number;
   pendingReviews: number;

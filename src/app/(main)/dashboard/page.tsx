@@ -483,52 +483,67 @@ export default function DashboardPage() {
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-stone-500 flex items-center gap-2">
                   <span className="w-3 h-3 gradient-radical rounded-full"></span>
-                  Radicaux
+                  Radicaux Guru
                 </span>
                 <span className="font-bold font-display text-stone-700">
-                  {progress.learnedRadicals}/{progress.totalRadicals}
+                  {progress.guruRadicals}/{progress.totalRadicals}
                 </span>
               </div>
               <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
                 <div
                   className="h-full gradient-radical rounded-full transition-all"
-                  style={{ width: `${progress.totalRadicals > 0 ? (progress.learnedRadicals / progress.totalRadicals) * 100 : 0}%` }}
+                  style={{ width: `${progress.totalRadicals > 0 ? (progress.guruRadicals / progress.totalRadicals) * 100 : 0}%` }}
                 ></div>
               </div>
+              {progress.learnedRadicals > progress.guruRadicals && (
+                <p className="text-xs text-stone-400 mt-1">
+                  {progress.learnedRadicals - progress.guruRadicals} en apprentissage
+                </p>
+              )}
             </div>
             <div>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-stone-500 flex items-center gap-2">
                   <span className="w-3 h-3 gradient-kanji rounded-full"></span>
-                  Kanji
+                  Kanji Guru
                 </span>
                 <span className="font-bold font-display text-stone-700">
-                  {progress.learnedKanji}/{progress.totalKanji}
+                  {progress.guruKanji}/{progress.totalKanji}
                 </span>
               </div>
               <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
                 <div
                   className="h-full gradient-kanji rounded-full transition-all"
-                  style={{ width: `${progress.totalKanji > 0 ? (progress.learnedKanji / progress.totalKanji) * 100 : 0}%` }}
+                  style={{ width: `${progress.totalKanji > 0 ? (progress.guruKanji / progress.totalKanji) * 100 : 0}%` }}
                 ></div>
               </div>
+              {progress.learnedKanji > progress.guruKanji && (
+                <p className="text-xs text-stone-400 mt-1">
+                  {progress.learnedKanji - progress.guruKanji} en apprentissage
+                </p>
+              )}
             </div>
             <div>
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-stone-500 flex items-center gap-2">
                   <span className="w-3 h-3 gradient-vocab rounded-full"></span>
-                  Vocabulaire
+                  Vocabulaire Guru
                 </span>
                 <span className="font-bold font-display text-stone-700">
-                  {progress.learnedVocabulary}/{progress.totalVocabulary}
+                  {progress.guruVocabulary}/{progress.totalVocabulary}
                 </span>
               </div>
               <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
                 <div
                   className="h-full gradient-vocab rounded-full transition-all"
-                  style={{ width: `${progress.totalVocabulary > 0 ? (progress.learnedVocabulary / progress.totalVocabulary) * 100 : 0}%` }}
+                  style={{ width: `${progress.totalVocabulary > 0 ? (progress.guruVocabulary / progress.totalVocabulary) * 100 : 0}%` }}
                 ></div>
               </div>
+              {progress.learnedVocabulary > progress.guruVocabulary && (
+                <p className="text-xs text-stone-400 mt-1">
+                  {progress.learnedVocabulary - progress.guruVocabulary} en apprentissage
+                </p>
+              )}
             </div>
           </div>
         </div>

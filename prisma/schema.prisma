@@ -15,7 +15,7 @@ model User {
   passwordHash    String
   username        String    @unique
   currentLevel    Int       @default(1)
-  lessonsPerDay   Int       @default(20)
+  lessonsPerDay   Int       @default(15)
   lessonBatchSize Int       @default(5)   // Learn 5, quiz 5, repeat (WaniKani-style)
   reviewBatchSize Int       @default(10)
   autoplayAudio   Boolean   @default(true)
