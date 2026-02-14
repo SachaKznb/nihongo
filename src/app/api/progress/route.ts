@@ -57,6 +57,7 @@ export async function GET() {
     radicalProgress,
     kanjiProgress,
     vocabProgress,
+    grammarProgress,
     todayReviews,
     todayLessonsCount,
   ] = await Promise.all([
@@ -74,6 +75,10 @@ export async function GET() {
     prisma.userVocabularyProgress.findMany({
       where: { userId },
       include: { vocabulary: { select: { levelId: true } } }
+    }),
+    prisma.userGrammarProgress.findMany({
+      where: { userId },
+      include: { grammar: { select: { levelId: true } } }
     }),
     prisma.review.findMany({
       where: { userId, createdAt: { gte: todayStart } },
@@ -125,7 +130,8 @@ export async function GET() {
   const totalUnlocked =
     radicalProgress.filter((rp) => rp.srsStage === SRS_STAGES.LOCKED && rp.radical.levelId <= maxLevel).length +
     kanjiProgress.filter((kp) => kp.srsStage === SRS_STAGES.LOCKED && kp.kanji.levelId <= maxLevel).length +
-    vocabProgress.filter((vp) => vp.srsStage === SRS_STAGES.LOCKED && vp.vocabulary.levelId <= maxLevel).length;
+    vocabProgress.filter((vp) => vp.srsStage === SRS_STAGES.LOCKED && vp.vocabulary.levelId <= maxLevel).length +
+    grammarProgress.filter((gp) => gp.srsStage === SRS_STAGES.LOCKED && gp.grammar.levelId <= maxLevel).length;
   const pendingLessons = Math.min(totalUnlocked, user.lessonsPerDay);
 
   const pendingReviews =
