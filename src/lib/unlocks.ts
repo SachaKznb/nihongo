@@ -82,7 +82,8 @@ export async function checkLevelUp(userId: string): Promise<boolean> {
   return percentage >= LEVEL_UP_PERCENTAGE;
 }
 
-// Unlock all available items for a user (optimized with batch operations)
+// Unlock items in batches - only unlocks enough to fill up to user's lessonsPerDay
+// This prevents overwhelming users with 100+ lessons at once
 export async function unlockAvailableItems(userId: string): Promise<{
   radicals: number;
   kanji: number;
@@ -93,77 +94,117 @@ export async function unlockAvailableItems(userId: string): Promise<{
   if (!user) return { radicals: 0, kanji: 0, vocabulary: 0, grammar: 0 };
 
   const now = new Date();
+  const batchSize = user.lessonsPerDay; // Only unlock up to this many items
 
   // Fetch all data in parallel
-  const [levelRadicals, levelKanji, levelVocabulary, levelGrammar, existingRadicalProgress, existingKanjiProgress, existingVocabProgress, existingGrammarProgress, allRadicalProgress] = await Promise.all([
-    prisma.radical.findMany({ where: { levelId: user.currentLevel } }),
-    prisma.kanji.findMany({ where: { levelId: user.currentLevel }, include: { radicals: true } }),
-    prisma.vocabulary.findMany({ where: { levelId: user.currentLevel }, include: { kanji: true } }),
-    prisma.grammarPoint.findMany({ where: { levelId: user.currentLevel } }),
+  const [levelRadicals, levelKanji, levelVocabulary, levelGrammar, existingRadicalProgress, existingKanjiProgress, existingVocabProgress, existingGrammarProgress] = await Promise.all([
+    prisma.radical.findMany({ where: { levelId: user.currentLevel }, orderBy: { id: 'asc' } }),
+    prisma.kanji.findMany({ where: { levelId: user.currentLevel }, include: { radicals: true }, orderBy: { id: 'asc' } }),
+    prisma.vocabulary.findMany({ where: { levelId: user.currentLevel }, include: { kanji: true }, orderBy: { id: 'asc' } }),
+    prisma.grammarPoint.findMany({ where: { levelId: user.currentLevel }, orderBy: { id: 'asc' } }),
     prisma.userRadicalProgress.findMany({ where: { userId } }),
     prisma.userKanjiProgress.findMany({ where: { userId } }),
     prisma.userVocabularyProgress.findMany({ where: { userId } }),
     prisma.userGrammarProgress.findMany({ where: { userId } }),
-    prisma.userRadicalProgress.findMany({ where: { userId } }), // For checking guru status
   ]);
 
-  // Create sets for fast lookup
+  // Create sets and maps for fast lookup
   const existingRadicalIds = new Set(existingRadicalProgress.map(p => p.radicalId));
   const existingKanjiIds = new Set(existingKanjiProgress.map(p => p.kanjiId));
   const existingVocabIds = new Set(existingVocabProgress.map(p => p.vocabularyId));
   const existingGrammarIds = new Set(existingGrammarProgress.map(p => p.grammarId));
 
-  // Map for radical progress lookup
-  const radicalProgressMap = new Map<number, number>(allRadicalProgress.map(p => [p.radicalId, p.srsStage]));
+  const radicalProgressMap = new Map<number, number>(existingRadicalProgress.map(p => [p.radicalId, p.srsStage]));
   const kanjiProgressMap = new Map<number, number>(existingKanjiProgress.map(p => [p.kanjiId, p.srsStage]));
 
-  // Find radicals to unlock
-  const radicalsToUnlock = levelRadicals
-    .filter(r => !existingRadicalIds.has(r.id))
-    .map(r => ({
-      userId,
-      radicalId: r.id,
-      srsStage: SRS_STAGES.LOCKED,
-      unlockedAt: now,
-    }));
+  // Count currently pending lessons (stage 0 = LOCKED but unlocked)
+  const currentPendingLessons =
+    existingRadicalProgress.filter(p => p.srsStage === SRS_STAGES.LOCKED).length +
+    existingKanjiProgress.filter(p => p.srsStage === SRS_STAGES.LOCKED).length +
+    existingVocabProgress.filter(p => p.srsStage === SRS_STAGES.LOCKED).length +
+    existingGrammarProgress.filter(p => p.srsStage === SRS_STAGES.LOCKED).length;
 
-  // Find kanji to unlock (all radicals at Guru+)
-  const kanjiToUnlock = levelKanji
-    .filter(k => {
-      if (existingKanjiIds.has(k.id)) return false;
-      if (k.radicals.length === 0) return true;
-      return k.radicals.every(kr => (radicalProgressMap.get(kr.radicalId) ?? 0) >= GURU_THRESHOLD);
-    })
-    .map(k => ({
-      userId,
-      kanjiId: k.id,
-      srsStage: SRS_STAGES.LOCKED,
-      unlockedAt: now,
-    }));
+  // Calculate how many new items we can unlock
+  let remainingSlots = Math.max(0, batchSize - currentPendingLessons);
 
-  // Find vocabulary to unlock (all kanji at Guru+)
-  const vocabToUnlock = levelVocabulary
-    .filter(v => {
-      if (existingVocabIds.has(v.id)) return false;
-      if (v.kanji.length === 0) return true;
-      return v.kanji.every(vk => (kanjiProgressMap.get(vk.kanjiId) ?? 0) >= GURU_THRESHOLD);
-    })
-    .map(v => ({
-      userId,
-      vocabularyId: v.id,
-      srsStage: SRS_STAGES.LOCKED,
-      unlockedAt: now,
-    }));
+  // If user already has enough pending lessons, don't unlock more
+  if (remainingSlots === 0) {
+    return { radicals: 0, kanji: 0, vocabulary: 0, grammar: 0 };
+  }
 
-  // Find grammar to unlock (unlocks immediately when user reaches the level, same as radicals)
-  const grammarToUnlock = levelGrammar
-    .filter(g => !existingGrammarIds.has(g.id))
-    .map(g => ({
-      userId,
-      grammarId: g.id,
-      srsStage: SRS_STAGES.LOCKED,
-      unlockedAt: now,
-    }));
+  // Priority order: Radicals -> Kanji (if radicals guru) -> Vocab (if kanji guru) -> Grammar
+  const radicalsToUnlock: { userId: string; radicalId: number; srsStage: number; unlockedAt: Date }[] = [];
+  const kanjiToUnlock: { userId: string; kanjiId: number; srsStage: number; unlockedAt: Date }[] = [];
+  const vocabToUnlock: { userId: string; vocabularyId: number; srsStage: number; unlockedAt: Date }[] = [];
+  const grammarToUnlock: { userId: string; grammarId: number; srsStage: number; unlockedAt: Date }[] = [];
+
+  // 1. Unlock radicals first (up to remaining slots)
+  for (const r of levelRadicals) {
+    if (remainingSlots <= 0) break;
+    if (!existingRadicalIds.has(r.id)) {
+      radicalsToUnlock.push({
+        userId,
+        radicalId: r.id,
+        srsStage: SRS_STAGES.LOCKED,
+        unlockedAt: now,
+      });
+      remainingSlots--;
+    }
+  }
+
+  // 2. Unlock kanji (only if all their radicals are at Guru+)
+  for (const k of levelKanji) {
+    if (remainingSlots <= 0) break;
+    if (existingKanjiIds.has(k.id)) continue;
+
+    // Check if all radicals are at Guru+
+    const canUnlock = k.radicals.length === 0 ||
+      k.radicals.every(kr => (radicalProgressMap.get(kr.radicalId) ?? 0) >= GURU_THRESHOLD);
+
+    if (canUnlock) {
+      kanjiToUnlock.push({
+        userId,
+        kanjiId: k.id,
+        srsStage: SRS_STAGES.LOCKED,
+        unlockedAt: now,
+      });
+      remainingSlots--;
+    }
+  }
+
+  // 3. Unlock vocabulary (only if all their kanji are at Guru+)
+  for (const v of levelVocabulary) {
+    if (remainingSlots <= 0) break;
+    if (existingVocabIds.has(v.id)) continue;
+
+    // Check if all kanji are at Guru+
+    const canUnlock = v.kanji.length === 0 ||
+      v.kanji.every(vk => (kanjiProgressMap.get(vk.kanjiId) ?? 0) >= GURU_THRESHOLD);
+
+    if (canUnlock) {
+      vocabToUnlock.push({
+        userId,
+        vocabularyId: v.id,
+        srsStage: SRS_STAGES.LOCKED,
+        unlockedAt: now,
+      });
+      remainingSlots--;
+    }
+  }
+
+  // 4. Unlock grammar (unlocks like radicals, no prerequisites)
+  for (const g of levelGrammar) {
+    if (remainingSlots <= 0) break;
+    if (!existingGrammarIds.has(g.id)) {
+      grammarToUnlock.push({
+        userId,
+        grammarId: g.id,
+        srsStage: SRS_STAGES.LOCKED,
+        unlockedAt: now,
+      });
+      remainingSlots--;
+    }
+  }
 
   // Batch create all unlocks
   await Promise.all([
@@ -178,6 +219,71 @@ export async function unlockAvailableItems(userId: string): Promise<{
     kanji: kanjiToUnlock.length,
     vocabulary: vocabToUnlock.length,
     grammar: grammarToUnlock.length,
+  };
+}
+
+// Clean up excess unlocked items (re-lock items that haven't been started yet)
+// Use this to fix users who have too many pending lessons
+export async function cleanupExcessUnlocks(userId: string, keepCount: number = 20): Promise<{
+  radicals: number;
+  kanji: number;
+  vocabulary: number;
+}> {
+  // Find all LOCKED (stage 0) items - these are unlocked but not started
+  const [radicals, kanji, vocab] = await Promise.all([
+    prisma.userRadicalProgress.findMany({
+      where: { userId, srsStage: SRS_STAGES.LOCKED },
+      orderBy: { unlockedAt: 'asc' }, // Keep oldest first
+    }),
+    prisma.userKanjiProgress.findMany({
+      where: { userId, srsStage: SRS_STAGES.LOCKED },
+      orderBy: { unlockedAt: 'asc' },
+    }),
+    prisma.userVocabularyProgress.findMany({
+      where: { userId, srsStage: SRS_STAGES.LOCKED },
+      orderBy: { unlockedAt: 'asc' },
+    }),
+  ]);
+
+  // Calculate how many to keep vs remove
+  const totalLocked = radicals.length + kanji.length + vocab.length;
+  if (totalLocked <= keepCount) {
+    return { radicals: 0, kanji: 0, vocabulary: 0 };
+  }
+
+  // Keep the first `keepCount` items (oldest unlocked first)
+  // Priority: radicals -> kanji -> vocab (keep radicals, remove vocab first)
+  let toKeep = keepCount;
+
+  const radicalsToKeep = radicals.slice(0, toKeep);
+  toKeep = Math.max(0, toKeep - radicals.length);
+
+  const kanjiToKeep = kanji.slice(0, toKeep);
+  toKeep = Math.max(0, toKeep - kanji.length);
+
+  const vocabToKeep = vocab.slice(0, toKeep);
+
+  // Delete excess items
+  const radicalsToDelete = radicals.slice(radicalsToKeep.length);
+  const kanjiToDelete = kanji.slice(kanjiToKeep.length);
+  const vocabToDelete = vocab.slice(vocabToKeep.length);
+
+  await Promise.all([
+    radicalsToDelete.length > 0 ? prisma.userRadicalProgress.deleteMany({
+      where: { userId, radicalId: { in: radicalsToDelete.map(r => r.radicalId) }, srsStage: SRS_STAGES.LOCKED }
+    }) : Promise.resolve(),
+    kanjiToDelete.length > 0 ? prisma.userKanjiProgress.deleteMany({
+      where: { userId, kanjiId: { in: kanjiToDelete.map(k => k.kanjiId) }, srsStage: SRS_STAGES.LOCKED }
+    }) : Promise.resolve(),
+    vocabToDelete.length > 0 ? prisma.userVocabularyProgress.deleteMany({
+      where: { userId, vocabularyId: { in: vocabToDelete.map(v => v.vocabularyId) }, srsStage: SRS_STAGES.LOCKED }
+    }) : Promise.resolve(),
+  ]);
+
+  return {
+    radicals: radicalsToDelete.length,
+    kanji: kanjiToDelete.length,
+    vocabulary: vocabToDelete.length,
   };
 }
 
