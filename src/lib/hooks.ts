@@ -60,6 +60,7 @@ export function useLessons() {
   const { data, error, isLoading, mutate } = useSWR<{
     lessons: LessonItem[];
     total: number;
+    batchSize: number;
   }>("/api/lessons", fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: true,

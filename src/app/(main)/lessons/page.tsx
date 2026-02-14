@@ -26,6 +26,7 @@ export default function LessonsPage() {
   const [started, setStarted] = useState(false);
 
   const lessons: LessonItem[] = data?.lessons || [];
+  const batchSize = data?.batchSize ?? 5;
 
   if (isLoading) {
     return (
@@ -73,7 +74,7 @@ export default function LessonsPage() {
   }
 
   if (started) {
-    return <LessonSession lessons={lessons} />;
+    return <LessonSession lessons={lessons} batchSize={batchSize} />;
   }
 
   // Count by type

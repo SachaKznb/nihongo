@@ -10,9 +10,10 @@ import { useToast } from "@/components/ui/Toast";
 
 interface LessonSessionProps {
   lessons: LessonItem[];
+  batchSize?: number;
 }
 
-type SessionPhase = "learning" | "quiz" | "complété";
+type SessionPhase = "learning" | "quiz" | "batch-complete" | "all-complete";
 
 const CORRECT_MESSAGES = [
   "Parfait !",
@@ -24,24 +25,42 @@ const CORRECT_MESSAGES = [
 ];
 
 const INCORRECT_MESSAGES = [
-  "Pas tout à fait...",
+  "Pas tout a fait...",
   "Presque !",
-  "Continue comme ça !",
+  "Continue comme ca !",
   "Tu y es presque !",
 ];
 
-export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
+export function LessonSession({ lessons: initialLessons, batchSize = 5 }: LessonSessionProps) {
   const router = useRouter();
   const { addToast } = useToast();
   const [lessons, setLessons] = useState<LessonItem[]>(initialLessons);
+
+  // Batch tracking
+  const [currentBatchIndex, setCurrentBatchIndex] = useState(0);
+  const totalBatches = Math.ceil(lessons.length / batchSize);
+
+  // Current batch items
+  const getCurrentBatch = () => {
+    const start = currentBatchIndex * batchSize;
+    const end = Math.min(start + batchSize, lessons.length);
+    return lessons.slice(start, end);
+  };
+
+  const [currentBatch, setCurrentBatch] = useState<LessonItem[]>(getCurrentBatch());
   const [currentIndex, setCurrentIndex] = useState(0);
   const [phase, setPhase] = useState<SessionPhase>("learning");
+
+  // Quiz state
   const [quizItems, setQuizItems] = useState<LessonItem[]>([]);
   const [quizIndex, setQuizIndex] = useState(0);
   const [answer, setAnswer] = useState("");
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [completedLessons, setCompletedLessons] = useState<Set<number>>(new Set());
+  const [completedInBatch, setCompletedInBatch] = useState<Set<number>>(new Set());
+  const [allCompletedIds, setAllCompletedIds] = useState<Set<number>>(new Set());
+
+  // UI state
   const [showXpAnimation, setShowXpAnimation] = useState(false);
   const [earnedXp, setEarnedXp] = useState(0);
   const [resultMessage, setResultMessage] = useState("");
@@ -49,8 +68,16 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
   const [generatingType, setGeneratingType] = useState<"meaning" | "reading" | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const currentLesson = lessons[currentIndex];
+  const currentLesson = currentBatch[currentIndex];
   const currentQuizItem = quizItems[quizIndex];
+
+  // Update current batch when batch index changes
+  useEffect(() => {
+    const batch = getCurrentBatch();
+    setCurrentBatch(batch);
+    setCurrentIndex(0);
+    setCompletedInBatch(new Set());
+  }, [currentBatchIndex]);
 
   // Handle mnemonic generation
   const handleGenerateMnemonic = async (mnemonicType: "meaning" | "reading", forceRegenerate: boolean = false) => {
@@ -73,7 +100,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
 
       if (!response.ok) {
         if (response.status === 402 && data.requiresCredits) {
-          addToast("Tu n'as plus de crédits IA pour régénérer ce mnémonique. Mais tu peux continuer tes leçons normalement !", "warning");
+          addToast("Tu n'as plus de credits IA pour regenerer ce mnemonique. Mais tu peux continuer tes lecons normalement !", "warning");
           return;
         }
         throw new Error(data.error || "Generation failed");
@@ -95,17 +122,31 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
         })
       );
 
+      // Also update current batch
+      setCurrentBatch((prev) =>
+        prev.map((lesson) => {
+          if (lesson.type === currentLesson.type && lesson.id === currentLesson.id) {
+            if (mnemonicType === "meaning") {
+              return { ...lesson, customMnemonic: mnemonic };
+            } else {
+              return { ...lesson, customReadingMnemonic: mnemonic };
+            }
+          }
+          return lesson;
+        })
+      );
+
       if (forceRegenerate) {
-        addToast("Mnémonique régénéré ! (1 crédit utilisé)", "success");
+        addToast("Mnemonique regenere ! (1 credit utilise)", "success");
       } else if (fromCache) {
-        addToast("Mnémonique IA appliqué !", "success");
+        addToast("Mnemonique IA applique !", "success");
       } else {
-        addToast("Mnémonique créé avec l'IA !", "success");
+        addToast("Mnemonique cree avec l'IA !", "success");
       }
     } catch (error) {
       console.error("Mnemonic generation error:", error);
       addToast(
-        error instanceof Error ? error.message : "Erreur lors de la génération",
+        error instanceof Error ? error.message : "Erreur lors de la generation",
         "error"
       );
     } finally {
@@ -125,10 +166,12 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
   };
 
   const handleNext = () => {
-    if (currentIndex < lessons.length - 1) {
+    if (currentIndex < currentBatch.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      setQuizItems([...lessons].sort(() => Math.random() - 0.5));
+      // End of learning phase for this batch - start quiz
+      setQuizItems([...currentBatch].sort(() => Math.random() - 0.5));
+      setQuizIndex(0);
       setPhase("quiz");
     }
   };
@@ -158,8 +201,9 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
       setEarnedXp(10);
 
       // Complete lesson with proper error handling
-      if (!completedLessons.has(currentQuizItem.id)) {
-        setCompletedLessons(new Set([...completedLessons, currentQuizItem.id]));
+      if (!completedInBatch.has(currentQuizItem.id)) {
+        setCompletedInBatch(new Set([...completedInBatch, currentQuizItem.id]));
+        setAllCompletedIds(new Set([...allCompletedIds, currentQuizItem.id]));
 
         fetch("/api/lessons/complete", {
           method: "POST",
@@ -176,7 +220,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
           })
           .catch((error) => {
             console.error("Error completing lesson:", error);
-            addToast("Erreur de sauvegarde. Votre progression sera resynchronisée.", "warning");
+            addToast("Erreur de sauvegarde. Votre progression sera resynchronisee.", "warning");
           });
       }
     } else {
@@ -188,7 +232,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
   useEffect(() => {
     if (!showResult) return;
 
-    const delay = isCorrect ? 3000 : 4000; // 3s for correct, 4s for incorrect to read
+    const delay = isCorrect ? 3000 : 4000;
     const timer = setTimeout(() => {
       advanceToNext();
     }, delay);
@@ -203,19 +247,36 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
 
     if (quizIndex < quizItems.length - 1) {
       setQuizIndex(quizIndex + 1);
-    } else if (completedLessons.size === lessons.length) {
-      setPhase("complété");
+    } else if (completedInBatch.size === currentBatch.length) {
+      // All items in this batch completed
+      if (currentBatchIndex < totalBatches - 1) {
+        // More batches to go
+        setPhase("batch-complete");
+      } else {
+        // All batches done
+        setPhase("all-complete");
+      }
     } else {
+      // Some items still need to be retried
       const remaining = quizItems.filter(
-        (item) => !completedLessons.has(item.id)
+        (item) => !completedInBatch.has(item.id)
       );
       if (remaining.length > 0) {
         setQuizItems(remaining.sort(() => Math.random() - 0.5));
         setQuizIndex(0);
       } else {
-        setPhase("complété");
+        if (currentBatchIndex < totalBatches - 1) {
+          setPhase("batch-complete");
+        } else {
+          setPhase("all-complete");
+        }
       }
     }
+  };
+
+  const startNextBatch = () => {
+    setCurrentBatchIndex(currentBatchIndex + 1);
+    setPhase("learning");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -231,10 +292,94 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
     }
   }, [phase, quizIndex, showResult]);
 
-  if (phase === "complété") {
+  // Batch complete screen
+  if (phase === "batch-complete") {
+    const batchXp = currentBatch.length * 10;
+    const remainingItems = lessons.length - (currentBatchIndex + 1) * batchSize;
+    const nextBatchSize = Math.min(batchSize, remainingItems);
+
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-md relative overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(12)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute animate-float-up"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 2}s`,
+                  animationDuration: `${3 + Math.random() * 2}s`,
+                }}
+              >
+                <span className="text-2xl opacity-60">
+                  {["✨", "🌟", "⭐"][Math.floor(Math.random() * 3)]}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="relative z-10">
+            <div className="text-7xl mb-4">🎯</div>
+            <h2 className="text-2xl font-bold font-display text-stone-900 mb-2">
+              Lot {currentBatchIndex + 1} termine !
+            </h2>
+            <p className="text-stone-600 mb-4">
+              {currentBatch.length} element{currentBatch.length > 1 ? "s" : ""} appris
+            </p>
+
+            {/* XP earned card */}
+            <div className="bg-gradient-to-r from-emerald-400 to-teal-500 rounded-2xl p-4 mb-4 text-white shadow-lg">
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-2xl">⚡</span>
+                <span className="text-2xl font-bold font-display">+{batchXp} XP</span>
+              </div>
+            </div>
+
+            {/* Progress indicator */}
+            <div className="bg-stone-100 rounded-xl p-4 mb-6">
+              <div className="flex justify-between text-sm text-stone-600 mb-2">
+                <span>Progression totale</span>
+                <span className="font-medium">{allCompletedIds.size}/{lessons.length}</span>
+              </div>
+              <div className="w-full bg-stone-200 rounded-full h-3">
+                <div
+                  className="bg-gradient-to-r from-emerald-400 to-teal-500 h-3 rounded-full transition-all duration-500"
+                  style={{ width: `${(allCompletedIds.size / lessons.length) * 100}%` }}
+                />
+              </div>
+              <p className="text-stone-500 text-sm mt-2">
+                Encore {remainingItems} element{remainingItems > 1 ? "s" : ""} a apprendre
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Button onClick={startNextBatch} className="w-full">
+                Continuer ({nextBatchSize} suivants)
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => router.push("/dashboard")}
+                className="w-full"
+              >
+                Pause - Retour au tableau de bord
+              </Button>
+            </div>
+
+            <p className="text-stone-400 text-xs mt-4">
+              Ces elements apparaitront dans tes revisions dans 4 heures.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // All complete screen
+  if (phase === "all-complete") {
     const totalXp = lessons.length * 10;
     return (
-      <div className="min-h-scréén bg-gradient-to-b from-emerald-50 to-teal-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 text-center max-w-md relative overflow-hidden">
           {/* Celebration background */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -258,10 +403,10 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
           <div className="relative z-10">
             <div className="text-8xl mb-6 animate-bounce">🎉</div>
             <h2 className="text-3xl font-bold font-display text-stone-900 mb-2">
-              Félicitations !
+              Felicitations !
             </h2>
             <p className="text-stone-600 mb-6">
-              Tu as complete {lessons.length} leçon{lessons.length > 1 ? "s" : ""} !
+              Tu as complete {lessons.length} lecon{lessons.length > 1 ? "s" : ""} !
             </p>
 
             {/* XP earned card */}
@@ -270,11 +415,11 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
                 <span className="text-4xl">⚡</span>
                 <span className="text-4xl font-bold font-display">+{totalXp} XP</span>
               </div>
-              <p className="text-emerald-100 text-sm mt-2">Ajoutés à ton score !</p>
+              <p className="text-emerald-100 text-sm mt-2">Ajoutes a ton score !</p>
             </div>
 
             <p className="text-stone-500 text-sm mb-6">
-              Ces éléments apparaîtront dans tes révisions dans 4 heures.
+              Ces elements apparaitront dans tes revisions dans 4 heures.
             </p>
 
             <div className="space-y-3">
@@ -286,7 +431,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
                 onClick={() => router.push("/lessons")}
                 className="w-full"
               >
-                Continuer les leçons
+                Continuer les lecons
               </Button>
             </div>
           </div>
@@ -297,21 +442,28 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
 
   if (phase === "quiz") {
     return (
-      <div className="min-h-scréén bg-gray-50 p-4">
+      <div className="min-h-screen bg-gray-50 p-4">
         <div className="max-w-2xl mx-auto">
+          {/* Batch indicator */}
+          <div className="text-center mb-2">
+            <span className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
+              Lot {currentBatchIndex + 1}/{totalBatches}
+            </span>
+          </div>
+
           {/* Progress */}
           <div className="mb-6">
             <div className="flex justify-between text-sm text-gray-600 mb-2">
               <span>Quiz</span>
               <span className="font-medium">
-                {completedLessons.size}/{lessons.length}
+                {completedInBatch.size}/{currentBatch.length}
               </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-gradient-to-r from-emerald-400 to-teal-500 h-2 rounded-full transition-all duration-500"
                 style={{
-                  width: `${(completedLessons.size / lessons.length) * 100}%`,
+                  width: `${(completedInBatch.size / currentBatch.length) * 100}%`,
                 }}
               />
             </div>
@@ -383,7 +535,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
                       value={answer}
                       onChange={(e) => setAnswer(e.target.value)}
                       onKeyDown={handleKeyPress}
-                      placeholder="Ta réponse..."
+                      placeholder="Ta reponse..."
                       autoFocus
                       className="text-center text-lg"
                     />
@@ -392,7 +544,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
                       disabled={!answer.trim()}
                       className="w-full"
                     >
-                      Vérifier
+                      Verifier
                     </Button>
                   </div>
                 </>
@@ -415,7 +567,7 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
                         <h3 className="text-xl font-semibold text-amber-700">{resultMessage}</h3>
                       </div>
                       <div className="bg-amber-50 rounded-xl p-4">
-                        <p className="text-stone-600 text-sm mb-1">La bonne réponse :</p>
+                        <p className="text-stone-600 text-sm mb-1">La bonne reponse :</p>
                         <p className="text-stone-900 font-bold text-lg">
                           {currentQuizItem.meaningsFr.join(", ")}
                         </p>
@@ -431,24 +583,36 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
     );
   }
 
+  // Learning phase
   return (
-    <div className="min-h-scréén bg-gray-50 p-4">
+    <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-2xl mx-auto">
+        {/* Batch indicator */}
+        <div className="text-center mb-2">
+          <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+            Lot {currentBatchIndex + 1}/{totalBatches}
+          </span>
+        </div>
+
         {/* Progress */}
         <div className="mb-6">
           <div className="flex justify-between text-sm text-gray-600 mb-2">
             <span>Apprentissage</span>
             <span>
-              {currentIndex + 1}/{lessons.length}
+              {currentIndex + 1}/{currentBatch.length}
             </span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
               className="bg-pink-500 h-2 rounded-full transition-all"
               style={{
-                width: `${((currentIndex + 1) / lessons.length) * 100}%`,
+                width: `${((currentIndex + 1) / currentBatch.length) * 100}%`,
               }}
             />
+          </div>
+          {/* Overall progress */}
+          <div className="flex justify-between text-xs text-gray-400 mt-1">
+            <span>Total: {currentBatchIndex * batchSize + currentIndex + 1}/{lessons.length}</span>
           </div>
         </div>
 
@@ -467,10 +631,10 @@ export function LessonSession({ lessons: initialLessons }: LessonSessionProps) {
             onClick={handlePrevious}
             disabled={currentIndex === 0}
           >
-            Précédent
+            Precedent
           </Button>
           <Button onClick={handleNext}>
-            {currentIndex === lessons.length - 1 ? "Quiz" : "Suivant"}
+            {currentIndex === currentBatch.length - 1 ? "Quiz" : "Suivant"}
           </Button>
         </div>
       </div>

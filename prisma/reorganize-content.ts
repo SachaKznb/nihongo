@@ -228,95 +228,124 @@ function getFrequencyRank(char: string): number {
   return KANJI_FREQUENCY[char] || 9999;
 }
 
-function calculateKanjiLevels(kanjiList: KanjiData[]): Map<number, number> {
-  console.log("\n[2/8] Calculating kanji levels (WaniKani-style: ~23 kanji per level)...");
+function calculateKanjiAndRadicalLevels(
+  kanjiList: KanjiData[],
+  radicals: RadicalData[]
+): { kanjiLevelMap: Map<number, number>; radicalLevelMap: Map<number, number> } {
+  console.log("\n[2/8] Calculating kanji AND radical levels together (WaniKani-style)...");
 
   const kanjiLevelMap = new Map<number, number>();
+  const radicalLevelMap = new Map<number, number>();
 
-  // WaniKani-style: distribute ALL kanji evenly across 60 levels
-  // Target: ~23 kanji per level (1405 / 60 = 23.4)
-  const TARGET_PER_LEVEL = 24;
+  // WaniKani targets:
+  // - ~26 radicals per level (early levels have more)
+  // - ~33 kanji per level
+  // - Kanji can only be in a level if ALL its radicals are in that level or earlier
+  const RADICALS_PER_LEVEL = 26;
+  const KANJI_PER_LEVEL = 33;
 
-  // Basic kanji that MUST be in level 1-2 (numbers, days)
-  const level1Kanji = new Set([
-    "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", // Numbers
-    "日", "上", "下", "大", "小", "人", "入", "口", "山", "川", // Basic WaniKani L1
-    "力", "工", "女", "子" // More L1 basics
-  ]);
+  // Build radical -> kanji usage map
+  const radicalToKanji = new Map<number, number[]>();
+  for (const r of radicals) {
+    radicalToKanji.set(r.id, r.kanjiIds || []);
+  }
 
-  const level2Kanji = new Set([
-    "月", "火", "水", "木", "金", "土", // Days of week
-    "中", "円", "出", "右", "左", "本", "正", "玉", "王", "目" // WaniKani L2 style
-  ]);
+  // Build kanji -> radicals map
+  const kanjiToRadicals = new Map<number, number[]>();
+  for (const k of kanjiList) {
+    kanjiToRadicals.set(k.id, k.radicalIds || []);
+  }
 
-  // Sort ALL kanji by:
-  // 1. JLPT level (N5 first, then N4, etc., unknown last)
-  // 2. Frequency rank (more common first)
+  // Sort kanji by JLPT then frequency
   const sortedKanji = [...kanjiList].sort((a, b) => {
-    // JLPT priority: 5 (N5) > 4 (N4) > 3 > 2 > 1 > null/0
     const jlptA = a.jlptLevel ?? 0;
     const jlptB = b.jlptLevel ?? 0;
-    // Higher JLPT number = easier = should come first
     if (jlptB !== jlptA) return jlptB - jlptA;
-    // Then by frequency (lower = more common = first)
     return (a.frequencyRank || 9999) - (b.frequencyRank || 9999);
   });
 
-  // Track level counts
-  const levelCounts: Record<number, number> = {};
-  for (let l = 1; l <= 60; l++) levelCounts[l] = 0;
+  // Sort radicals by how many early kanji use them (more useful = earlier)
+  const sortedRadicals = [...radicals].sort((a, b) => {
+    return (b.kanjiIds?.length || 0) - (a.kanjiIds?.length || 0);
+  });
 
-  // First pass: assign basic kanji to levels 1-2
-  for (const kanji of sortedKanji) {
-    if (level1Kanji.has(kanji.character)) {
-      kanjiLevelMap.set(kanji.id, 1);
-      levelCounts[1]++;
-    } else if (level2Kanji.has(kanji.character)) {
-      kanjiLevelMap.set(kanji.id, 2);
-      levelCounts[2]++;
+  // Track assignments
+  const levelRadicalCounts: Record<number, number> = {};
+  const levelKanjiCounts: Record<number, number> = {};
+  for (let l = 1; l <= 60; l++) {
+    levelRadicalCounts[l] = 0;
+    levelKanjiCounts[l] = 0;
+  }
+
+  // Assigned sets for quick lookup
+  const assignedRadicals = new Set<number>();
+  const assignedKanji = new Set<number>();
+
+  // Process level by level
+  for (let level = 1; level <= 60; level++) {
+    // First, assign radicals to this level (up to target)
+    for (const radical of sortedRadicals) {
+      if (assignedRadicals.has(radical.id)) continue;
+      if (levelRadicalCounts[level] >= RADICALS_PER_LEVEL) break;
+
+      radicalLevelMap.set(radical.id, level);
+      assignedRadicals.add(radical.id);
+      levelRadicalCounts[level]++;
+    }
+
+    // Then, assign kanji that can be unlocked with radicals at this level or earlier
+    for (const kanji of sortedKanji) {
+      if (assignedKanji.has(kanji.id)) continue;
+      if (levelKanjiCounts[level] >= KANJI_PER_LEVEL) break;
+
+      const requiredRadicals = kanjiToRadicals.get(kanji.id) || [];
+
+      // Check if ALL required radicals are assigned to this level or earlier
+      const canUnlock = requiredRadicals.length === 0 || requiredRadicals.every(rId => {
+        const rLevel = radicalLevelMap.get(rId);
+        return rLevel !== undefined && rLevel <= level;
+      });
+
+      if (canUnlock) {
+        kanjiLevelMap.set(kanji.id, level);
+        assignedKanji.add(kanji.id);
+        levelKanjiCounts[level]++;
+      }
     }
   }
 
-  // Second pass: distribute remaining kanji evenly across levels
-  let currentLevel = 1;
-  for (const kanji of sortedKanji) {
-    if (kanjiLevelMap.has(kanji.id)) continue; // Already assigned
-
-    // Find next level that isn't full
-    while (levelCounts[currentLevel] >= TARGET_PER_LEVEL && currentLevel < 60) {
-      currentLevel++;
+  // Assign any remaining radicals
+  for (const radical of sortedRadicals) {
+    if (!assignedRadicals.has(radical.id)) {
+      radicalLevelMap.set(radical.id, 60);
+      levelRadicalCounts[60]++;
     }
+  }
 
-    kanjiLevelMap.set(kanji.id, currentLevel);
-    levelCounts[currentLevel]++;
+  // Assign any remaining kanji
+  for (const kanji of sortedKanji) {
+    if (!assignedKanji.has(kanji.id)) {
+      kanjiLevelMap.set(kanji.id, 60);
+      levelKanjiCounts[60]++;
+    }
   }
 
   // Log distribution
   console.log("   Distribution summary:");
+  console.log(`     Total radicals: ${radicals.length}`);
   console.log(`     Total kanji: ${kanjiList.length}`);
-  console.log(`     Target per level: ${TARGET_PER_LEVEL}`);
-
-  // Show sample levels
-  console.log("   Sample kanji per level:");
-  for (const level of [1, 2, 3, 5, 10, 20, 30, 40, 50, 60]) {
-    console.log(`     Level ${level}: ${levelCounts[level] || 0} kanji`);
+  console.log("   Sample per level:");
+  for (const level of [1, 2, 3, 5, 10, 20, 30]) {
+    console.log(`     Level ${level}: ${levelRadicalCounts[level]} radicals, ${levelKanjiCounts[level]} kanji`);
   }
 
-  // JLPT stats
-  const jlptCounts = { N5: 0, N4: 0, N3: 0, N2: 0, N1: 0, unknown: 0 };
-  for (const kanji of kanjiList) {
-    const jlpt = kanji.jlptLevel;
-    if (jlpt === 5) jlptCounts.N5++;
-    else if (jlpt === 4) jlptCounts.N4++;
-    else if (jlpt === 3) jlptCounts.N3++;
-    else if (jlpt === 2) jlptCounts.N2++;
-    else if (jlpt === 1) jlptCounts.N1++;
-    else jlptCounts.unknown++;
-  }
-  console.log("   JLPT breakdown in source data:");
-  console.log(`     N5: ${jlptCounts.N5}, N4: ${jlptCounts.N4}, N3: ${jlptCounts.N3}, N2: ${jlptCounts.N2}, N1: ${jlptCounts.N1}, Unknown: ${jlptCounts.unknown}`);
+  return { kanjiLevelMap, radicalLevelMap };
+}
 
-  return kanjiLevelMap;
+// Keep old function signature for compatibility but redirect
+function calculateKanjiLevels(kanjiList: KanjiData[]): Map<number, number> {
+  // This will be replaced by calculateKanjiAndRadicalLevels in main()
+  return new Map();
 }
 
 function extractKanjiFromWord(word: string): string[] {
@@ -404,22 +433,28 @@ function calculateRadicalLevels(
   radicals: RadicalData[],
   kanjiLevelMap: Map<number, number>
 ): Map<number, number> {
-  console.log("\n[3/8] Calculating radical levels (must appear before their kanji)...");
+  console.log("\n[3/8] Calculating radical levels (WaniKani-style: ~26 per level early)...");
 
   const radicalLevelMap = new Map<number, number>();
 
+  // WaniKani-style distribution:
+  // - Levels 1-10: ~26 radicals each (heavy front-loading)
+  // - Levels 11-20: ~10 radicals each
+  // - Levels 21+: remaining radicals spread thin
+  const TARGET_PER_LEVEL: Record<number, number> = {};
+  for (let l = 1; l <= 10; l++) TARGET_PER_LEVEL[l] = 26;
+  for (let l = 11; l <= 20; l++) TARGET_PER_LEVEL[l] = 10;
+  for (let l = 21; l <= 60; l++) TARGET_PER_LEVEL[l] = 5;
+
   // Step 1: Calculate the MAXIMUM level each radical can be at
-  // (must be before its earliest kanji)
   const radicalMaxLevel = new Map<number, number>();
 
   for (const radical of radicals) {
     if (radical.kanjiIds.length === 0) {
-      // Radical not used by any kanji - can be at any level, prefer later levels
       radicalMaxLevel.set(radical.id, 60);
       continue;
     }
 
-    // Find the minimum level of all kanji using this radical
     let minKanjiLevel = 60;
     for (const kanjiId of radical.kanjiIds) {
       const kanjiLevel = kanjiLevelMap.get(kanjiId);
@@ -427,77 +462,45 @@ function calculateRadicalLevels(
         minKanjiLevel = kanjiLevel;
       }
     }
-
-    // Radical can be at most minKanjiLevel - 1 (or at least 1)
     radicalMaxLevel.set(radical.id, Math.max(1, minKanjiLevel - 1));
   }
 
-  // Step 2: Sort radicals by their max level constraint
+  // Step 2: Sort radicals by max level constraint, then by usage
   const sortedRadicals = [...radicals].sort((a, b) => {
     const maxA = radicalMaxLevel.get(a.id) || 60;
     const maxB = radicalMaxLevel.get(b.id) || 60;
     if (maxA !== maxB) return maxA - maxB;
-    // Secondary sort by usage count (more used = earlier)
     return (b.kanjiIds.length || 0) - (a.kanjiIds.length || 0);
   });
 
-  // Step 3: Distribute radicals evenly across levels 1-60
-  // Target: ~3-4 radicals per level for 192 radicals across 60 levels
-  const totalRadicals = radicals.length;
-  const targetPerLevel = Math.ceil(totalRadicals / 60);
+  // Step 3: Distribute respecting constraints and targets
+  const levelCounts: Record<number, number> = {};
+  for (let l = 1; l <= 60; l++) levelCounts[l] = 0;
 
-  // Group radicals by their max level constraint
-  const byMaxLevel = new Map<number, RadicalData[]>();
   for (const radical of sortedRadicals) {
     const maxLevel = radicalMaxLevel.get(radical.id) || 60;
-    if (!byMaxLevel.has(maxLevel)) {
-      byMaxLevel.set(maxLevel, []);
-    }
-    byMaxLevel.get(maxLevel)!.push(radical);
-  }
 
-  // Distribute radicals, filling levels from 1 upward
-  // But respecting the max level constraint
-  const levelCounts = new Map<number, number>();
-  for (let l = 1; l <= 60; l++) {
-    levelCounts.set(l, 0);
-  }
-
-  // Process radicals in order of their max level (most constrained first)
-  const sortedMaxLevels = [...byMaxLevel.keys()].sort((a, b) => a - b);
-
-  for (const maxLevel of sortedMaxLevels) {
-    const radicalsAtMax = byMaxLevel.get(maxLevel)!;
-
-    // Distribute these radicals across levels 1 to maxLevel
-    // Prefer filling underfilled levels
-    for (const radical of radicalsAtMax) {
-      // Find the level from 1 to maxLevel with the fewest radicals
-      let bestLevel = 1;
-      let minCount = Infinity;
-
-      for (let l = 1; l <= maxLevel; l++) {
-        const count = levelCounts.get(l) || 0;
-        if (count < minCount) {
-          minCount = count;
-          bestLevel = l;
-        }
+    // Find best level: lowest level that isn't at target yet, respecting max
+    let bestLevel = 1;
+    for (let l = 1; l <= maxLevel; l++) {
+      if (levelCounts[l] < TARGET_PER_LEVEL[l]) {
+        bestLevel = l;
+        break;
       }
-
-      radicalLevelMap.set(radical.id, bestLevel);
-      levelCounts.set(bestLevel, (levelCounts.get(bestLevel) || 0) + 1);
+      // If all levels at target, use the one with fewest
+      if (levelCounts[l] < levelCounts[bestLevel]) {
+        bestLevel = l;
+      }
     }
+
+    radicalLevelMap.set(radical.id, bestLevel);
+    levelCounts[bestLevel]++;
   }
 
   // Report distribution
-  const uniqueLevels = new Set(radicalLevelMap.values());
-  console.log(`   Radicals distributed across ${uniqueLevels.size} levels`);
-
-  // Show sample distribution
-  const sampleLevels = [1, 2, 3, 10, 20, 30];
-  for (const level of sampleLevels) {
-    const count = [...radicalLevelMap.values()].filter(l => l === level).length;
-    console.log(`   Level ${level}: ${count} radicals`);
+  console.log("   Distribution (WaniKani-style):");
+  for (const level of [1, 2, 3, 5, 10, 15, 20]) {
+    console.log(`   Level ${level}: ${levelCounts[level]} radicals`);
   }
 
   return radicalLevelMap;
@@ -1022,11 +1025,9 @@ async function main(): Promise<void> {
     // Step 1: Load all data
     const { radicals, kanji, vocabulary } = await loadAllData();
 
-    // Step 2: Calculate kanji levels based on JLPT and frequency
-    const kanjiLevelMap = calculateKanjiLevels(kanji);
-
-    // Step 3: Calculate radical levels (must be before their kanji)
-    const radicalLevelMap = calculateRadicalLevels(radicals, kanjiLevelMap);
+    // Step 2 & 3: Calculate kanji AND radical levels together (WaniKani-style)
+    // This ensures radicals are assigned first, then kanji that can use those radicals
+    const { kanjiLevelMap, radicalLevelMap } = calculateKanjiAndRadicalLevels(kanji, radicals);
 
     // Step 4: Calculate vocabulary levels (must be after their kanji)
     const vocabLevelMap = calculateVocabularyLevels(vocabulary, kanji, kanjiLevelMap);

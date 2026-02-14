@@ -40,8 +40,8 @@ export default async function GrammarDetailPage({ params }: Props) {
   }>;
 
   // Calculate accuracies
-  const total = (progress?.correct ?? 0) + (progress?.incorrect ?? 0);
-  const accuracy = total > 0 ? Math.round((progress?.correct ?? 0) / total * 100) : null;
+  const total = (progress?.correctCount ?? 0) + (progress?.incorrectCount ?? 0);
+  const accuracy = total > 0 ? Math.round((progress?.correctCount ?? 0) / total * 100) : null;
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -139,11 +139,11 @@ export default async function GrammarDetailPage({ params }: Props) {
               </h4>
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center p-3 bg-white rounded-xl">
-                  <p className="text-lg font-bold text-emerald-600">{progress?.correct ?? 0}</p>
+                  <p className="text-lg font-bold text-emerald-600">{progress?.correctCount ?? 0}</p>
                   <p className="text-xs text-stone-400">Correct</p>
                 </div>
                 <div className="text-center p-3 bg-white rounded-xl">
-                  <p className="text-lg font-bold text-rose-500">{progress?.incorrect ?? 0}</p>
+                  <p className="text-lg font-bold text-rose-500">{progress?.incorrectCount ?? 0}</p>
                   <p className="text-xs text-stone-400">Incorrect</p>
                 </div>
                 <div className="text-center p-3 bg-white rounded-xl">

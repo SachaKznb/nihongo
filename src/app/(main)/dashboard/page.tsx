@@ -187,7 +187,7 @@ export default function DashboardPage() {
               <span className="text-3xl">🎊</span>
               <div>
                 <p className="font-bold font-display text-lg">Bienvenue sur Nihongo !</p>
-                <p className="text-teal-100 text-sm">Tu as appris tes premiers radicaux. Continue tes leçons !</p>
+                <p className="text-teal-100 text-sm">Tu as appris tes premiers radicaux. Continue tes lecons !</p>
               </div>
             </div>
             <button
@@ -198,6 +198,39 @@ export default function DashboardPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Next Reviews Banner - Show when 0 pending but upcoming exist */}
+      {progress.pendingReviews === 0 && progress.upcomingReviews.some((r: { count: number }) => r.count > 0) && (
+        <div className="relative overflow-hidden bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl p-4 text-white shadow-lg">
+          <div className="absolute inset-0 opacity-10 bg-white/5" style={{backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)", backgroundSize: "20px 20px"}}></div>
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">⏰</span>
+              <div>
+                <p className="font-bold font-display text-lg">Prochaines revisions</p>
+                <p className="text-blue-100 text-sm">
+                  {(() => {
+                    const firstNonZero = progress.upcomingReviews.find((r: { count: number }) => r.count > 0);
+                    if (!firstNonZero) return "Aucune revision prevue";
+                    const hours = Math.round((new Date(firstNonZero.time).getTime() - Date.now()) / (1000 * 60 * 60));
+                    const minutes = Math.round((new Date(firstNonZero.time).getTime() - Date.now()) / (1000 * 60));
+                    if (minutes < 60) {
+                      return `${firstNonZero.count} revision${firstNonZero.count > 1 ? "s" : ""} dans ${minutes} min`;
+                    }
+                    return `${firstNonZero.count} revision${firstNonZero.count > 1 ? "s" : ""} dans ~${hours}h`;
+                  })()}
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-bold font-display">
+                {progress.upcomingReviews.find((r: { count: number }) => r.count > 0)?.count || 0}
+              </p>
+              <p className="text-blue-200 text-xs">a venir</p>
+            </div>
           </div>
         </div>
       )}
@@ -248,11 +281,11 @@ export default function DashboardPage() {
             <p className="text-indigo-100 text-xs font-medium uppercase tracking-wide">Niveau actuel</p>
             <div className="flex items-baseline gap-1">
               <span className="text-4xl font-bold font-display">{progress.currentLevel}</span>
-              <span className="text-indigo-200 text-sm">/ 10</span>
+              <span className="text-indigo-200 text-sm">/ 60</span>
             </div>
             <div className="mt-2">
               <div className="flex justify-between text-xs text-indigo-200 mb-1">
-                <span>Progression</span>
+                <span>Kanji Guru</span>
                 <span>{gamification.levelProgress}%</span>
               </div>
               <div className="h-1.5 bg-white/30 rounded-full overflow-hidden">
@@ -261,6 +294,9 @@ export default function DashboardPage() {
                   style={{ width: `${gamification.levelProgress}%` }}
                 ></div>
               </div>
+              {gamification.levelProgress === 0 && progress.learnedRadicals > 0 && progress.learnedKanji === 0 && (
+                <p className="text-indigo-200 text-[10px] mt-1">Radicaux au Guru = kanji debloques</p>
+              )}
             </div>
           </div>
         </div>
@@ -352,16 +388,30 @@ export default function DashboardPage() {
                   )}
                 </div>
               </div>
-              <h3 className="text-xl font-bold font-display text-stone-900 mb-1">Révisions en attente</h3>
-              <p className="text-stone-500">Éléments prêts à réviser</p>
-              {progress.pendingReviews > 0 && (
+              <h3 className="text-xl font-bold font-display text-stone-900 mb-1">Revisions en attente</h3>
+              <p className="text-stone-500">Elements prets a reviser</p>
+              {progress.pendingReviews > 0 ? (
                 <div className="mt-4 flex items-center gap-2 text-orange-600 font-medium group-hover:gap-3 transition-all">
-                  <span>Réviser maintenant</span>
+                  <span>Reviser maintenant</span>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
                 </div>
-              )}
+              ) : progress.upcomingReviews.length > 0 && progress.upcomingReviews.some((r: { count: number }) => r.count > 0) ? (
+                <div className="mt-4 flex items-center gap-2 text-stone-500 text-sm">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>
+                    {(() => {
+                      const firstNonZero = progress.upcomingReviews.find((r: { count: number }) => r.count > 0);
+                      if (!firstNonZero) return "Aucune revision prevue";
+                      const hours = Math.round((new Date(firstNonZero.time).getTime() - Date.now()) / (1000 * 60 * 60));
+                      return `${firstNonZero.count} revision${firstNonZero.count > 1 ? "s" : ""} dans ~${hours < 1 ? "<1" : hours}h`;
+                    })()}
+                  </span>
+                </div>
+              ) : null}
             </div>
           </div>
         </Link>
@@ -517,39 +567,65 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <span className="text-2xl font-japanese text-teal-500">時</span>
-              <h3 className="font-bold font-display text-stone-900">Prochaines révisions</h3>
+              <h3 className="font-bold font-display text-stone-900">Prochaines revisions</h3>
             </div>
             <span className="text-xs font-medium text-teal-600 bg-teal-50 px-3 py-1 rounded-full">
               24h
             </span>
           </div>
           <div className="space-y-2">
-            {progress.upcomingReviews.length > 0 ? (
-              progress.upcomingReviews.slice(0, 5).map((review: { time: Date; count: number }, index: number) => {
-                const hours = Math.round((new Date(review.time).getTime() - Date.now()) / (1000 * 60 * 60));
-                if (review.count === 0) return null;
-                return (
-                  <div key={index} className="flex items-center justify-between py-3 px-3 rounded-xl hover:bg-stone-50 transition-colors border-b border-stone-100 last:border-0">
-                    <div className="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-stone-400">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span className="text-sm text-stone-500">
-                        Dans {hours < 1 ? "< 1" : hours}h
-                      </span>
+            {progress.upcomingReviews.some((r: { count: number }) => r.count > 0) ? (
+              <>
+                {/* First non-zero upcoming review - highlighted */}
+                {(() => {
+                  const firstNonZero = progress.upcomingReviews.find((r: { count: number }) => r.count > 0);
+                  if (!firstNonZero) return null;
+                  const totalMs = new Date(firstNonZero.time).getTime() - Date.now();
+                  const hours = Math.floor(totalMs / (1000 * 60 * 60));
+                  const minutes = Math.round((totalMs % (1000 * 60 * 60)) / (1000 * 60));
+                  return (
+                    <div className="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-200 rounded-xl p-4 mb-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs text-teal-600 font-medium uppercase tracking-wide">Prochaine session</p>
+                          <p className="text-lg font-bold text-stone-900">
+                            {hours > 0 ? `${hours}h ${minutes}min` : `${minutes} min`}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-3xl font-bold font-display text-teal-600">{firstNonZero.count}</span>
+                          <p className="text-xs text-stone-500">elements</p>
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-sm font-bold font-display text-teal-600 bg-teal-50 px-2 py-0.5 rounded-full">
-                      +{review.count}
-                    </span>
-                  </div>
-                );
-              })
+                  );
+                })()}
+                {/* Rest of the timeline */}
+                {progress.upcomingReviews.slice(1).map((review: { time: Date; count: number }, index: number) => {
+                  const hours = Math.round((new Date(review.time).getTime() - Date.now()) / (1000 * 60 * 60));
+                  if (review.count === 0) return null;
+                  // Show cumulative difference
+                  const prevCount = progress.upcomingReviews[index]?.count || 0;
+                  const newItems = review.count - prevCount;
+                  if (newItems <= 0) return null;
+                  return (
+                    <div key={index} className="flex items-center justify-between py-2 px-3 rounded-xl hover:bg-stone-50 transition-colors">
+                      <div className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-stone-400">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-sm text-stone-500">Dans {hours}h</span>
+                      </div>
+                      <span className="text-sm font-medium text-stone-600">+{newItems}</span>
+                    </div>
+                  );
+                })}
+              </>
             ) : (
               <div className="text-center py-8">
                 <span className="text-4xl mb-2 block">🎉</span>
-                <p className="text-sm text-stone-400">
-                  Aucune révision prévue
-                </p>
+                <p className="text-sm text-stone-400">Aucune revision prevue</p>
+                <p className="text-xs text-stone-300 mt-1">Termine tes lecons pour debloquer des revisions</p>
               </div>
             )}
           </div>

@@ -196,7 +196,7 @@ export async function GET(request: NextRequest) {
   }
 
     return NextResponse.json(
-      { lessons, total: lessons.length },
+      { lessons, total: lessons.length, batchSize: user.lessonBatchSize },
       {
         headers: {
           "Cache-Control": "private, max-age=30, stale-while-revalidate=60",

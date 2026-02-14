@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 
 const settingsSchema = z.object({
   lessonsPerDay: z.number().int().min(1).max(100).optional(),
+  lessonBatchSize: z.number().int().min(3).max(20).optional(),
   reviewBatchSize: z.number().int().min(1).max(50).optional(),
   autoplayAudio: z.boolean().optional(),
   levelAwareSentencesEnabled: z.boolean().optional(),
@@ -22,6 +23,7 @@ export async function GET() {
     where: { id: session.user.id },
     select: {
       lessonsPerDay: true,
+      lessonBatchSize: true,
       reviewBatchSize: true,
       autoplayAudio: true,
       levelAwareSentencesEnabled: true,
@@ -56,13 +58,14 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  const { lessonsPerDay, reviewBatchSize, autoplayAudio, levelAwareSentencesEnabled, leaderboardOptIn } = validation.data;
+  const { lessonsPerDay, lessonBatchSize, reviewBatchSize, autoplayAudio, levelAwareSentencesEnabled, leaderboardOptIn } = validation.data;
 
   try {
     const user = await prisma.user.update({
       where: { id: session.user.id },
       data: {
         ...(lessonsPerDay !== undefined && { lessonsPerDay }),
+        ...(lessonBatchSize !== undefined && { lessonBatchSize }),
         ...(reviewBatchSize !== undefined && { reviewBatchSize }),
         ...(autoplayAudio !== undefined && { autoplayAudio }),
         ...(levelAwareSentencesEnabled !== undefined && { levelAwareSentencesEnabled }),
@@ -70,6 +73,7 @@ export async function PUT(request: NextRequest) {
       },
       select: {
         lessonsPerDay: true,
+        lessonBatchSize: true,
         reviewBatchSize: true,
         autoplayAudio: true,
         levelAwareSentencesEnabled: true,

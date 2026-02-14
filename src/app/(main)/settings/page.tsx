@@ -10,6 +10,7 @@ import { Modal } from "@/components/ui/Modal";
 
 interface UserSettings {
   lessonsPerDay: number;
+  lessonBatchSize: number;
   reviewBatchSize: number;
   autoplayAudio: boolean;
   levelAwareSentencesEnabled: boolean;
@@ -59,6 +60,7 @@ export default function SettingsPage() {
   // Learning settings state
   const [settings, setSettings] = useState<UserSettings>({
     lessonsPerDay: 20,
+    lessonBatchSize: 5,
     reviewBatchSize: 10,
     autoplayAudio: true,
     levelAwareSentencesEnabled: true,
@@ -501,7 +503,7 @@ export default function SettingsPage() {
             <CardContent className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Leçons par jour
+                  Lecons par jour
                 </label>
                 <Input
                   type="number"
@@ -516,13 +518,38 @@ export default function SettingsPage() {
                   }
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Nombre maximum de nouvelles leçons par session
+                  Nombre maximum de nouvelles lecons par session
                 </p>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Taille des lots de révision
+                  Taille des lots de lecons
+                </label>
+                <select
+                  value={settings.lessonBatchSize}
+                  onChange={(e) =>
+                    setSettings({
+                      ...settings,
+                      lessonBatchSize: parseInt(e.target.value) || 5,
+                    })
+                  }
+                  className="w-full px-4 py-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                >
+                  <option value={3}>3 elements</option>
+                  <option value={5}>5 elements (recommande)</option>
+                  <option value={10}>10 elements</option>
+                  <option value={15}>15 elements</option>
+                  <option value={20}>20 elements</option>
+                </select>
+                <p className="text-sm text-gray-500 mt-1">
+                  Apprendre X elements, puis quiz, puis X suivants...
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Taille des lots de revision
                 </label>
                 <Input
                   type="number"
@@ -537,7 +564,7 @@ export default function SettingsPage() {
                   }
                 />
                 <p className="text-sm text-gray-500 mt-1">
-                  Nombre d&apos;éléments par session de révision
+                  Nombre d&apos;elements par session de revision
                 </p>
               </div>
             </CardContent>
