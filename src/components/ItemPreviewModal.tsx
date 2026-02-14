@@ -97,10 +97,22 @@ export function ItemPreviewModal({ item, isOpen, onClose }: ItemPreviewModalProp
 
   const handlePlayAudio = () => {
     if (item.type === "kanji") {
-      const reading = item.readingsOn[0] || item.readingsKun[0];
-      if (reading) playReading(reading);
+      const onReading = item.readingsOn[0];
+      const kunReading = item.readingsKun[0];
+      const reading = onReading || kunReading;
+      if (reading) {
+        playReading(reading, {
+          source: onReading ? "kanji_on" : "kanji_kun",
+          character: item.character,
+        });
+      }
     } else if (item.type === "vocabulary") {
-      if (item.readings[0]) playReading(item.readings[0]);
+      if (item.readings[0]) {
+        playReading(item.readings[0], {
+          source: "vocab",
+          character: item.word,
+        });
+      }
     }
   };
 
