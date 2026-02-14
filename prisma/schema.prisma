@@ -150,7 +150,6 @@ model Radical {
   kanji        KanjiRadical[]
   userProgress UserRadicalProgress[]
 
-  @@unique([character, levelId])
   @@index([levelId])
 }
 
@@ -199,7 +198,6 @@ model Vocabulary {
   userProgress  UserVocabularyProgress[]
   sentenceCache UserSentenceCache[]
 
-  @@unique([word, levelId])
   @@index([levelId])
   @@index([jlptLevel])
 }
