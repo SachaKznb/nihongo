@@ -5,13 +5,13 @@ type AudioSource = "kanji_on" | "kanji_kun" | "vocab" | "sentence";
 const audioCache = new Map<string, HTMLAudioElement>();
 
 // Check if we should use Vercel Blob storage
-// In production, we use blob storage; in development, we use local files
+// If NEXT_PUBLIC_BLOB_BASE_URL is set, use blob storage
 function getBlobBaseUrl(): string | null {
   // This is set at build time for client-side code
   if (typeof window !== "undefined") {
     // Check for blob base URL injected via environment
     const blobUrl = process.env.NEXT_PUBLIC_BLOB_BASE_URL;
-    if (blobUrl && process.env.NODE_ENV === "production") {
+    if (blobUrl) {
       return blobUrl;
     }
   }
